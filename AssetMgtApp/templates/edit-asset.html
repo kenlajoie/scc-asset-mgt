@@ -1,0 +1,69 @@
+{% include 'layout.html' %}
+
+<div class="container">
+  <div class="card">
+    <div class="card-header">
+      Let's edit your asset!
+    </div>
+    <div class="card-body">
+      <form id="editAssetForm">
+        <div class="form-group">
+          <label>Major Area</label>
+          <select class="form-control" name="majorArea">
+            <option {% if asset.majorArea == 1st %} selected="selected" {% endif %}>1st</option>
+            <option {% if asset.majorArea == 2nd %} selected="selected" {% endif %}>2nd</option>
+            <option {% if asset.majorArea == 3rd %} selected="selected" {% endif %}>3rd</option>
+            <option {% if asset.majorArea == 17th %} selected="selected" {% endif %}>17th</option>
+            <option {% if asset.majorArea == 18th %} selected="selected" {% endif %}>18th</option>
+            <option {% if asset.majorArea == Range %} selected="selected" {% endif %}>Range</option>
+            <option {% if asset.majorArea == Practice %} selected="selected" {% endif %}>Practice</option>
+            <option {% if asset.majorArea == ClubHouse %} selected="selected" {% endif %}>clubHouse</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Minor Area</label>
+          <select class="form-control" name="minorArea">
+            <option {% if asset.minorArea == Tee %} selected="selected" {% endif %}>Tee</option>
+            <option {% if asset.minorArea == Fairway %} selected="selected" {% endif %}>Fairway</option>
+            <option {% if asset.minorArea == Rough %} selected="selected" {% endif %}>Rough</option>
+            <option {% if asset.minorArea == Green %} selected="selected" {% endif %}>Green</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Micro Area</label>
+          <input type="text" class="form-control" name="microArea" value="{{asset.microArea}}" required>
+        </div>
+        <div class="form-group">
+          <label>Asset Type</label>
+          <select class="form-control" name="assetType">
+            <option {% if asset.assetType == Head %} selected="selected" {% endif %}>Head</option>
+            <option {% if asset.assetType == GroupValve %} selected="selected" {% endif %}>GroupValve</option>
+            <option {% if asset.assetTYpe == AreaValve %} selected="selected" {% endif %}>AreaValve</option>
+            <option {% if asset.assetType == MainValve %} selected="selected" {% endif %}>MainValue</option>
+            <option {% if asset.assetType == Satellite %} selected="selected" {% endif %}>Satellite</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Description</label>
+          <input type="text" class="form-control" name="description" value="{{asset.description}" required>
+        </div>
+         <div class="form-group">
+          <label>Asset State</label>
+          <select class="form-control" name="assetState">
+            <option {% if asset.assetState == Unknown %} selected="selected" {% endif %}>Unknown/option>
+            <option {% if asset.assetState == Good %} selected="selected" {% endif %}>Good</option>
+            <option {% if asset.assetState == Bad %} selected="selected" {% endif %}>Bad</option>
+          </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Save</button>
+        <button id="deleteButton" type="button" class="btn btn-danger">Delete</button>
+        <a href="/assets/asset-page" class="btn btn-success">Back</a>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+
+
+

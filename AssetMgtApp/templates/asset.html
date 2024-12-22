@@ -1,0 +1,51 @@
+{% include 'layout.html' %}
+
+<div class="container">
+    <div class="card text-center">
+        <div class="card-header">
+            Your Assets!
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">
+                List of your Assets!
+            </h5>
+            <p class="card-text">
+                Information about Assets
+            </p>
+
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th scope="col">Major</th>
+                        <th scope="col">Minor</th>
+                        <th scope="col">Descriptiom</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for asset in assets %}
+                <tr class="pointer">
+                    <td>{{asset.majorArea}}</td>
+                    <td>{{asset.minorArea}}</td>
+                    <td>{{asset.description}}</td>
+
+                    <td>
+                        <button onclick="window.location.href='edit-asset-page/{{asset.id}}'"
+                                type="button" class="btn btn-info">
+                            Edit {{asset.id}}
+                        </button>
+                    </td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            <a href="add-asset-page" class="btn btn-primary">Add a new Asset!</a>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
