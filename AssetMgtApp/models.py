@@ -28,6 +28,8 @@ class Assets(Base):
     assetState = Column(String)
     gpsLat  = Column(Double)
     gpsLng = Column(Double)
+    createdById = Column(Integer, ForeignKey("users.id"))
+    updatedById = Column(Integer, ForeignKey("users.id"))
 
 
 class Todos(Base):
@@ -36,7 +38,11 @@ class Todos(Base):
     id = Column(Integer, primary_key=True, index=True)
     title = Column(String)
     description = Column(String)
-    priority = Column(Integer)
-    complete = Column(Boolean, default=False)
-    asset_id = Column(Integer, ForeignKey("assets.id"))
+    priority = Column(String)
+    todoStatus = Column(String)
+    assetId = Column(Integer, ForeignKey("assets.id"))
+    ownerId = Column(Integer, ForeignKey("users.id"))
+    createdById = Column(Integer, ForeignKey("users.id"))
+    updatedById = Column(Integer, ForeignKey("users.id"))
+    closedById = Column(Integer, ForeignKey("users.id"))
 

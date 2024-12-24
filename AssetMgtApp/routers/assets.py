@@ -1,6 +1,4 @@
 from typing import Annotated
-
-from click import confirm
 from pydantic import BaseModel, Field
 from sqlalchemy.orm import Session
 from fastapi import APIRouter, Depends, HTTPException, Path, Request, status
@@ -10,6 +8,7 @@ from ..database import SessionLocal
 from .auth import get_current_user
 from starlette.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
+
 
 templates = Jinja2Templates(directory="AssetMgtApp/templates")
 
@@ -52,9 +51,27 @@ async def render_asset_page(request: Request, db: db_dependency):
         if user is None:
            return redirect_to_login()
 
-        assets = db.query(Assets).all()
+        ## Get saved filtering values
+        majorAreaFilter =request.cookies.get('majorAreaFilter')
+        minorAreaFilter =request.cookies.get('minorAreaFilter')
+        assetTypeFilter =request.cookies.get('assetTypeFilter')
 
-        return templates.TemplateResponse("asset.html", {"request": request, "assets": assets, "user": user})
+
+        ##build dynamic query
+        query = db.query(Assets)
+
+        if majorAreaFilter is not None and majorAreaFilter != "All":
+            query = query.filter(Assets.majorArea == majorAreaFilter)
+
+        if minorAreaFilter is not None and minorAreaFilter != "All":
+            query = query.filter(Assets.minorArea == minorAreaFilter)
+
+        if assetTypeFilter is not None and assetTypeFilter != "All":
+            query = query.filter(Assets.assetType == assetTypeFilter)
+
+        assetList = query.all()
+
+        return templates.TemplateResponse("asset.html", {"request": request, "assets": assetList, "user": user})
 
     except:
         return redirect_to_login()
@@ -81,14 +98,36 @@ async def render_edit_asset_page(request: Request, asset_id: int, db: db_depende
         if user is None:
             return redirect_to_login()
 
-        asset = db.query(Assets).filter(Assets.id == asset_id).first()
+        asset_model = db.query(Assets).filter(Assets.id == asset_id).first()
+        if asset_model is None:
+            raise HTTPException(status_code=404, detail='Asset not found.')
 
-        return templates.TemplateResponse("edit-asset.html", {"request": request, "asset": asset, "user": user})
+##        confirm("hello3")
+
+        return templates.TemplateResponse("edit-asset.html", {"request": request, "asset": asset_model, "user": user})
 
     except:
         return redirect_to_login()
 
 
+@router.get("/view-asset-page/{asset_id}")
+async def render_view_asset_page(request: Request, asset_id: int, db: db_dependency):
+    try:
+        user = await get_current_user(request.cookies.get('access_token'))
+
+        if user is None:
+            return redirect_to_login()
+
+        asset_model = db.query(Assets).filter(Assets.id == asset_id).first()
+        if asset_model is None:
+            raise HTTPException(status_code=404, detail='Asset not found.')
+
+##        confirm("hello3")
+
+        return templates.TemplateResponse("view-asset.html", {"request": request, "asset": asset_model, "user": user})
+
+    except:
+        return redirect_to_login()
 
 ### Endpoints ###
 @router.get("/", status_code=status.HTTP_200_OK)
@@ -103,7 +142,8 @@ async def read_asset(user: user_dependency, db: db_dependency, asset_id: int = P
     if user is None:
         raise HTTPException(status_code=401, detail='Authentication Failed')
 
-    asset_model = db.query(Assets).filter(Asset.id == asset_id).first()
+    asset_model = db.query(Assets).filter(Assets.id == asset_id).first()
+
     if asset_model is not None:
         return asset_model
     raise HTTPException(status_code=404, detail=' not found.')
@@ -137,7 +177,8 @@ async def update_asset(user: user_dependency, db: db_dependency,
     if user is None:
         raise HTTPException(status_code=401, detail='Authentication Failed')
 
-    asset_model = db.query(asset).filter(Asset.id == asset_id).first()
+    asset_model = db.query(Assets).filter(Assets.id == asset_id).first()
+
     if asset_model is None:
         raise HTTPException(status_code=404, detail='Asset not found.')
 
@@ -157,7 +198,8 @@ async def delete_asset(user: user_dependency, db: db_dependency, asset_id: int =
     if user is None:
         raise HTTPException(status_code=401, detail='Authentication Failed')
 
-    asset_model = db.query(Asset).filter(Asset.id == asset_id).first()
+    asset_model = db.query(Assets).filter(Assets.id == asset_id).first()
+
     if asset_model is None:
         raise HTTPException(status_code=404, detail='Asset not found.')
     db.query(Assets).filter(Assets.id == asset_id).delete()

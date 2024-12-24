@@ -19,13 +19,6 @@
             };
 
             try {
-                alert(data.majorArea);
-                alert(data.minorArea);
-                alert(data.microArea);
-                alert(data.assetType);
-                alert(data.description);
-                alert(data.assetState);
-
                 const response = await fetch('/assets/asset', {
                     method: 'POST',
                     headers: {
@@ -34,7 +27,6 @@
                     },
                     body: JSON.stringify(payload)
                 });
-               alert('After POST');
 
                 if (response.ok) {
                     form.reset(); // Clear the form
@@ -101,25 +93,52 @@
             }
         });
 
-       document.getElementById('deleteButton').addEventListener('click', async function () {
+    }
+
+    // view asset JS  --------------------------------------------------------------------
+    const viewAssetForm = document.getElementById('viewAssetForm');
+    if (viewAssetForm) {
+        viewAssetForm.addEventListener('submit', async function (event) {
+            event.preventDefault();
+            const form = event.target;
+            const formData = new FormData(form);
+            const data = Object.fromEntries(formData.entries());
             var url = window.location.pathname;
             const assetId = url.substring(url.lastIndexOf('/') + 1);
 
+            const payload = {
+                majorArea: data.majorArea,
+                minorArea: data.minorArea,
+                microArea: data.microArea,
+                assetType: data.assetType,
+                description: data.description,
+                assetState: data.assetState
+            };
+
             try {
                 const token = getCookie('access_token');
+                console.log(token)
                 if (!token) {
                     throw new Error('Authentication token not found');
+                }
+
+                console.log(`${assetId}`
+                )
+
+                if (!confirm("Are you sure?")) {
+                    window.location.href = '/assets/asset-page'; // Redirect to the asset page
                 }
 
                 const response = await fetch(`/assets/asset/${assetId}`, {
                     method: 'DELETE',
                     headers: {
+                        'Content-Type': 'application/json',
                         'Authorization': `Bearer ${token}`
-                    }
+                    },
+                    body: JSON.stringify(payload)
                 });
 
                 if (response.ok) {
-                    // Handle success
                     window.location.href = '/assets/asset-page'; // Redirect to the asset page
                 } else {
                     // Handle error
@@ -128,11 +147,11 @@
                 }
             } catch (error) {
                 console.error('Error:', error);
-                alert('#3 An error occurred. Please try again.');
+                alert('#2 An error occurred. Please try again.');
             }
-       });
-    }
+        });
 
+    }
 
     // Todo ---------------------------------------------------------------------------------------------
     // Add Todo JS --------------------------------------------------------------------
@@ -148,8 +167,8 @@
             const payload = {
                 title: data.title,
                 description: data.description,
-                priority: parseInt(data.priority),
-                complete: false
+                priority: data.priority,
+                todoStatus: data.todoStatus
             };
 
             try {
@@ -167,7 +186,7 @@
                 } else {
                     // Handle error
                     const errorData = await response.json();
-                    alert(`Error: ${errorData.detail}`);
+                    alert(`XXX Error: ${errorData.detail}`);
                 }
             } catch (error) {
                 console.error('Error:', error);
@@ -180,70 +199,39 @@
     const editTodoForm = document.getElementById('editTodoForm');
     if (editTodoForm) {
         editTodoForm.addEventListener('submit', async function (event) {
-        event.preventDefault();
-        const form = event.target;
-        const formData = new FormData(form);
-        const data = Object.fromEntries(formData.entries());
-        var url = window.location.pathname;
-        const todoId = url.substring(url.lastIndexOf('/') + 1);
-
-        const payload = {
-            title: data.title,
-            description: data.description,
-            priority: parseInt(data.priority),
-            complete: data.complete === "on"
-        };
-
-        try {
-            const token = getCookie('access_token');
-            console.log(token)
-            if (!token) {
-                throw new Error('Authentication token not found');
-            }
-
-            console.log(`${todoId}`)
-
-            const response = await fetch(`/todos/todo/${todoId}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                },
-                body: JSON.stringify(payload)
-            });
-
-            if (response.ok) {
-                window.location.href = '/todos/todo-page'; // Redirect to the todo page
-            } else {
-                // Handle error
-                const errorData = await response.json();
-                alert(`Error: ${errorData.detail}`);
-            }
-        } catch (error) {
-            console.error('Error:', error);
-            alert('#2 An error occurred. Please try again.');
-        }
-    });
-
-        document.getElementById('deleteButton').addEventListener('click', async function () {
+            event.preventDefault();
+            const form = event.target;
+            const formData = new FormData(form);
+            const data = Object.fromEntries(formData.entries());
             var url = window.location.pathname;
             const todoId = url.substring(url.lastIndexOf('/') + 1);
 
+            const payload = {
+                title: data.title,
+                description: data.description,
+                priority: data.priority,
+                todoStatus: data.todoStatus
+            };
+
             try {
                 const token = getCookie('access_token');
+                console.log(token)
                 if (!token) {
                     throw new Error('Authentication token not found');
                 }
 
+                console.log(`${todoId}`)
+
                 const response = await fetch(`/todos/todo/${todoId}`, {
-                    method: 'DELETE',
+                    method: 'PUT',
                     headers: {
+                        'Content-Type': 'application/json',
                         'Authorization': `Bearer ${token}`
-                    }
+                    },
+                    body: JSON.stringify(payload)
                 });
 
                 if (response.ok) {
-                    // Handle success
                     window.location.href = '/todos/todo-page'; // Redirect to the todo page
                 } else {
                     // Handle error
@@ -252,7 +240,62 @@
                 }
             } catch (error) {
                 console.error('Error:', error);
-                alert('#3 An error occurred. Please try again.');
+                alert('#2 An error occurred. Please try again.');
+            }
+        });
+    }
+
+    // view todo JS  --------------------------------------------------------------------
+    const viewTodoForm = document.getElementById('viewTodoForm');
+    if (viewTodoForm) {
+        viewTodoForm.addEventListener('submit', async function (event) {  //delete
+            event.preventDefault();
+            const form = event.target;
+            const formData = new FormData(form);
+            const data = Object.fromEntries(formData.entries());
+            var url = window.location.pathname;
+            const todoId = url.substring(url.lastIndexOf('/') + 1);
+
+            const payload = {
+                title: data.title,
+                description: data.description,
+                priority: data.priority,
+                todoStatus: data.todoStatus
+            };
+
+            try {
+                const token = getCookie('access_token');
+                console.log(token)
+                if (!token) {
+                    throw new Error('Authentication token not found');
+                }
+
+                console.log(`${todoId}`
+                )
+
+                if (!confirm("Are you sure?")) {
+                    window.location.href = '/todos/todo-page'; // Redirect to the todo page
+                }
+
+                const response = await fetch(`/assets/asset/${assetId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                if (response.ok) {
+                    window.location.href = '/assets/asset-page'; // Redirect to the asset page
+                } else {
+                    // Handle error
+                    const errorData = await response.json();
+                    alert(`Error: ${errorData.detail}`);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('#2 An error occurred. Please try again.');
             }
         });
     }
@@ -287,6 +330,7 @@
                     logout();
                     // Save token to cookie
                     document.cookie = `access_token=${data.access_token}; path=/`;
+
                     window.location.href = '/assets/asset-page'; // Change this to your desired redirect page
                     // window.location.href = '/todos/todo-page'; // Change this to your desired redirect page
                 } else {

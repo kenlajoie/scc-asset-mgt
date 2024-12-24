@@ -2,24 +2,53 @@
 
 <div class="container">
     <div class="card text-center">
-        <div class="card-header">
-            Your Assets!
-        </div>
         <div class="card-body">
             <h5 class="card-title">
-                List of your Assets!
+                Asset List
             </h5>
-            <p class="card-text">
-                Information about Assets
-            </p>
-
             <table class="table table-hover">
                 <thead>
                     <tr>
                         <th scope="col">Major</th>
                         <th scope="col">Minor</th>
+                        <th scope="col">type</th>
                         <th scope="col">Descriptiom</th>
                         <th scope="col">Actions</th>
+                    </tr>
+                    <tr>
+                        <th scope="col">
+                            <div class="major-filter">
+                              <select class="majorArea" onchange="majorChangeEventHandler(event);">
+                                <option data-area="All">All</option>
+                                <option data-area="1st">1st</option>
+                                <option data-area="2nd">2nd</option>
+                                <option data-area="17th">17th</option>
+                              </select>
+                            </div>
+                        </th>
+                        <th scope="col">
+                            <div class="minor-filter">
+                              <select class="minorArea" onchange="minorChangeEventHandler(event);">
+                                <option data-area="ALL">All</option>
+                                <option data-area="Tee">Tee</option>
+                                <option data-area="Fairway">Fairway</option>
+                                <option data-area="Rough">Rough</option>
+                                <option data-area="Green">Green</option>
+                              </select>
+                            </div>
+                        </th>
+                        <th scope="col">
+                            <div class="type-filter">
+                              <select class="assetType" onchange="typeChangeEventHandler(event);">
+                                <option data-area="ALL">All</option>
+                                <option data-area="Head">Head</option>
+                                <option data-area="GroupValve">GroupValve</option>
+                                <option data-area="AreaValve">AreaValve</option>
+                                <option data-area="MainValve">MainValve</option>
+                                <option data-area="Satellite">Satellite</option>
+                              </select>
+                            </div>
+                        </th>
                     </tr>
                 </thead>
                 <tbody>
@@ -27,12 +56,18 @@
                 <tr class="pointer">
                     <td>{{asset.majorArea}}</td>
                     <td>{{asset.minorArea}}</td>
+                    <td>{{asset.assetType}}</td>
                     <td>{{asset.description}}</td>
 
                     <td>
+                        <button onclick="window.location.href='view-asset-page/{{asset.id}}'"
+                                type="button" class="btn btn-info">
+                            View
+                        </button>
+                        &nbsp;
                         <button onclick="window.location.href='edit-asset-page/{{asset.id}}'"
                                 type="button" class="btn btn-info">
-                            Edit {{asset.id}}
+                            Edit
                         </button>
                     </td>
                 </tr>
@@ -40,9 +75,87 @@
                 </tbody>
             </table>
             <a href="add-asset-page" class="btn btn-primary">Add a new Asset!</a>
+             <script type="text/javascript">
+                  function majorChangeEventHandler(event) {
+                    if (getCookie("majorAreaFilter") != event.target.value) {
+                        document.cookie = `majorAreaFilter=${event.target.value}; path=/`;
+                        window.location.href=window.location.href;
+                    }
+                  }
+                  function minorChangeEventHandler(event) {
+                    if (getCookie("minorAreaFilter") != event.target.value) {
+                        document.cookie = `minorAreaFilter=${event.target.value}; path=/`;
+                        window.location.href=window.location.href;
+                    }
+                  }
+                  function typeChangeEventHandler(event) {
+                    if (getCookie("assetTypeFilter") != event.target.value) {
+                        document.cookie = `assetTypeFilter=${event.target.value}; path=/`;
+                        window.location.href=window.location.href;
+                    }
+                  }
+            </script>
         </div>
     </div>
 </div>
+
+<script type="text/javascript">
+    function getCookie(cname) {
+      let name = cname + "=";
+      let decodedCookie = decodeURIComponent(document.cookie);
+      let ca = decodedCookie.split(';');
+      for(let i = 0; i <ca.length; i++) {
+        let c = ca[i];
+        while (c.charAt(0) == ' ') {
+          c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+          return c.substring(name.length, c.length);
+        }
+      }
+      return "";
+    }
+    // majorArea
+    filter = getCookie("majorAreaFilter")
+    select = document.querySelector(".majorArea");
+    options = document.querySelectorAll(".majorArea option");
+    if (filter) {
+       for(const option of options) {
+           const area = option.dataset.area;
+           if (area === filter) {
+              option.setAttribute("selected", "");
+              break;
+           }
+       }
+    }
+    //minorArea
+    filter = getCookie("minorAreaFilter")
+    select = document.querySelector(".minorArea");
+    options = document.querySelectorAll(".minorArea option");
+    if (filter) {
+       for(const option of options) {
+           const area = option.dataset.area;
+           if (area === filter) {
+              option.setAttribute("selected", "");
+              break;
+           }
+       }
+    }
+    //assetType
+    filter = getCookie("assetTypeFilter")
+    select = document.querySelector(".assetType");
+    options = document.querySelectorAll(".assetType option");
+    if (filter) {
+       for(const option of options) {
+           const area = option.dataset.area;
+           if (area === filter) {
+              option.setAttribute("selected", "");
+              break;
+           }
+       }
+    }
+
+</script>
 
 
 

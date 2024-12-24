@@ -1,0 +1,59 @@
+{% include 'layout.html' %}
+
+<div class="container">
+  <div class="card">
+    <div class="card-header">
+      View Asset
+    </div>
+    <div class="card-body">
+      <form id="viewAssetForm">
+
+       <div class="form-group">
+          <label>Major Area</label>
+          <input type="text" class="form-control" name="majorArea" value="{{asset.majorArea}}" readonly>
+        </div>
+
+        <div class="form-group">
+          <label>Minor Area</label>
+          <input type="text" class="form-control" name="minorArea" value="{{asset.minorArea}}" readonly>
+        </div>
+
+        <div class="form-group">
+          <label>Micro Area</label>
+          <input type="text" class="form-control" name="microArea" value="{{asset.microArea}}" readonly>
+        </div>
+
+        <div class="form-group">
+          <label>Asset Type</label>
+          <input type="text" class="form-control" name="assetType" value="{{asset.assetType}}" readonly>
+        </div>
+
+        <div class="form-group">
+          <label>Description</label>
+          <input type="text" class="form-control" name="description" value="{{asset.description}}" readonly>
+        </div>
+
+        <div class="form-group">
+          <label>Asset State</label>
+          <input type="text" class="form-control" name="assetState" value="{{asset.assetState}}" readonly>
+        </div>
+
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Delete</button>
+             <a href="/assets/asset-page" class="btn btn-success">Back</a>
+       </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<button onclick="myFunction()">Try it</button>
+
+<script>
+function deleteConfirmation() {
+   rc = confirm("Are you sure?")
+   if (rc) {
+        confirm("Deleted")
+    }
+}
+</script>
