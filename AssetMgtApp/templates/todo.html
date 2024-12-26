@@ -9,6 +9,7 @@
             <table class="table table-hover">
                 <thead>
                     <tr>
+                        <th scope="col">A/T</th>
                         <th scope="col">Status</th>
                         <th scope="col">Priority</th>
                         <th scope="col">Major</th>
@@ -18,6 +19,7 @@
                         <th scope="col">Actions</th>
                     </tr>
                     <tr>
+                        <th scope="col">---</th>
                         <th scope="col">
                             <div class="todoStatus">
                               <select class="todoStatus" onchange="todoStatusChangeEventHandler(event);">
@@ -73,15 +75,16 @@
                     </tr>
                 </thead>
                 <tbody>
+                <tbody>
                 {% for todo in todos %}
                 <tr class="pointer">
+                    <td>{{todo.assetId}}/{{todo.id}}</td>
                     <td>{{todo.todoStatus}}</td>
                     <td>{{todo.priority}}</td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                    <td>{{todo.majorArea}}</td>
+                    <td>{{todo.minorArea}}</td>
+                    <td>{{todo.assetType}}</td>
                     <td>{{todo.title}}</td>
-
                     <td>
                         <button onclick="window.location.href='view-todo-page/{{todo.id}}'"
                                 type="button" class="btn btn-info">
@@ -91,6 +94,11 @@
                         <button onclick="window.location.href='edit-todo-page/{{todo.id}}'"
                                 type="button" class="btn btn-info">
                             Edit
+                        </button>
+                        &nbsp;
+                        <button onclick="window.location.href='add-todo-page/{{todo.assetId}}'"
+                                type="button" class="btn btn-info">
+                            Add
                         </button>
                     </td>
                 </tr>

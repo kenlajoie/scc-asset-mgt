@@ -4,13 +4,13 @@ from click import confirm
 from pydantic import BaseModel, Field
 from sqlalchemy.orm import Session
 from fastapi import APIRouter, Depends, HTTPException, Path, Request, status
+from sqlalchemy.testing.schema import mapped_column
 from starlette import status
-from ..models import Todos
+from ..models import Todos, Assets
 from ..database import SessionLocal
 from .auth import get_current_user
 from starlette.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
-
 
 templates = Jinja2Templates(directory="AssetMgtApp/templates")
 
@@ -35,6 +35,7 @@ class TodoRequest(BaseModel):
     priority: str = Field(min_length=3, max_length=10)
     todoStatus: str = Field(min_length=3, max_length=10)
 
+
 def redirect_to_login():
     redirect_response = RedirectResponse(url="/auth/login-page", status_code=status.HTTP_302_FOUND)
     redirect_response.delete_cookie(key="access_token")
@@ -57,15 +58,37 @@ async def render_todo_page(request: Request, db: db_dependency):
         minorAreaFilter =request.cookies.get('minorAreaFilter')
         assetTypeFilter =request.cookies.get('assetTypeFilter')
 
+        query = db.query(
+            Todos.id,
+            Todos.todoStatus,
+            Todos.priority,
+            Todos.title,
+            Todos.assetId,
+            Todos.ownerId,
+            Assets.majorArea,
+            Assets.minorArea,
+            Assets.microArea,
+            Assets.description,
+            Assets.assetType
+        ).join(Assets, Todos.assetId == Assets.id)
 
-        ##build dynamic query
-        query = db.query(Todos)
+#       todoList = query.all()
 
-##        if todoStatusFilter is not None and todoStatusFilter != "All":
-##            query = query.filter(Todos.todoStatus == todoStatusFilter)
+#       build dynamic query
+        if todoStatusFilter is not None and todoStatusFilter != "All":
+            query = query.filter(Todos.todoStatus == todoStatusFilter)
 
-##        if priorityFilter is not None and priorityFilter != "All":
-##            query = query.filter(Todos.priority == priorityFilter)
+        if priorityFilter is not None and priorityFilter != "All":
+            query = query.filter(Todos.priority == priorityFilter)
+
+        if majorAreaFilter is not None and majorAreaFilter != "All":
+            query = query.filter(Assets.majorArea == majorAreaFilter)
+
+        if minorAreaFilter is not None and minorAreaFilter != "All":
+            query = query.filter(Assets.minorArea == minorAreaFilter)
+
+        if assetTypeFilter is not None and assetTypeFilter != "All":
+            query = query.filter(Assets.assetType == assetTypeFilter)
 
         todoList = query.all()
 
@@ -75,15 +98,20 @@ async def render_todo_page(request: Request, db: db_dependency):
         return redirect_to_login()
 
 
-@router.get('/add-todo-page')
-async def render_todo_page(request: Request):
+@router.get('/add-todo-page/{asset_id}')
+async def render_todo_page(request: Request, asset_id: int,db: db_dependency):
     try:
+        # get the current user to set "by" columns
         user = await get_current_user(request.cookies.get('access_token'))
-
         if user is None:
             return redirect_to_login()
 
-        return templates.TemplateResponse("add-todo.html", {"request": request, "user": user})
+        # get the current asset details to show on the form in ready-only
+        asset_model = db.query(Assets).filter(Assets.id == asset_id).first()
+        if asset_model is None:
+            raise HTTPException(status_code=404, detail='Asset not found.')
+
+        return templates.TemplateResponse("add-todo.html", {"request": request, "asset": asset_model, "user": user})
 
     except:
         return redirect_to_login()
@@ -91,16 +119,22 @@ async def render_todo_page(request: Request):
 @router.get("/edit-todo-page/{todo_id}")
 async def render_edit_todo_page(request: Request, todo_id: int, db: db_dependency):
     try:
+        # get the current user to set "by" columns
         user = await get_current_user(request.cookies.get('access_token'))
-
         if user is None:
             return redirect_to_login()
 
+        # get the current todo details
         todo_model = db.query(Todos).filter(Todos.id == todo_id).first()
         if todo_model is None:
             raise HTTPException(status_code=404, detail='Todo not found.')
 
-        return templates.TemplateResponse("edit-todo.html", {"request": request, "todo": todo_model, "user": user})
+        # get the current asset details to show on the form in ready-only
+        asset_model = db.query(Assets).filter(Assets.id == todo_model.assetId).first()
+        if asset_model is None:
+            raise HTTPException(status_code=404, detail='Asset not found.')
+
+        return templates.TemplateResponse("edit-todo.html", {"request": request, "todo": todo_model, "asset": asset_model, "user": user})
 
     except:
         return redirect_to_login()
@@ -118,7 +152,12 @@ async def render_view_asset_page(request: Request, todo_id: int, db: db_dependen
         if todo_model is None:
             raise HTTPException(status_code=404, detail='Todo not found.')
 
-        return templates.TemplateResponse("view-todo.html", {"request": request, "todo": todo_model, "user": user})
+        # get the current asset details to show on the form in ready-only
+        asset_model = db.query(Assets).filter(Assets.id == todo_model.assetId).first()
+        if asset_model is None:
+            raise HTTPException(status_code=404, detail='Asset not found.')
+
+        return templates.TemplateResponse("view-todo.html", {"request": request, "todo": todo_model, "asset": asset_model, "user": user})
 
     except:
         return redirect_to_login()
@@ -143,38 +182,42 @@ async def read_todo(user: user_dependency, db: db_dependency, todo_id: int = Pat
 
     raise HTTPException(status_code=404, detail=' not found.')
 
-@router.post("/todo", status_code=status.HTTP_201_CREATED)
+@router.post("/todo-add/{asset_id}", status_code=status.HTTP_201_CREATED)
 async def create_todo(user: user_dependency, db: db_dependency,
-                      todo_request: TodoRequest):
+                      todo_request: TodoRequest,
+                      asset_id: int = Path(gt=0)):
+
     if user is None:
         raise HTTPException(status_code=401, detail='Authentication Failed')
 
+
     create_todo_model = Todos(
-        title=todo_request.title,
-        description=todo_request.description,
-        priority=todo_request.priority,
-        todoStatus=todo_request.todoStatus,
-        ownerId =user.get('id')
+       title=todo_request.title,
+       description=todo_request.description,
+       todoStatus=todo_request.todoStatus,
+       priority=todo_request.priority,
+       assetId =asset_id,
+       ownerId = user.get('id')
     )
 
-    todo_model = Todos(**todo_request.model_dump())
+#    todo_model = Todos(**todo_request.model_dump())
 
     db.add(create_todo_model)
     db.commit()
 
-
-@router.put("/todo/{todo_id}", status_code=status.HTTP_204_NO_CONTENT)
+@router.put("/todo-update/{todo_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def update_todo(user: user_dependency, db: db_dependency,
                       todo_request: TodoRequest,
                       todo_id: int = Path(gt=0)):
     if user is None:
         raise HTTPException(status_code=401, detail='Authentication Failed')
 
+    # get the rows current values
     todo_model = db.query(Todos).filter(Todos.id == todo_id).first()
-
     if todo_model is None:
         raise HTTPException(status_code=404, detail='Todo not found.')
 
+    #update the columns with form data
     todo_model.title = todo_request.title
     todo_model.description = todo_request.description
     todo_model.priority = todo_request.priority

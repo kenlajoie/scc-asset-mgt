@@ -159,10 +159,11 @@
     if (todoForm) {
         todoForm.addEventListener('submit', async function (event) {
             event.preventDefault();
-
             const form = event.target;
             const formData = new FormData(form);
             const data = Object.fromEntries(formData.entries());
+            var url = window.location.pathname;
+            const assetId = url.substring(url.lastIndexOf('/') + 1);
 
             const payload = {
                 title: data.title,
@@ -172,25 +173,37 @@
             };
 
             try {
-                const response = await fetch('/todos/todo', {
+                const token = getCookie('access_token');
+                console.log(token)
+
+                if (!token) {
+                    throw new Error('Authentication token not found');
+                }
+
+                console.log(`${assetId}`)
+
+                const response = await fetch(`/todos/todo-add/${assetId}`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${getCookie('access_token')}`
+                        'Authorization': `Bearer ${token}`
                     },
                     body: JSON.stringify(payload)
                 });
+
+                //alert(assetId);
+                //alert(JSON.stringify(payload))
 
                 if (response.ok) {
                     form.reset(); // Clear the form
                 } else {
                     // Handle error
                     const errorData = await response.json();
-                    alert(`XXX Error: ${errorData.detail}`);
+                    alert(`#2 Error: ${errorData.detail}`);
                 }
             } catch (error) {
                 console.error('Error:', error);
-                alert('#1 An error occurred. Please try again.');
+                alert('#3 An error occurred. Please try again.');
             }
         });
     }
@@ -216,13 +229,14 @@
             try {
                 const token = getCookie('access_token');
                 console.log(token)
+
                 if (!token) {
                     throw new Error('Authentication token not found');
                 }
 
                 console.log(`${todoId}`)
 
-                const response = await fetch(`/todos/todo/${todoId}`, {
+                const response = await fetch(`/todos/todo-update/${todoId}`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
@@ -236,11 +250,11 @@
                 } else {
                     // Handle error
                     const errorData = await response.json();
-                    alert(`Error: ${errorData.detail}`);
+                    alert(`#2 Error: ${errorData.detail}`);
                 }
             } catch (error) {
                 console.error('Error:', error);
-                alert('#2 An error occurred. Please try again.');
+                alert('#3 An error occurred. Please try again.');
             }
         });
     }

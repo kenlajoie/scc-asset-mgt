@@ -56,9 +56,9 @@
          <div class="form-group">
           <label>Asset State</label>
           <select class="form-control" name="assetState">
-            <option {% if asset.assetState =="Unknown" %} selected="selected" {% endif %}>Unknown</option>
             <option {% if asset.assetState =="Good" %} selected="selected" {% endif %}>Good</option>
             <option {% if asset.assetState =="Bad" %} selected="selected" {% endif %}>Bad</option>
+            <option {% if asset.assetState =="Unknown" %} selected="selected" {% endif %}>Unknown</option>
           </select>
         </div>
 

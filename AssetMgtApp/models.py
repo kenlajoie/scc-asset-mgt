@@ -1,5 +1,7 @@
 from .database import Base
-from sqlalchemy import Column, Integer, String, Boolean, ForeignKey, Double
+from sqlalchemy import Column, Integer, String, Boolean, ForeignKey, Double, Table
+
+from sqlalchemy.orm import declarative_base, relationship, Mapped
 
 
 class Users(Base):
@@ -14,7 +16,6 @@ class Users(Base):
     is_active = Column(Boolean, default=True)
     role = Column(String)
     phone_number = Column(String)
-
 
 class Assets(Base):
     __tablename__ = 'assets'

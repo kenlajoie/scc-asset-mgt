@@ -164,7 +164,7 @@ async def create_asset(user: user_dependency, db: db_dependency,
         assetState=asset_request.assetState
     )
 
-    asset_model = Assets(**asset_request.model_dump())
+    #asset_model = Assets(**asset_request.model_dump())
 
     db.add(create_asset_model)
     db.commit()

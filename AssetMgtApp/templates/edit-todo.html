@@ -7,6 +7,42 @@
     </div>
     <div class="card-body">
       <form id="editTodoForm">
+
+       <div class="form-group">
+          <label>Asset Id</label>
+          <input type="text" class="form-control" name="assetId" value="{{asset.id}}" readonly>
+       </div>
+
+       <div class="form-group">
+          <label>Major Area</label>
+          <input type="text" class="form-control" name="majorArea" value="{{asset.majorArea}}" readonly>
+       </div>
+
+        <div class="form-group">
+          <label>Minor Area</label>
+          <input type="text" class="form-control" name="minorArea" value="{{asset.minorArea}}" readonly>
+        </div>
+
+        <div class="form-group">
+          <label>Micro Area</label>
+          <input type="text" class="form-control" name="microArea" value="{{asset.microArea}}" readonly>
+        </div>
+
+        <div class="form-group">
+          <label>Asset Type</label>
+          <input type="text" class="form-control" name="assetType" value="{{asset.assetType}}" readonly>
+        </div>
+
+        <div class="form-group">
+          <label>Description</label>
+          <input type="text" class="form-control" name="description" value="{{asset.description}}" readonly>
+        </div>
+
+      <div class="form-group">
+          <label>Todo Id</label>
+          <input type="text" class="form-control" name="id" value="{{todo.id}}" readonly>
+       </div>
+
         <div class="form-group">
           <label>Title</label>
           <input type="text" class="form-control" name="title" value="{{todo.title}}" required>
