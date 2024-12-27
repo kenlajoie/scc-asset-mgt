@@ -71,7 +71,7 @@ async def render_asset_page(request: Request, db: db_dependency):
 
         assetList = query.all()
 
-        return templates.TemplateResponse("asset.html", {"request": request, "assets": assetList, "user": user})
+        return templates.TemplateResponse("asset.html", {"request": request, "assets": assetList, "currentUser": user})
 
     except:
         return redirect_to_login()
@@ -85,7 +85,7 @@ async def render_asset_page(request: Request):
         if user is None:
             return redirect_to_login()
 
-        return templates.TemplateResponse("add-asset.html", {"request": request, "user": user})
+        return templates.TemplateResponse("add-asset.html", {"request": request, "currentUser": user})
 
     except:
         return redirect_to_login()
@@ -104,7 +104,7 @@ async def render_edit_asset_page(request: Request, asset_id: int, db: db_depende
 
 ##        confirm("hello3")
 
-        return templates.TemplateResponse("edit-asset.html", {"request": request, "asset": asset_model, "user": user})
+        return templates.TemplateResponse("edit-asset.html", {"request": request, "asset": asset_model, "currentUser": user})
 
     except:
         return redirect_to_login()
@@ -124,7 +124,7 @@ async def render_view_asset_page(request: Request, asset_id: int, db: db_depende
 
 ##        confirm("hello3")
 
-        return templates.TemplateResponse("view-asset.html", {"request": request, "asset": asset_model, "user": user})
+        return templates.TemplateResponse("view-asset.html", {"request": request, "asset": asset_model, "currentUser": user})
 
     except:
         return redirect_to_login()

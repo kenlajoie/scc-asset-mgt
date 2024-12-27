@@ -1,4 +1,6 @@
 from typing import Annotated
+
+from click import confirm
 from pydantic import BaseModel, Field
 from sqlalchemy.orm import Session
 from fastapi import APIRouter, Depends, HTTPException, Path, Request, status
@@ -33,15 +35,22 @@ class UserVerification(BaseModel):
     password: str
     new_password: str = Field(min_length=6)
 
-class UserRequest(BaseModel):
+class UserAddRequest(BaseModel):
     username: str = Field(min_length=3, max_length=15)
     email: str = Field(min_length=3, max_length=20)
     firstname: str = Field(min_length=1, max_length=15)
     lastname: str = Field(min_length=3, max_length=15)
     userRole: str = Field(min_length=3,max_length=10)
     userStatus: str = Field(min_length=3, max_length=10)
-    password: str = Field(min_length=5, max_length=30)
-    confirmPassword: str = Field(min_length=5, max_length=30)
+    password: str = Field(min_length=6, max_length=20)
+
+class UserEditRequest(BaseModel):
+    username: str = Field(min_length=3, max_length=15)
+    email: str = Field(min_length=3, max_length=20)
+    firstname: str = Field(min_length=1, max_length=15)
+    lastname: str = Field(min_length=3, max_length=15)
+    userRole: str = Field(min_length=3,max_length=10)
+    userStatus: str = Field(min_length=3, max_length=10)
 
 ##this should be a shared function
 def redirect_to_login():
@@ -69,7 +78,7 @@ async def render_user_page(request: Request, db: db_dependency):
             query = query.filter(Users.userRole == userRoleFilter)
 
         if userStatusFilter is not None and userStatusFilter != "All":
-            query = query.filter(Users.userStatus == userStatusilter)
+            query = query.filter(Users.userStatus == userStatusFilter)
 
         userList = query.all()
 
@@ -93,7 +102,7 @@ async def render_user_page(request: Request):
 
 
 @router.get("/edit-user-page/{user_id}")
-async def render_edit_edit_page(request: Request, user_id: int, db: db_dependency):
+async def render_user_edit_page(request: Request, user_id: int, db: db_dependency):
     try:
         user = await get_current_user(request.cookies.get('access_token'))
 
@@ -110,6 +119,78 @@ async def render_edit_edit_page(request: Request, user_id: int, db: db_dependenc
         return redirect_to_login()
 
 
+@router.get("/view-user-page/{user_id}")
+async def render_user_view_page(request: Request, user_id: int, db: db_dependency):
+    try:
+        user = await get_current_user(request.cookies.get('access_token'))
+
+        if user is None:
+            return redirect_to_login()
+
+        user_model = db.query(Users).filter(Users.id == user_id).first()
+        if user_model is None:
+            raise HTTPException(status_code=404, detail='User not found.')
+
+        return templates.TemplateResponse("view-user.html", {"request": request, "user": user_model, "currentUser": user})
+
+    except:
+        return redirect_to_login()
+
+
+@router.post("/user", status_code=status.HTTP_201_CREATED)
+async def create_asset(user: user_dependency, db: db_dependency,
+                      user_request: UserAddRequest):
+    if user is None:
+        raise HTTPException(status_code=401, detail='Authentication Failed')
+
+    create_user_model = Users(
+        username = user_request.username,
+        email = user_request.email,
+        firstname = user_request.firstname,
+        lastname = user_request.lastname,
+        userRole = user_request.userRole,
+        userStatus = user_request.userStatus,
+        hashedPassword=bcrypt_context.hash(user_request.password),
+    )
+
+    db.add(create_user_model)
+    db.commit()
+
+@router.put("/user/{user_id}", status_code=status.HTTP_204_NO_CONTENT)
+async def update_user(user: user_dependency, db: db_dependency,
+                      user_request: UserEditRequest,
+                      user_id: int = Path(gt=0)):
+    if user is None:
+        raise HTTPException(status_code=401, detail='Authentication Failed')
+
+    user_model = db.query(Users).filter(Users.id == user_id).first()
+    if user_model is None:
+        raise HTTPException(status_code=404, detail='User not found.')
+
+    user_model.username = user_request.username
+    user_model.email = user_request.email
+    user_model.firstname = user_request.firstname
+    user_model.lastname = user_request.lastname
+    user_model.userRole = user_request.userRole
+    user_model.userStatus = user_request.userStatus
+
+    db.add(user_model)
+    db.commit()
+
+@router.get("/user/{user_id}", status_code=status.HTTP_200_OK)
+async def read_user(user: user_dependency, db: db_dependency, user_id: int = Path(gt=0)):
+
+    if user is None:
+        raise HTTPException(status_code=401, detail='Authentication Failed')
+
+    user_model = db.query(Users).filter(user.id == user_id).first()
+
+    if user_model is not None:
+        return user_model
+
+    raise HTTPException(status_code=404, detail='user not found.')
+
+
 
 @router.get('/', status_code=status.HTTP_200_OK)
 async def get_user(user: user_dependency, db: db_dependency):
@@ -123,6 +204,7 @@ async def change_password(user: user_dependency, db: db_dependency,
                           user_verification: UserVerification):
     if user is None:
         raise HTTPException(status_code=401, detail='Authentication Failed')
+
     user_model = db.query(Users).filter(Users.id == user.get('id')).first()
 
     if not bcrypt_context.verify(user_verification.password, user_model.hashedPassword):

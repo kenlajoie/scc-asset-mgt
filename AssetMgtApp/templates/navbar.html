@@ -1,3 +1,4 @@
+
 <div>
   <nav class="navbar navbar-expand-md navbar-dark main-color fixed-top">
     <a class="navbar-brand" href="#">Asset Mgt App</a>
@@ -7,7 +8,7 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav">
-        {% if user %}
+        {% if currentUser %}
         <li class="nav-item active">
           <a class="nav-link" href="/assets/asset-page">Assets</a>
         </li>
@@ -21,8 +22,11 @@
       </ul>
 
       <ul class="navbar-nav ml-auto">
-        {% if user %}
+        {% if currentUser %}
         <li class="nav-item m-1">
+          {{currentUser.username}} &nbsp; &nbsp; &nbsp;
+        </li>
+        <li class="nav-item m-2">
           <a type="button" class="btn btn-outline-light text-white" onclick="logout()">Logout</a>
         </li>
         {% endif %}

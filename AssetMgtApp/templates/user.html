@@ -29,7 +29,7 @@
                               <select class="userRole" onchange="userRoleChangeEventHandler(event);">
                                 <option data-area="All">All</option>
                                 <option data-area="Admin">Admin</option>
-                                <option data-area="Tech">Technician</option>
+                                <option data-area="Technician">Technician</option>
                               </select>
                             </div>
                         </th>
@@ -72,7 +72,7 @@
             </table>
             <a href="add-user-page" class="btn btn-primary">Add a new User!</a>
              <script type="text/javascript">
-                  function roleChangeEventHandler(event) {
+                  function userRoleChangeEventHandler(event) {
                     if (getCookie("userRoleFilter") != event.target.value) {
                         document.cookie = `userRoleFilter=${event.target.value}; path=/`;
                         window.location.href=window.location.href;
@@ -108,7 +108,7 @@
     // role
     filter = getCookie("userRoleFilter")
     select = document.querySelector(".userRole");
-    options = document.querySelectorAll(".userAll option");
+    options = document.querySelectorAll(".userRole option");
     if (filter) {
        for(const option of options) {
            const area = option.dataset.area;

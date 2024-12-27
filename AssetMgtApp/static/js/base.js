@@ -1,3 +1,160 @@
+    // User ---------------------------------------------------------------------------------------------
+    // Add User JS --------------------------------------------------------------------
+    const userForm = document.getElementById('userForm');
+    if (userForm) {
+        userForm.addEventListener('submit', async function (event) {
+            event.preventDefault();
+
+            const form = event.target;
+            const formData = new FormData(form);
+            const data = Object.fromEntries(formData.entries());
+
+            const payload = {
+                username: data.username,
+                email: data.email,
+                firstname: data.firstname,
+                lastname: data.lastname,
+                userRole: data.userRole,
+                userStatus: data.userStatus,
+                password: data.password,
+                confirmPassword: data.confirmPassword
+            };
+
+            try {
+                const response = await fetch('/users/user', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${getCookie('access_token')}`
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                if (response.ok) {
+                    window.location.href = '/users/user-page'; // Redirect to the asset page
+                    //form.reset(); // Clear the form
+                } else {
+                    // Handle error
+                    const errorData = await response.json();
+                    alert(`XXX Error: ${errorData.detail}`);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('#1 An error occurred. Please try again.');
+            }
+        });
+    }
+
+    // Edit user JS  --------------------------------------------------------------------
+    const editUserForm = document.getElementById('editUserForm');
+    if (editUserForm) {
+        editUserForm.addEventListener('submit', async function (event) {
+            event.preventDefault();
+            const form = event.target;
+            const formData = new FormData(form);
+            const data = Object.fromEntries(formData.entries());
+            var url = window.location.pathname;
+            const userId = url.substring(url.lastIndexOf('/') + 1);
+
+            const payload = {
+                username: data.username,
+                email: data.email,
+                firstname: data.firstname,
+                lastname: data.lastname,
+                userRole: data.userRole,
+                userStatus: data.userStatus
+            };
+
+            try {
+                const token = getCookie('access_token');
+                console.log(token)
+                if (!token) {
+                    throw new Error('Authentication token not found');
+                }
+
+                console.log(`${userId}`)
+
+                const response = await fetch(`/users/user/${userId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                if (response.ok) {
+                    window.location.href = '/users/user-page'; // Redirect to the user pag
+                                    } else {
+                    // Handle error
+                    const errorData = await response.json();
+                    alert(`Error: ${errorData.detail}`);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('#2 An error occurred. Please try again.');
+            }
+        });
+
+    }
+
+    // view user JS  --------------------------------------------------------------------
+    const viewUserForm = document.getElementById('viewUserForm');
+    if (viewUserForm) {
+        viewUserForm.addEventListener('submit', async function (event) {  //for future delete button
+            event.preventDefault();
+            const form = event.target;
+            const formData = new FormData(form);
+            const data = Object.fromEntries(formData.entries());
+            var url = window.location.pathname;
+            const userId = url.substring(url.lastIndexOf('/') + 1);
+
+            const payload = {
+                username: data.username,
+                email: data.email,
+                firstname: data.firstname,
+                lastname: data.lastname,
+                userRole: data.userRole,
+                userStatus: data.userStatus
+            };
+
+            try {
+                const token = getCookie('access_token');
+                console.log(token)
+                if (!token) {
+                    throw new Error('Authentication token not found');
+                }
+
+                console.log(`${userId}`
+                )
+
+                if (!confirm("Delete User! Are you sure?")) {
+                    window.location.href = '/users/user-page'; // Redirect to the user page
+                }
+
+                const response = await fetch(`/users/user/${userId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                if (response.ok) {
+                    window.location.href = '/users/user-page'; // Redirect to the user page
+                } else {
+                    // Handle error
+                    const errorData = await response.json();
+                    alert(`Error: ${errorData.detail}`);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('#2 An error occurred. Please try again.');
+            }
+        });
+    }
+
     // Asset ---------------------------------------------------------------------------------------------
     // Add Asset JS --------------------------------------------------------------------
     const assetForm = document.getElementById('assetForm');
@@ -29,7 +186,8 @@
                 });
 
                 if (response.ok) {
-                    form.reset(); // Clear the form
+                    window.location.href = '/assets/asset-page'; // Redirect to the asset page
+                    //form.reset(); // Clear the form
                 } else {
                     // Handle error
                     const errorData = await response.json();
@@ -195,7 +353,8 @@
                 //alert(JSON.stringify(payload))
 
                 if (response.ok) {
-                    form.reset(); // Clear the form
+                    window.location.href = '/todos/todo-page'; // Redirect to the asset page
+                    //form.reset(); // Clear the form
                 } else {
                     // Handle error
                     const errorData = await response.json();
