@@ -10,12 +10,13 @@ class Users(Base):
     id = Column(Integer, primary_key=True, index=True)
     email = Column(String, unique=True)
     username = Column(String, unique=True)
-    first_name = Column(String)
-    last_name = Column(String)
-    hashed_password = Column(String)
-    is_active = Column(Boolean, default=True)
-    role = Column(String)
-    phone_number = Column(String)
+    firstname = Column(String)
+    lastname = Column(String)
+    userRole = Column(String)
+    userStatus = Column(String)
+    hashedPassword = Column(String)
+    createdById = Column(Integer)
+    updatedById = Column(Integer)
 
 class Assets(Base):
     __tablename__ = 'assets'

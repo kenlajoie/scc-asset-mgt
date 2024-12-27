@@ -1,0 +1,141 @@
+{% include 'layout.html' %}
+
+<div class="container">
+    <div class="card text-center">
+        <div class="card-body">
+            <h5 class="card-title">
+                User List
+            </h5>
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th scope="col">Id</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Username</th>
+                        <th scope="col">First</th>
+                        <th scope="col">Last</th>
+                        <th scope="col">Role</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                    <tr>
+                        <th scope="col">---</th>
+                        <th scope="col">---</th>
+                        <th scope="col">---</th>
+                        <th scope="col">---</th>
+                        <th scope="col">---</th>
+                        <th scope="col">
+                            <div class="userRole">
+                              <select class="userRole" onchange="userRoleChangeEventHandler(event);">
+                                <option data-area="All">All</option>
+                                <option data-area="Admin">Admin</option>
+                                <option data-area="Tech">Technician</option>
+                              </select>
+                            </div>
+                        </th>
+                        <th scope="col">
+                            <div class="userStatus">
+                              <select class="userStatus" onchange="userStatusChangeEventHandler(event);">
+                                <option data-area="All">All</option>
+                                <option data-area="Active">Active</option>
+                                <option data-area="Paused">Paused</option>
+                              </select>
+                            </div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for user in users %}
+                <tr class="pointer">
+                    <td>{{user.id}}</td>
+                    <td>{{user.username}}</td>
+                    <td>{{user.email}}</td>
+                    <td>{{user.firstname}}</td>
+                    <td>{{user.lastname}}</td>
+                    <td>{{user.userRole}}</td>
+                    <td>{{user.userStatus}}</td>
+
+                    <td>
+                        <button onclick="window.location.href='view-user-page/{{user.id}}'"
+                                type="button" class="btn btn-info">
+                            View
+                        </button>
+                        &nbsp;
+                        <button onclick="window.location.href='edit-user-page/{{user.id}}'"
+                                type="button" class="btn btn-info">
+                            Edit
+                        </button>
+                    </td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            <a href="add-user-page" class="btn btn-primary">Add a new User!</a>
+             <script type="text/javascript">
+                  function roleChangeEventHandler(event) {
+                    if (getCookie("userRoleFilter") != event.target.value) {
+                        document.cookie = `userRoleFilter=${event.target.value}; path=/`;
+                        window.location.href=window.location.href;
+                    }
+                  }
+                  function userStatusChangeEventHandler(event) {
+                    if (getCookie("userStatusFilter") != event.target.value) {
+                        document.cookie = `userStatusFilter=${event.target.value}; path=/`;
+                        window.location.href=window.location.href;
+                    }
+                  }
+            </script>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    function getCookie(cname) {
+      let name = cname + "=";
+      let decodedCookie = decodeURIComponent(document.cookie);
+      let ca = decodedCookie.split(';');
+      for(let i = 0; i <ca.length; i++) {
+        let c = ca[i];
+        while (c.charAt(0) == ' ') {
+          c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+          return c.substring(name.length, c.length);
+        }
+      }
+      return "";
+    }
+    // role
+    filter = getCookie("userRoleFilter")
+    select = document.querySelector(".userRole");
+    options = document.querySelectorAll(".userAll option");
+    if (filter) {
+       for(const option of options) {
+           const area = option.dataset.area;
+           if (area === filter) {
+              option.setAttribute("selected", "");
+              break;
+           }
+       }
+    }
+    //userStatus
+    filter = getCookie("userStatusFilter")
+    select = document.querySelector(".userStatus");
+    options = document.querySelectorAll(".userStatus option");
+    if (filter) {
+       for(const option of options) {
+           const area = option.dataset.area;
+           if (area === filter) {
+              option.setAttribute("selected", "");
+              break;
+           }
+       }
+    }
+
+</script>
+
+
+
+
+
+

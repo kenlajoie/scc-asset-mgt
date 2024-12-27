@@ -1,0 +1,55 @@
+{% include 'layout.html' %}
+
+<div class="container">
+  <div class="card">
+    <div class="card-header">
+      Edit Asset
+    </div>
+    <div class="card-body">
+      <form id="editUserForm">
+
+        <div class="form-group">
+          <label>Username (must be unique, no spaces)</label>
+          <input type="text" class="form-control" name="username" value="{{user.username}}" required>
+        </div>
+
+        <div class="form-group">
+          <label>Email (must be unique)</label>
+          <input type="text" class="form-control" name="email" value="{{user.email}}" required>
+        </div>
+
+        <div class="form-group">
+          <label>First Name</label>
+          <input type="text" class="form-control" name="firstname" value="{{user.firstname}}">
+        </div>
+
+        <div class="form-group">
+          <label>Last Name</label>
+          <input type="text" class="form-control" name="lastname" value="{{user.lastname}}">
+        </div>
+
+        <div class="form-group">
+          <label>Role</label>
+          <select class="form-control" name="userRole">
+            <option {% if user.userRole =="Admin" %} selected="selected" {% endif %}>Admin</option>
+            <option {% if user.userRole =="Tech" %} selected="selected" {% endif %}>Technician</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Status</label>
+          <select class="form-control" name="userStatus">
+            <option {% if user.userStatus =="Active" %} selected="selected" {% endif %}>Active</option>
+            <option {% if user.userStatus =="Paused" %} selected="selected" {% endif %}>Paused</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary"> Save </button>
+            <a href="/users/user-page" class="btn btn-success">Back</a>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</div>

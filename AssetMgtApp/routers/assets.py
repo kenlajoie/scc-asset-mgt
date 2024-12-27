@@ -35,11 +35,11 @@ class AssetRequest(BaseModel):
     description: str = Field(max_length=30)
     assetState: str = Field(min_length=3, max_length=10)
 
+##this should be a shared function
 def redirect_to_login():
     redirect_response = RedirectResponse(url="/auth/login-page", status_code=status.HTTP_302_FOUND)
     redirect_response.delete_cookie(key="access_token")
     return redirect_response
-
 
 ### Pages ###
 

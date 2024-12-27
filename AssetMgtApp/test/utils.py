@@ -56,11 +56,11 @@ def test_user():
     user = Users(
         username="kenlajoie",
         email="ken.lajoie@gmail.com",
-        first_name="Ken",
-        last_name="Lajoie",
-        hashed_password=bcrypt_context.hash("testpassword"),
-        role="admin",
-        phone_number="(111)-111-1111"
+        firstName="Ken",
+        lastName="Lajoie",
+        hashedPassword=bcrypt_context.hash("testpassword"),
+        userRole="Admin",
+        userStatus="Active",
     )
     db = TestingSessionLocal()
     db.add(user)

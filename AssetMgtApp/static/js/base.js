@@ -125,7 +125,7 @@
                 console.log(`${assetId}`
                 )
 
-                if (!confirm("Are you sure?")) {
+                if (!confirm("Delete Asset! Are you sure?")) {
                     window.location.href = '/assets/asset-page'; // Redirect to the asset page
                 }
 
@@ -287,11 +287,11 @@
                 console.log(`${todoId}`
                 )
 
-                if (!confirm("Are you sure?")) {
+                if (!confirm("Delete Todo! Are you sure?")) {
                     window.location.href = '/todos/todo-page'; // Redirect to the todo page
                 }
 
-                const response = await fetch(`/assets/asset/${assetId}`, {
+                const response = await fetch(`/todos/todo-delete/${todoId}`, {
                     method: 'DELETE',
                     headers: {
                         'Content-Type': 'application/json',
@@ -301,7 +301,7 @@
                 });
 
                 if (response.ok) {
-                    window.location.href = '/assets/asset-page'; // Redirect to the asset page
+                    window.location.href = '/todos/todo-page'; // Redirect to the todo page
                 } else {
                     // Handle error
                     const errorData = await response.json();
