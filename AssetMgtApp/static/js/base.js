@@ -286,6 +286,7 @@
                 if (response.ok) {
                     window.location.href = '/assets/asset-page'; // Redirect to the asset page
                 } else {
+
                     // Handle error
                     const errorData = await response.json();
                     alert(`Error: ${errorData.detail}`);
@@ -394,11 +395,15 @@
                     body: JSON.stringify(payload)
                 });
 
+                //alert(data.redirect);
                 //alert(assetId);
                 //alert(JSON.stringify(payload))
 
                 if (response.ok) {
-                    window.location.href = '/todos/todo-page'; // Redirect to the asset page
+                    if (data.redirect == 'T')
+                        window.location.href = '/todos/todo-page'; // Redirect to the todo page
+                    else
+                        window.location.href = `/assets/view-asset-page/${assetId}`; // Redirect to the view-asset page
                     //form.reset(); // Clear the form
                 } else {
                     // Handle error
@@ -438,6 +443,8 @@
                     throw new Error('Authentication token not found');
                 }
 
+                //alert(data.redirect);
+                //alert(`'hello1 ${data.assetId}`);
                 console.log(`${todoId}`)
 
                 const response = await fetch(`/todos/todo-update/${todoId}`, {
@@ -450,7 +457,11 @@
                 });
 
                 if (response.ok) {
-                    window.location.href = '/todos/todo-page'; // Redirect to the todo page
+                    if (data.redirect == 'T')
+                        window.location.href = '/todos/todo-page'; // Redirect to the todo page
+                    else {
+                        window.location.href = `/assets/view-asset-page/${assetId}`; // Redirect to the view-asset page
+                    }
                 } else {
                     // Handle error
                     const errorData = await response.json();
@@ -505,7 +516,11 @@
                 });
 
                 if (response.ok) {
-                    window.location.href = '/todos/todo-page'; // Redirect to the todo page
+                    if (data.redirect == 'T')
+                        window.location.href = '/todos/todo-page'; // Redirect to the todo page
+                    else {
+                        window.location.href = `/assets/view-asset-page/${assetId}`; // Redirect to the view-asset page
+                    }
                 } else {
                     // Handle error
                     const errorData = await response.json();

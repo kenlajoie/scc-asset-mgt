@@ -111,10 +111,27 @@ async def render_todo_page(request: Request, asset_id: int,db: db_dependency):
         if asset_model is None:
             raise HTTPException(status_code=404, detail='Asset not found.')
 
-        return templates.TemplateResponse("add-todo.html", {"request": request, "asset": asset_model, "currentUser": user})
-
+        return templates.TemplateResponse("add-todo.html", {"request": request, "asset": asset_model, "currentUser": user, "redirect": "T"})
     except:
         return redirect_to_login()
+
+@router.get('/add-todo-asset-page/{asset_id}')
+async def render_todo_page(request: Request, asset_id: int,db: db_dependency):
+    try:
+        # get the current user to set "by" columns
+        user = await get_current_user(request.cookies.get('access_token'))
+        if user is None:
+            return redirect_to_login()
+
+        # get the current asset details to show on the form in ready-only
+        asset_model = db.query(Assets).filter(Assets.id == asset_id).first()
+        if asset_model is None:
+            raise HTTPException(status_code=404, detail='Asset not found.')
+
+        return templates.TemplateResponse("add-todo.html", {"request": request, "asset": asset_model, "currentUser": user, "redirect": "A"})
+    except:
+        return redirect_to_login()
+
 
 @router.get("/edit-todo-page/{todo_id}")
 async def render_edit_todo_page(request: Request, todo_id: int, db: db_dependency):
@@ -134,11 +151,34 @@ async def render_edit_todo_page(request: Request, todo_id: int, db: db_dependenc
         if asset_model is None:
             raise HTTPException(status_code=404, detail='Asset not found.')
 
-        return templates.TemplateResponse("edit-todo.html", {"request": request, "todo": todo_model, "asset": asset_model, "currentUser": user})
+        return templates.TemplateResponse("edit-todo.html", {"request": request, "todo": todo_model,
+                                                             "asset": asset_model, "currentUser": user,"redirect": "T"})
 
     except:
         return redirect_to_login()
 
+@router.get("/edit-todo-asset-page/{todo_id}")
+async def render_edit_todo_page(request: Request, todo_id: int, db: db_dependency):
+    try:
+        # get the current user to set "by" columns
+        user = await get_current_user(request.cookies.get('access_token'))
+        if user is None:
+            return redirect_to_login()
+
+        # get the current todo details
+        todo_model = db.query(Todos).filter(Todos.id == todo_id).first()
+        if todo_model is None:
+            raise HTTPException(status_code=404, detail='Todo not found.')
+
+        # get the current asset details to show on the form in ready-only
+        asset_model = db.query(Assets).filter(Assets.id == todo_model.assetId).first()
+        if asset_model is None:
+            raise HTTPException(status_code=404, detail='Asset not found.')
+
+        return templates.TemplateResponse("edit-todo.html", {"request": request, "todo": todo_model,
+                                                             "asset": asset_model, "currentUser": user,"redirect": "A"})
+    except:
+        return redirect_to_login()
 
 @router.get("/view-todo-page/{todo_id}")
 async def render_view_asset_page(request: Request, todo_id: int, db: db_dependency):
@@ -157,7 +197,31 @@ async def render_view_asset_page(request: Request, todo_id: int, db: db_dependen
         if asset_model is None:
             raise HTTPException(status_code=404, detail='Asset not found.')
 
-        return templates.TemplateResponse("view-todo.html", {"request": request, "todo": todo_model, "asset": asset_model, "currentUser": user})
+        return templates.TemplateResponse("view-todo.html", {"request": request, "todo": todo_model,
+                                                             "asset": asset_model, "currentUser": user, "redirect": "T"})
+
+    except:
+        return redirect_to_login()
+
+@router.get("/view-todo-asset-page/{todo_id}")
+async def render_view_asset_page(request: Request, todo_id: int, db: db_dependency):
+    try:
+        user = await get_current_user(request.cookies.get('access_token'))
+
+        if user is None:
+            return redirect_to_login()
+
+        todo_model = db.query(Todos).filter(Todos.id == todo_id).first()
+        if todo_model is None:
+            raise HTTPException(status_code=404, detail='Todo not found.')
+
+        # get the current asset details to show on the form in ready-only
+        asset_model = db.query(Assets).filter(Assets.id == todo_model.assetId).first()
+        if asset_model is None:
+            raise HTTPException(status_code=404, detail='Asset not found.')
+
+        return templates.TemplateResponse("view-todo.html", {"request": request, "todo": todo_model,
+                                                             "asset": asset_model, "currentUser": user, "redirect": "A"})
 
     except:
         return redirect_to_login()

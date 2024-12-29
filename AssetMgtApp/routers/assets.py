@@ -3,7 +3,7 @@ from pydantic import BaseModel, Field
 from sqlalchemy.orm import Session
 from fastapi import APIRouter, Depends, HTTPException, Path, Request, status
 from starlette import status
-from ..models import Assets
+from ..models import Assets, Todos
 from ..database import SessionLocal
 from .auth import get_current_user
 from starlette.responses import RedirectResponse
@@ -122,9 +122,9 @@ async def render_view_asset_page(request: Request, asset_id: int, db: db_depende
         if asset_model is None:
             raise HTTPException(status_code=404, detail='Asset not found.')
 
-##        confirm("hello3")
+        todo_list = db.query(Todos).filter(Todos.assetId == asset_id).all()
 
-        return templates.TemplateResponse("view-asset.html", {"request": request, "asset": asset_model, "currentUser": user})
+        return templates.TemplateResponse("view-asset.html", {"request": request, "asset": asset_model, "todo_list": todo_list, "currentUser": user})
 
     except:
         return redirect_to_login()
