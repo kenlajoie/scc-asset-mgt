@@ -1,5 +1,6 @@
 from typing import Annotated
 
+from alembic.util import not_none
 from click import confirm
 from pydantic import BaseModel, Field
 from sqlalchemy.orm import Session
@@ -51,6 +52,9 @@ class UserEditRequest(BaseModel):
     lastname: str = Field(min_length=3, max_length=15)
     userRole: str = Field(min_length=3,max_length=10)
     userStatus: str = Field(min_length=3, max_length=10)
+
+class UserPasswordRequest(BaseModel):
+    password: str = Field(min_length=6, max_length=20)
 
 ##this should be a shared function
 def redirect_to_login():
@@ -119,6 +123,24 @@ async def render_user_edit_page(request: Request, user_id: int, db: db_dependenc
         return redirect_to_login()
 
 
+@router.get("/password-user-page/{user_id}")
+async def render_user_password_page(request: Request, user_id: int, db: db_dependency):
+    try:
+        user = await get_current_user(request.cookies.get('access_token'))
+
+        if user is None:
+            return redirect_to_login()
+
+        user_model = db.query(Users).filter(Users.id == user_id).first()
+        if user_model is None:
+            raise HTTPException(status_code=404, detail='User not found.')
+
+        return templates.TemplateResponse("password-user.html", {"request": request, "user": user_model, "currentUser": user})
+
+    except:
+        return redirect_to_login()
+
+
 @router.get("/view-user-page/{user_id}")
 async def render_user_view_page(request: Request, user_id: int, db: db_dependency):
     try:
@@ -138,7 +160,7 @@ async def render_user_view_page(request: Request, user_id: int, db: db_dependenc
 
 
 @router.post("/user", status_code=status.HTTP_201_CREATED)
-async def create_asset(user: user_dependency, db: db_dependency,
+async def create_user(user: user_dependency, db: db_dependency,
                       user_request: UserAddRequest):
     if user is None:
         raise HTTPException(status_code=401, detail='Authentication Failed')
@@ -167,6 +189,8 @@ async def update_user(user: user_dependency, db: db_dependency,
     if user_model is None:
         raise HTTPException(status_code=404, detail='User not found.')
 
+    save = user_model.hashedPassword
+
     user_model.username = user_request.username
     user_model.email = user_request.email
     user_model.firstname = user_request.firstname
@@ -176,6 +200,23 @@ async def update_user(user: user_dependency, db: db_dependency,
 
     db.add(user_model)
     db.commit()
+
+@router.put("/password/{user_id}", status_code=status.HTTP_204_NO_CONTENT)
+async def update_user_password(user: user_dependency, db: db_dependency,
+                      user_request: UserPasswordRequest,
+                      user_id: int = Path(gt=0)):
+    if user is None:
+        raise HTTPException(status_code=401, detail='Authentication Failed')
+
+    user_model = db.query(Users).filter(Users.id == user_id).first()
+    if user_model is None:
+        raise HTTPException(status_code=404, detail='User not found.')
+
+    user_model.hashedPassword = bcrypt_context.hash(user_request.password)
+
+    db.add(user_model)
+    db.commit()
+
 
 @router.get("/user/{user_id}", status_code=status.HTTP_200_OK)
 async def read_user(user: user_dependency, db: db_dependency, user_id: int = Path(gt=0)):
@@ -190,6 +231,20 @@ async def read_user(user: user_dependency, db: db_dependency, user_id: int = Pat
 
     raise HTTPException(status_code=404, detail='user not found.')
 
+@router.put("/password", status_code=status.HTTP_204_NO_CONTENT)
+async def change_password(user: user_dependency, db: db_dependency,
+                          user_verification: UserVerification):
+    if user is None:
+        raise HTTPException(status_code=401, detail='Authentication Failed')
+
+    user_model = db.query(Users).filter(Users.id == user.get('id')).first()
+    if not bcrypt_context.verify(user_verification.password, user_model.hashedPassword):
+       raise HTTPException(status_code=401, detail='Error on password change')
+
+    user_model.hashedPassword = bcrypt_context.hash(user_verification.new_password)
+
+    db.add(user_model)
+    db.commit()
 
 
 @router.get('/', status_code=status.HTTP_200_OK)
@@ -198,20 +253,6 @@ async def get_user(user: user_dependency, db: db_dependency):
         raise HTTPException(status_code=401, detail='Authentication Failed')
     return db.query(Users).filter(Users.id == user.get('id')).first()
 
-
-@router.put("/password", status_code=status.HTTP_204_NO_CONTENT)
-async def change_password(user: user_dependency, db: db_dependency,
-                          user_verification: UserVerification):
-    if user is None:
-        raise HTTPException(status_code=401, detail='Authentication Failed')
-
-    user_model = db.query(Users).filter(Users.id == user.get('id')).first()
-
-    if not bcrypt_context.verify(user_verification.password, user_model.hashedPassword):
-        raise HTTPException(status_code=401, detail='Error on password change')
-    user_model.hashedPassword = bcrypt_context.hash(user_verification.new_password)
-    db.add(user_model)
-    db.commit()
 
 
 

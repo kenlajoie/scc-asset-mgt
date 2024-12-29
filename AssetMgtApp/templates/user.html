@@ -10,8 +10,8 @@
                 <thead>
                     <tr>
                         <th scope="col">Id</th>
-                        <th scope="col">Email</th>
                         <th scope="col">Username</th>
+                        <th scope="col">Email</th>
                         <th scope="col">First</th>
                         <th scope="col">Last</th>
                         <th scope="col">Role</th>
@@ -57,14 +57,13 @@
 
                     <td>
                         <button onclick="window.location.href='view-user-page/{{user.id}}'"
-                                type="button" class="btn btn-info">
-                            View
-                        </button>
-                        &nbsp;
+                                type="button" class="btn btn-info">V</button>
+
                         <button onclick="window.location.href='edit-user-page/{{user.id}}'"
-                                type="button" class="btn btn-info">
-                            Edit
-                        </button>
+                                type="button" class="btn btn-info">E</button>
+
+                        <button onclick="window.location.href='password-user-page/{{user.id}}'"
+                                type="button" class="btn btn-info">P</button>
                     </td>
                 </tr>
                 {% endfor %}

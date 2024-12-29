@@ -15,16 +15,18 @@
         <li class="nav-item active">
           <a class="nav-link" href="/todos/todo-page">Todos</a>
         </li>
-        <li class="nav-item active">
-          <a class="nav-link" href="/users/user-page">Users</a>
-        </li>
+            {% if currentUser.userRole == 'Admin' %}
+              <li class="nav-item active">
+                <a class="nav-link" href="/users/user-page">Users</a>
+              </li>
+            {% endif %}
         {% endif %}
       </ul>
 
       <ul class="navbar-nav ml-auto">
         {% if currentUser %}
         <li class="nav-item m-1">
-          {{currentUser.username}} &nbsp; &nbsp; &nbsp;
+          {{currentUser.username}} {{currentUser.id}} {{currentUser.userRole}} &nbsp; &nbsp; &nbsp;
         </li>
         <li class="nav-item m-2">
           <a type="button" class="btn btn-outline-light text-white" onclick="logout()">Logout</a>
