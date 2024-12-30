@@ -37,7 +37,7 @@
                 } else {
                     // Handle error
                     const errorData = await response.json();
-                    alert(`XXX Error: ${errorData.detail}`);
+                    alert(`Error User ADD: ${response.status}:${response.statusText}`);
                 }
             } catch (error) {
                 console.error('Error:', error);
@@ -67,6 +67,8 @@
                 userStatus: data.userStatus,
             };
 
+            //alert(JSON.stringify(payload));
+
             try {
                 const token = getCookie('access_token');
                 console.log(token)
@@ -88,7 +90,7 @@
                 } else {
                     // Handle error
                     const errorData = await response.json();
-                    alert('Error #1');
+                    alert(`Error User UPDATE: ${response.status}:${response.statusText}`);
                 }
             } catch (error) {
                 alert('#2 An error occurred. Please try again.');
@@ -128,14 +130,14 @@
                     body: JSON.stringify(payload)
                 });
 
-                //alert(JSON.stringify(payload))
+                alert(JSON.stringify(payload))
 
                 if (response.ok) {
                     window.location.href = '/users/user-page'; // Redirect to the user pag
                 } else {
                     // Handle error
                     const errorData = await response.json();
-                    alert('Error #1');
+                    alert(`Error User Password UPDATE: ${response.status}:${response.statusText}`);
                 }
             } catch (error) {
                 alert('#2 An error occurred. Please try again.');
@@ -163,39 +165,36 @@
                 userStatus: data.userStatus
             };
 
+            //alert(JSON.stringify(payload));
+
             try {
                 const token = getCookie('access_token');
-                console.log(token)
                 if (!token) {
                     throw new Error('Authentication token not found');
                 }
 
-                console.log(`${userId}`
-                )
-
                 if (!confirm("Delete User! Are you sure?")) {
-                    window.location.href = '/users/user-page'; // Redirect to the user page
+                    window.location.href = '/assets/asset-page'; // Redirect to the asset page
                 }
 
                 const response = await fetch(`/users/user/${userId}`, {
                     method: 'DELETE',
                     headers: {
-                        'Content-Type': 'application/json',
                         'Authorization': `Bearer ${token}`
-                    },
-                    body: JSON.stringify(payload)
+                    }
                 });
 
                 if (response.ok) {
+                    // Handle success
                     window.location.href = '/users/user-page'; // Redirect to the user page
                 } else {
                     // Handle error
                     const errorData = await response.json();
-                    alert(`Error X: ${errorData.detail}`);
+                    alert(`Error user DELTET: ${response.status}:${response.statusText}`);
                 }
             } catch (error) {
                 console.error('Error:', error);
-                alert('#2 An error occurred. Please try again.');
+                alert('An error occurred. Please try again.');
             }
         });
     }
@@ -444,8 +443,9 @@
                 }
 
                 //alert(data.redirect);
-                //alert(`'hello1 ${data.assetId}`);
+                //alert(JSON.stringify(payload));
                 console.log(`${todoId}`)
+                console.log(`${data.assetId}`)
 
                 const response = await fetch(`/todos/todo-update/${todoId}`, {
                     method: 'PUT',
@@ -460,7 +460,7 @@
                     if (data.redirect == 'T')
                         window.location.href = '/todos/todo-page'; // Redirect to the todo page
                     else {
-                        window.location.href = `/assets/view-asset-page/${assetId}`; // Redirect to the view-asset page
+                        window.location.href = `/assets/view-asset-page/${data.assetId}`; // Redirect to the todo page
                     }
                 } else {
                     // Handle error
@@ -468,8 +468,9 @@
                     alert(`#2 Error: ${errorData.detail}`);
                 }
             } catch (error) {
-                console.error('Error:', error);
+                alert(error)
                 alert('#3 An error occurred. Please try again.');
+                console.error('Error:', error);
             }
         });
     }
@@ -519,7 +520,7 @@
                     if (data.redirect == 'T')
                         window.location.href = '/todos/todo-page'; // Redirect to the todo page
                     else {
-                        window.location.href = `/assets/view-asset-page/${assetId}`; // Redirect to the view-asset page
+                        window.location.href = `/assets/view-asset-page/${data.assetId}`; // Redirect to the todo page
                     }
                 } else {
                     // Handle error
@@ -527,6 +528,7 @@
                     alert(`Error: ${errorData.detail}`);
                 }
             } catch (error) {
+                alert(error)
                 console.error('Error:', error);
                 alert('#2 An error occurred. Please try again.');
             }

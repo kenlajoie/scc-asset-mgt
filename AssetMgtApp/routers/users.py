@@ -201,6 +201,21 @@ async def update_user(user: user_dependency, db: db_dependency,
     db.add(user_model)
     db.commit()
 
+@router.delete("/user/{user_id}", status_code=status.HTTP_204_NO_CONTENT)
+async def delete_user(user: user_dependency, db: db_dependency,
+                      user_id: int = Path(gt=0)):
+
+    if user is None or user.get('userRole') != 'Admin' :
+        raise HTTPException(status_code=401, detail='Authentication Failed')
+
+    user_model = db.query(Users).filter(Users.id == user_id).first()
+    if user_model is None:
+        raise HTTPException(status_code=404, detail='User Not found.')
+
+    db.query(Users).filter(Users.id == user_id).delete()
+    db.commit()
+
+
 @router.put("/password/{user_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def update_user_password(user: user_dependency, db: db_dependency,
                       user_request: UserPasswordRequest,
