@@ -22,7 +22,7 @@
                         <th scope="col">---</th>
                         <th scope="col">
                             <div class="todoStatus">
-                              <select class="todoStatus" onchange="todoStatusChangeEventHandler(event);">
+                              <select id=todoStatusFilter class="todoStatus" onchange="todoStatusChangeEventHandler(event);">
                                 <option data-area="All">All</option>
                                 <option data-area="Open">Open</option>
                                 <option data-area="Closed">Closed</option>
@@ -31,7 +31,7 @@
                         </th>
                         <th scope="col">
                             <div class="priority">
-                              <select class="priority" onchange="priorityChangeEventHandler(event);">
+                              <select id=todoPriorityFilter class="priority" onchange="priorityChangeEventHandler(event);">
                                 <option data-area="All">All</option>
                                 <option data-area="High">High</option>
                                 <option data-area="Medium">Medium</option>
@@ -41,7 +41,7 @@
                         </th>
                         <th scope="col">
                             <div class="major-filter">
-                              <select class="majorArea" onchange="majorChangeEventHandler(event);">
+                              <select id=assetMajorFilter class="majorArea" onchange="majorChangeEventHandler(event);">
                                 <option data-area="All">All</option>
                                 <option data-area="1st">1st</option>
                                 <option data-area="2nd">2nd</option>
@@ -51,7 +51,7 @@
                         </th>
                         <th scope="col">
                             <div class="minor-filter">
-                              <select class="minorArea" onchange="minorChangeEventHandler(event);">
+                              <select id=assetMinorFilter class="minorArea" onchange="minorChangeEventHandler(event);">
                                 <option data-area="ALL">All</option>
                                 <option data-area="Tee">Tee</option>
                                 <option data-area="Fairway">Fairway</option>
@@ -62,7 +62,7 @@
                         </th>
                         <th scope="col">
                             <div class="type-filter">
-                              <select class="assetType" onchange="typeChangeEventHandler(event);">
+                              <select id=assetYpeFilter class="assetType" onchange="typeChangeEventHandler(event);">
                                 <option data-area="All">All</option>
                                 <option data-area="Head">Head</option>
                                 <option data-area="GroupValve">GroupValve</option>
