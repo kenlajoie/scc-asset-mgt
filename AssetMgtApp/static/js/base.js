@@ -363,7 +363,7 @@
 
     // Todo ---------------------------------------------------------------------------------------------
     // Add Todo JS --------------------------------------------------------------------
-    const todoForm = document.getElementById('todoForm');
+    const todoForm = document.getElementById('addTodoForm');
     if (todoForm) {
         todoForm.addEventListener('submit', async function (event) {
             event.preventDefault();
@@ -441,9 +441,10 @@
 
                 console.log(`${todoId}`)
                 console.log(`${data.assetId}`)
-//                alert(`${todoId}`);
-//                alert(data.redirect);
-//                alert(JSON.stringify(payload));
+                alert(`${todoId}`);
+                alert(data.redirect);
+                alert(data.mode);
+                alert(JSON.stringify(payload));
 //                alert(data.title);
 //                alert(data.description);
 //                alert(data.priority);

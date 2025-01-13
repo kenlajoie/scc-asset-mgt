@@ -31,7 +31,7 @@ user_dependency = Annotated[dict, Depends(get_current_user)]
 
 class TodoRequest(BaseModel):
     title: str = Field(min_length=3)
-    description: str = Field(min_length=3, max_length=100)
+    description: str
     priority: str = Field(min_length=3, max_length=10)
     todoStatus: str = Field(min_length=3, max_length=10)
 
@@ -111,7 +111,19 @@ async def render_todo_page(request: Request, asset_id: int,db: db_dependency):
         if asset_model is None:
             raise HTTPException(status_code=404, detail='Asset not found.')
 
-        return templates.TemplateResponse("add-todo.html", {"request": request, "asset": asset_model, "currentUser": user, "redirect": "T"})
+        #default values
+        todo_default = Todos(
+            title="",
+            description="",
+            todoStatus="OPEN",
+            priority="HIGH",
+            assetId=asset_id,
+            ownerId=user.get('id')
+        )
+
+        return templates.TemplateResponse("add-edit-view-todo.html", {"request": request,
+                            "todo" : todo_default, "asset": asset_model,
+                            "currentUser": user, "redirect": "T","mode": "ADD"})
     except:
         return redirect_to_login()
 
@@ -128,7 +140,19 @@ async def render_todo_page(request: Request, asset_id: int,db: db_dependency):
         if asset_model is None:
             raise HTTPException(status_code=404, detail='Asset not found.')
 
-        return templates.TemplateResponse("add-todo.html", {"request": request, "asset": asset_model, "currentUser": user, "redirect": "A"})
+        #default values
+        todo_default = Todos(
+            title="",
+            description="",
+            todoStatus="OPEN",
+            priority="HIGH",
+            assetId=asset_id,
+            ownerId=user.get('id')
+        )
+        return templates.TemplateResponse("add-edit-view-todo.html", {"request": request,
+                            "todo" : todo_default, "asset": asset_model,
+                            "currentUser": user, "redirect": "A","mode": "ADD"})
+
     except:
         return redirect_to_login()
 
@@ -151,8 +175,8 @@ async def render_edit_todo_page(request: Request, todo_id: int, db: db_dependenc
         if asset_model is None:
             raise HTTPException(status_code=404, detail='Asset not found.')
 
-        return templates.TemplateResponse("edit-todo.html", {"request": request, "todo": todo_model,
-                                                             "asset": asset_model, "currentUser": user,"redirect": "T"})
+        return templates.TemplateResponse("add-edit-view-todo.html", {"request": request, "todo": todo_model,
+                                     "asset": asset_model, "currentUser": user,"redirect": "T","mode": "EDIT"})
 
     except:
         return redirect_to_login()
@@ -175,8 +199,8 @@ async def render_edit_todo_page(request: Request, todo_id: int, db: db_dependenc
         if asset_model is None:
             raise HTTPException(status_code=404, detail='Asset not found.')
 
-        return templates.TemplateResponse("edit-todo.html", {"request": request, "todo": todo_model,
-                                                             "asset": asset_model, "currentUser": user,"redirect": "A"})
+        return templates.TemplateResponse("add-edit-view-todo.html", {"request": request, "todo": todo_model,
+                                     "asset": asset_model, "currentUser": user,"redirect": "A","mode": "EDIT"})
     except:
         return redirect_to_login()
 
@@ -197,8 +221,8 @@ async def render_view_asset_page(request: Request, todo_id: int, db: db_dependen
         if asset_model is None:
             raise HTTPException(status_code=404, detail='Asset not found.')
 
-        return templates.TemplateResponse("view-todo.html", {"request": request, "todo": todo_model,
-                                                             "asset": asset_model, "currentUser": user, "redirect": "T"})
+        return templates.TemplateResponse("add-edit-view-todo.html", {"request": request, "todo": todo_model,
+                                     "asset": asset_model, "currentUser": user, "redirect": "T", "mode": "VIEW"})
 
     except:
         return redirect_to_login()
@@ -220,8 +244,8 @@ async def render_view_asset_page(request: Request, todo_id: int, db: db_dependen
         if asset_model is None:
             raise HTTPException(status_code=404, detail='Asset not found.')
 
-        return templates.TemplateResponse("view-todo.html", {"request": request, "todo": todo_model,
-                                                             "asset": asset_model, "currentUser": user, "redirect": "A"})
+        return templates.TemplateResponse("add-edit-view-todo.html", {"request": request, "todo": todo_model,
+                                    "asset": asset_model, "currentUser": user, "redirect": "A", "mode": "VIEW"})
 
     except:
         return redirect_to_login()

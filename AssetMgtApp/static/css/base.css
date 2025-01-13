@@ -26,6 +26,10 @@ body {
       padding: 0px 0px; /* Custom padding for thinner appearance */
 }
 
+.btn-tight {
+  margin-right: -5px; /* Pull the buttons closer together */
+}
+
 .td150 {
       min-width: 150px; /* Set minimum width for all td elements */
 }
@@ -36,6 +40,14 @@ th {
 
 td {
     text-align: left;
+}
+
+table tr.hover-highlight td {
+      background-color: #8acf8a;
+}
+
+table tr.bottom-border td {
+      border-bottom: 3px solid black;
 }
 
 .card-body {
@@ -62,10 +74,6 @@ td {
 
 .table-hover tbody tr:hover {
   background-color: rgba(0, 0, 0, 0.1);
-}
-
-.btn {
-  padding: 5px 10px; /* Reduce top/bottom padding */
 }
 
 /* ----------------------------------------------- */

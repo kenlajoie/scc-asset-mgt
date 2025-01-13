@@ -2,9 +2,12 @@
 
 <div class="container">
     <div class="card text-center">
-        <div class="card-body">
+        <div class="card-header">
             <h5 class="card-title card-title-left">Todo List</h5>
-            <table class="table-sm table-hover table-striped">
+        </div>
+        <div class="card-body">
+            <table class="table table-sm">
+
                 <thead>
                     <tr>
                         <th scope="col">Status</th>
@@ -12,7 +15,6 @@
                         <th scope="col">Major</th>
                         <th scope="col">Minor</th>
                         <th scope="col">Type</th>
-                        <th scope="col">Title</th>
                         <th scope="col">Actions</th>
                     </tr>
                     <tr>
@@ -56,7 +58,7 @@
                               </select>
                             </div>
                         </th>
-                        <th scope="col">
+                        <th colspan="3" scope="col">
                             <div class="type-filter">
                               <select id=assetYpeFilter class="assetType" onchange="typeChangeEventHandler(event);">
                                 <option data-area="All">All</option>
@@ -72,26 +74,28 @@
                 </thead>
                 <tbody>
                 {% for todo in todos %}
-                <tr class="pointer">
+                <tr class="group-{{todo.id}}">
                     <td>{{todo.todoStatus}}</td>
                     <td>{{todo.priority}}</td>
                     <td>{{todo.majorArea}}</td>
                     <td>{{todo.minorArea}}</td>
                     <td>{{todo.assetType}}</td>
-                    <td>{{todo.title}}</td>
                     <td>
-                        <button class="btn-sm btn-primary btn-thin-sm"
+                        <button class="btn-sm btn-primary btn-thin-sm btn-tight"
                                 onclick="window.location.href='view-todo-page/{{todo.id}}'"
                                 type="button">View</button>
                         &nbsp;
-                        <button class="btn-sm btn-primary btn-thin-sm"
+                        <button class="btn-sm btn-primary btn-thin-sm btn-tight"
                                 onclick="window.location.href='edit-todo-page/{{todo.id}}'"
                                 type="button">Edit</button>
                         &nbsp;
-                        <button class="btn-sm btn-primary btn-thin-sm"
+                        <button class="btn-sm btn-primary btn-thin-sm btn-tight"
                                 onclick="window.location.href='add-todo-page/{{todo.assetId}}'"
-                                type="button">Add</button>
+                                type="button" >Add</button>
                     </td>
+                </tr>
+                <tr class="group-{{todo.id}} bottom-border">
+                    <td colspan="8"><b>Title:</b> {{todo.title}}</td>
                 </tr>
                 {% endfor %}
                 </tbody>
@@ -213,6 +217,26 @@
            }
        }
     }
+    // Add hover effect for row groups
+    document.querySelectorAll('tr').forEach(row => {
+      row.addEventListener('mouseenter', () => {
+        const groupClass = Array.from(row.classList).find(cls => cls.startsWith('group-'));
+        if (groupClass) {
+          document.querySelectorAll(`.${groupClass}`).forEach(groupRow => {
+            groupRow.classList.add('hover-highlight');
+          });
+        }
+      });
+
+      row.addEventListener('mouseleave', () => {
+        const groupClass = Array.from(row.classList).find(cls => cls.startsWith('group-'));
+        if (groupClass) {
+          document.querySelectorAll(`.${groupClass}`).forEach(groupRow => {
+            groupRow.classList.remove('hover-highlight');
+          });
+        }
+      });
+    });
 
 </script>
 
