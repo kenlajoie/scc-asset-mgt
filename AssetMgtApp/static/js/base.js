@@ -272,6 +272,10 @@
                 }
 
                 console.log(`${assetId}`)
+                alert(`${assetId}`);
+                alert(data.majorArea);
+                alert(data.minorArea);
+                alert(data.microArea);
 
                 const response = await fetch(`/assets/asset/${assetId}`, {
                     method: 'PUT',
@@ -281,6 +285,7 @@
                     },
                     body: JSON.stringify(payload)
                 });
+
 
                 if (response.ok) {
                     window.location.href = '/assets/asset-page'; // Redirect to the asset page
@@ -434,6 +439,16 @@
                 todoStatus: data.todoStatus
             };
 
+                console.log(`${todoId}`)
+                console.log(`${data.assetId}`)
+//                alert(`${todoId}`);
+//                alert(data.redirect);
+//                alert(JSON.stringify(payload));
+//                alert(data.title);
+//                alert(data.description);
+//                alert(data.priority);
+//                alert(data.todoStatus);
+
             try {
                 const token = getCookie('access_token');
                 console.log(token)
@@ -442,10 +457,6 @@
                     throw new Error('Authentication token not found');
                 }
 
-                //alert(data.redirect);
-                //alert(JSON.stringify(payload));
-                console.log(`${todoId}`)
-                console.log(`${data.assetId}`)
 
                 const response = await fetch(`/todos/todo-update/${todoId}`, {
                     method: 'PUT',

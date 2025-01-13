@@ -3,81 +3,139 @@
 <div class="container">
   <div class="card">
     <div class="card-header">
-      Edit Todo
+        <h5 class="card-title card-title-left">Todo</h5>
     </div>
     <div class="card-body">
       <form id="editTodoForm">
+           <div class="form-group">
+              <input type="text" class="form-control" name="redirect" value="{{redirect}}" hidden>
+              <input type="text" class="form-control" name="assetId" value="{{asset.id}}" hidden>
+           </div>
 
-      <div class="form-group">
-          <input type="text" class="form-control" name="redirect" value="{{redirect}}" hidden>
-          <input type="text" class="form-control" name="assetId" value="{{asset.id}}" hidden>
-       </div>
+           <div class="row g-5 pt-0">
 
-       <div class="form-group">
-          <label>Major Area</label>
-          <input type="text" class="form-control" name="majorArea" value="{{asset.majorArea}}" readonly>
-       </div>
+                <div class="col-sm-3">
+                    <label for="majorArea"
+                        class="form-label-sm">Major Area</label>
+                    <input id=majorArea name="majorArea" type="text"
+                            style="min-width: 100px; max-width: 150px;" class="form-control-sm"
+                            placeholder="Major Area" value="{{asset.majorArea}}" readonly>
+                </div>
 
-        <div class="form-group">
-          <label>Minor Area</label>
-          <input type="text" class="form-control" name="minorArea" value="{{asset.minorArea}}" readonly>
-        </div>
+                <div class="col-sm-3">
+                    <label for="minorArea"
+                        class="form-label-sm">Minor Area</label>
+                    <input id=minorArea name="MinorArea" type="text"
+                            style="min-width: 100px; max-width: 150px;" class="form-control-sm"
+                            placeholder="Asset Description" value="{{asset.minorArea}}" readonly>
+                </div>
 
-        <div class="form-group">
-          <label>Micro Area</label>
-          <input type="text" class="form-control" name="microArea" value="{{asset.microArea}}" readonly>
-        </div>
+                <div class="col-sm-3">
+                    <label for="assetType"
+                        class="form-label-sm">Asset Type</label>
+                    <input id=assetType name="assetType" type="text"
+                            style="min-width: 100px; max-width: 150px;" class="form-control-sm"
+                            placeholder="Asset Type" value="{{asset.assetType}}" readonly>
+                </div>
 
-        <div class="form-group">
-          <label>Asset Type</label>
-          <input type="text" class="form-control" name="assetType" value="{{asset.assetType}}" readonly>
-        </div>
+            </div> <!--row-->
 
-        <div class="form-group">
-          <label>Description</label>
-          <input type="text" class="form-control" name="description" value="{{asset.description}}" readonly>
-        </div>
+            <div class="row g-3 pt-2">
+                <div class="col-sm-8">
+                    <label for="asset.description" class="form-label-sm">Description</label>
+                    <input id=description name="asset.description" type="text"
+                            style="min-width: 300px; max-width: 400px;" class="form-control-sm"
+                            placeholder="Asset Description" value="{{asset.description}}" readonly>
+                </div>
+            </div> <!--row-->
 
-      <div class="form-group">
-          <label>Todo Id</label>
-          <input type="text" class="form-control" name="id" value="{{todo.id}}" readonly>
-       </div>
+            <div class="row g-3 pt-2 pb-2">
+                <div class="col-sm-10">
+                    <label for="microArea" class="form-label-sm">Model</label>
+                    <input id="microArea" name="microArea" type="text"
+                            style="min-width: 100px; max-width: 150px;" class="form-control-sm"
+                            placeholder="Micro Area" value="{{asset.microArea}}" readonly>
 
-        <div class="form-group">
-          <label>Title</label>
-          <input type="text" class="form-control" name="title" value="{{todo.title}}" required>
-        </div>
-        <div class="form-group">
-          <label>Description</label>
-          <textarea name="description" class="form-control" rows="3" required>{{todo.description}}</textarea>
-        </div>
-        <div class="form-group">
-          <label>Priority</label>
-          <select name="priority" class="form-control">
-            <option {% if todo.priority =="Low" %} selected="selected" {% endif %}>Low</option>
-            <option {% if todo.priority =="Medium" %} selected="selected" {% endif %}>Medium</option>
-            <option {% if todo.priority =="High" %} selected="selected" {% endif %}>High</option>
-         </select>
-        </div>
-        <div class="form-group">
-          <label>todoStatus</label>
-          <select name="todoStatus" class="form-control">
-            <option {% if todo.todoStatus =="Open" %} selected="selected" {% endif %}>Open</option>
-            <option {% if todo.todoStatus =="Closed" %} selected="selected" {% endif %}>Closed</option>
-          </select>
-        </div>
-            <button type="submit" class="btn btn-primary"> Save </button>
-            {% if redirect == "T"%}
-                <a href="/todos/todo-page" class="btn btn-success">Back</a>
-            {% else %}  <!- A  asset --!>
-                 <a href="/assets/view-asset-page/{{asset.id}}" class="btn btn-success">Back</a>
-            {% endif %}
+                    <label for="assetState" class="form-label-sm">Asset State</label>
+                    <input id="assetState" name="assetState" type="text"
+                            style="min-width: 100px; max-width: 150px;" class="form-control-sm"
+                            placeholder="Asset State" value="{{asset.assetState}}" readonly>
+                </div>
+
+            </div> <!--row-->
+
+<!------------todo stuff---------------->
+
+            <div class="row g-3 pt-2">
+                <div class="col-sm-8">
+                    <label for="title" class="form-label-sm">Title</label>
+                    <input id=title name="title" type="text"
+                            style="min-width: 300px; max-width: 400px;" class="form-control-sm"
+                            placeholder="Todo Title" value="{{todo.title}}" required>
+                </div>
+            </div> <!--row-->
+
+            <div class="row g-3 pt-2">
+                <div class="col-sm-8">
+                    <label for="description" class="form-label-sm">Notes</label>
+                    <textarea name="description" class="form-control" rows="5" required>{{todo.description}}</textarea>
+                </div>
+
+            </div> <!--row-->
+             <div class="row g-3 pt-1">
+                <div class="col-sm-3">
+                    <label for="priority"
+                        class="form-label-sm">Priority</label>
+                        <select id="priority" name="priority"
+                            style="min-width: 125px; max-width: 125px;" class="form-control-sm">
+                            <option {% if todo.priority =="High" %} selected="selected" {% endif %}>High</option>
+                            <option {% if todo.priority =="Medium" %} selected="selected" {% endif %}>Medium</option>
+                            <option {% if todo.priority =="Low" %} selected="selected" {% endif %}>Low</option>
+                        </select>
+                </div>
+
+                <div class="col-sm-3">
+                    <label for="todoStatus"
+                        class="form-label-sm">status</label>
+                        <select id="todoStatus" name="todoStatus"
+                            style="min-width: 125px; max-width: 125px;" class="form-control-sm">
+                            <option {% if todo.status =="Open" %} selected="selected" {% endif %}>Open</option>
+                            <option {% if todo.Status =="Closed" %} selected="selected" {% endif %}>Closed</option>
+                            <option {% if todo.Status =="Wip" %} selected="selected" {% endif %}>Wip</option>
+                        </select>
+                </div>
+            </div> <!--row-->
+
+            <div class="row g-3 pt-1">
+                <div class="col-sm-3">
+                    <label for="addedDate" class="form-label-sm">Added On</label>
+                    <input id=addedDate type="date"
+                        style="min-width: 125px; max-width: 125px;" class="form-control-sm" readonly>
+                </div>
+
+                <div class="col-sm-3">
+                    <label for="updatedDate" class="form-label-sm">Updated On</label>
+                    <input id=updatedDate type="date"
+                        style="min-width: 125px; max-width: 125px;" class="form-control-sm" readonly>
+                </div>
+            </div> <!--row-->
+
+            <div class="row g-3 pt-1">
+                <div class="col-sm-3">
+                        <button type="submit"
+                            class="btn-sm btn-primary btn-thin-sm"> Save </button>
+                    {% if redirect == "T"%}
+                        <button
+                            class="btn-sm btn-primary btn-thin-sm"
+                            onclick=window.location.href='/todos/todo-page' type="button">Back</button>
+                    {% else %}  <!- A  asset --!>
+                        <button
+                            class="btn-sm btn-primary btn-thin-sm"
+                            onclick=window.location.href='/assets/view-asset-page/{{asset.id}}' type="button">Back</button>
+                    {% endif %}
+                </div>
+            </div> <!--row-->
       </form>
-    </div>
-  </div>
-</div>
-
-
-
-
-
+    </div> <!-- card body -->
+  </div> <!-- card -->
+</div> <!-- container -->

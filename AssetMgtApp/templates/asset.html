@@ -1,30 +1,29 @@
 {% include 'layout.html' %}
 
+
 <div class="container">
     <div class="card text-center">
         <div class="card-body">
-            <h5 class="card-title">
-                Asset List
-            </h5>
-            <table class="table table-hover">
+            <h5 class="card-title card-title-left">Asset List</h5>
+            <table class="table-sm table-hover table-striped">
                 <thead>
                     <tr>
-                        <th scope="col">Id</th>
+                        <th scope="col">Description</th>
                         <th scope="col">Major</th>
                         <th scope="col">Minor</th>
-                        <th scope="col">type</th>
-                        <th scope="col">Descriptiom</th>
+                        <th scope="col">Type</th>
+                        <th scope="col">State</th>
                         <th scope="col">Actions</th>
                     </tr>
                     <tr>
-                        <th scope="col">---</th>
+                        <th scope="col">&nbsp;</th>
                         <th scope="col">
                             <div class="major-filter">
                               <select id=major-filter class="majorArea" onchange="majorChangeEventHandler(event);">
-                                <option data-area="All">All</option>
                                 <option data-area="1st">1st</option>
                                 <option data-area="2nd">2nd</option>
                                 <option data-area="17th">17th</option>
+                                <option data-area="All">All</option>
                               </select>
                             </div>
                         </th>
@@ -51,33 +50,45 @@
                               </select>
                             </div>
                         </th>
+                        <th scope="col">
+                            <div class="stateFilter">
+                              <select id=stateFilter class="assetState" onchange="stateChangeEventHandler(event);">
+                                <option data-area="ALL">All</option>
+                                <option data-area="Good">Good</option>
+                                <option data-area="Bad">Bad</option>
+                                <option data-area="Unknown">Unknown</option>
+                              </select>
+                            </div>
+                        </th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
                 {% for asset in assets %}
-                <tr class="pointer">
-                    <td>{{asset.id}}</td>
+                <tr>
+                    <td class = "td150">{{asset.description}}</td>
                     <td>{{asset.majorArea}}</td>
                     <td>{{asset.minorArea}}</td>
                     <td>{{asset.assetType}}</td>
-                    <td>{{asset.description}}</td>
+                    <td>{{asset.assetState}}</td>
 
                     <td>
-                        <button onclick="window.location.href='view-asset-page/{{asset.id}}'"
-                                type="button" class="btn btn-info">
-                            View
-                        </button>
-                        &nbsp;
-                        <button onclick="window.location.href='edit-asset-page/{{asset.id}}'"
-                                type="button" class="btn btn-info">
-                            Edit
-                        </button>
+                        <button class="btn-sm btn-primary btn-thin-sm"
+                                 onclick="window.location.href='view-asset-page/{{asset.id}}'"
+                                type="button">View</button>
+                        <button class="btn-sm btn-primary btn-thin-sm"
+                                onclick="window.location.href='edit-asset-page/{{asset.id}}'"
+                                type="button">Edit</button>
+
                     </td>
                 </tr>
                 {% endfor %}
                 </tbody>
             </table>
-            <a href="add-asset-page" class="btn btn-primary">Add a new Asset</a>
+            <button class="btn-sm btn-primary btn-thin-sm"
+                     onclick="add-asset-page" type="button">Add</button>
+
+
              <script type="text/javascript">
                   function majorChangeEventHandler(event) {
                     if (getCookie("majorAreaFilter") != event.target.value) {
@@ -94,6 +105,12 @@
                   function typeChangeEventHandler(event) {
                     if (getCookie("assetTypeFilter") != event.target.value) {
                         document.cookie = `assetTypeFilter=${event.target.value}; path=/`;
+                        window.location.href=window.location.href;
+                    }
+                  }
+                  function stateChangeEventHandler(event) {
+                    if (getCookie("assetStateFilter") != event.target.value) {
+                        document.cookie = `assetStateFilter=${event.target.value}; path=/`;
                         window.location.href=window.location.href;
                     }
                   }
@@ -148,6 +165,20 @@
     filter = getCookie("assetTypeFilter")
     select = document.querySelector(".assetType");
     options = document.querySelectorAll(".assetType option");
+    if (filter) {
+       for(const option of options) {
+           const area = option.dataset.area;
+           if (area === filter) {
+              option.setAttribute("selected", "");
+              break;
+           }
+       }
+    }
+
+    //assetState
+    filter = getCookie("assetStateFilter")
+    select = document.querySelector(".assetState");
+    options = document.querySelectorAll(".assetState option");
     if (filter) {
        for(const option of options) {
            const area = option.dataset.area;

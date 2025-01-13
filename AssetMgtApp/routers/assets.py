@@ -30,7 +30,7 @@ user_dependency = Annotated[dict, Depends(get_current_user)]
 class AssetRequest(BaseModel):
     majorArea: str = Field(min_length=3, max_length=10)
     minorArea: str = Field(min_length=3, max_length=10)
-    microArea: str = Field(min_length=1, max_length=10)
+    microArea: str;
     assetType: str = Field(min_length=3, max_length=10)
     description: str = Field(max_length=30)
     assetState: str = Field(min_length=3, max_length=10)
@@ -53,8 +53,12 @@ async def render_asset_page(request: Request, db: db_dependency):
 
         ## Get saved filtering values
         majorAreaFilter =request.cookies.get('majorAreaFilter')
+        if majorAreaFilter is None:
+            majorAreaFilter = '1st' ##make the 1st the default to prevent loading a big table by default
+
         minorAreaFilter =request.cookies.get('minorAreaFilter')
         assetTypeFilter =request.cookies.get('assetTypeFilter')
+        assetStateFilter =request.cookies.get('assetStateFilter')
 
 
         ##build dynamic query
@@ -68,6 +72,9 @@ async def render_asset_page(request: Request, db: db_dependency):
 
         if assetTypeFilter is not None and assetTypeFilter != "All":
             query = query.filter(Assets.assetType == assetTypeFilter)
+
+        if assetStateFilter is not None and assetStateFilter != "All":
+            query = query.filter(Assets.assetState == assetStateFilter)
 
         assetList = query.all()
 

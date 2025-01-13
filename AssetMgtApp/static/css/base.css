@@ -1,9 +1,74 @@
 
+/* ----------------------------------------------- */
+/* overrides */
+
 body {
+
+    background: linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)), url('Sprinklers.jpg');
+    background-size: cover;         /* Makes the image cover the entire viewport */
+    background-position: center;    /* Centers the image */
+    background-attachment: fixed;   /* Keeps the background fixed while scrolling */
+    height: 100vh;                  /* Ensures the body takes the full height of the viewport */
+    margin: 0;                      /* Ensures no margin is around the body */
+    padding-top: 100px;              /* Adjust the value based on the navbar height */
+/*
   background: #fafafa;
   color: #33333a;
   padding-top: 70px;
+*/
 }
+
+.card-title-left {
+      text-align: left;
+}
+
+.btn-thin-sm {
+      padding: 0px 0px; /* Custom padding for thinner appearance */
+}
+
+.td150 {
+      min-width: 150px; /* Set minimum width for all td elements */
+}
+
+th {
+    text-align: left;
+}
+
+td {
+    text-align: left;
+}
+
+.card-body {
+   padding: 1px 10px; /* Adjust the values to reduce or customize padding */
+}
+
+.card-header {
+   padding: 0px 10px; /* Adjust the values to reduce or customize padding  tb/lr*/
+  background-color: rgb(255, 99, 71); /* Tomato color */
+  color: white;
+}
+
+.card {
+  background-color: #d9dee0;
+}
+
+.table thead th {
+  border-bottom: 2px solid #323a3d
+}
+
+.table tbody th {
+  border-bottom: 2px solid #323a3d
+}
+
+.table-hover tbody tr:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.btn {
+  padding: 5px 10px; /* Reduce top/bottom padding */
+}
+
+/* ----------------------------------------------- */
 
 h1, h2, h3, h4, h5, h6 {
   color: #323232;
@@ -16,5 +81,4 @@ h1, h2, h3, h4, h5, h6 {
 .strike-through-td {
     text-decoration: line-through;
 }
-
 

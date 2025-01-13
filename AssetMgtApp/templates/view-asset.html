@@ -3,95 +3,118 @@
 <div class="container">
   <div class="card">
     <div class="card-header">
-      View Asset
+        <h5 class="card-title card-title-left">Asset</h5>
     </div>
     <div class="card-body">
       <form id="viewAssetForm">
 
-       <div class="form-group">
-          <label>Id</label>
-          <input type="text" class="form-control" name="id" value="{{asset.id}}" readonly>
-        </div>
+           <div class="row g-5 pt-0">
 
-       <div class="form-group">
-          <label>Major Area</label>
-          <input type="text" class="form-control" name="majorArea" value="{{asset.majorArea}}" readonly>
-        </div>
+                <div class="col-sm-3">
+                    <label for="majorArea"
+                        class="form-label-sm">Major Area</label>
+                    <input id=majorArea name="majorArea" type="text"
+                            style="min-width: 100px; max-width: 150px;" class="form-control-sm"
+                            placeholder="Major Area" value="{{asset.majorArea}}" readonly>
+                </div>
 
-        <div class="form-group">
-          <label>Minor Area</label>
-          <input type="text" class="form-control" name="minorArea" value="{{asset.minorArea}}" readonly>
-        </div>
+                <div class="col-sm-3">
+                    <label for="minorArea"
+                        class="form-label-sm">Minor Area</label>
+                    <input id=minorArea name="MinorArea" type="text"
+                            style="min-width: 100px; max-width: 150px;" class="form-control-sm"
+                            placeholder="Asset Description" value="{{asset.minorArea}}" readonly>
+                </div>
 
-        <div class="form-group">
-          <label>Micro Area</label>
-          <input type="text" class="form-control" name="microArea" value="{{asset.microArea}}" readonly>
-        </div>
+                <div class="col-sm-3">
+                    <label for="assetType"
+                        class="form-label-sm">Asset Type</label>
+                    <input id=assetType name="assetType" type="text"
+                            style="min-width: 100px; max-width: 150px;" class="form-control-sm"
+                            placeholder="Asset Type" value="{{asset.assetType}}" readonly>
+                </div>
 
-        <div class="form-group">
-          <label>Asset Type</label>
-          <input type="text" class="form-control" name="assetType" value="{{asset.assetType}}" readonly>
-        </div>
+            </div> <!--row-->
 
-        <div class="form-group">
-          <label>Description</label>
-          <input type="text" class="form-control" name="description" value="{{asset.description}}" readonly>
-        </div>
+            <div class="row g-3 pt-2">
+                <div class="col-sm-8">
+                    <label for="description" class="form-label-sm">Description</label>
+                    <input id=description name="description" type="text"
+                            style="min-width: 300px; max-width: 400px;" class="form-control-sm"
+                            placeholder="Asset Description" value="{{asset.description}}" readonly>
+                </div>
+            </div> <!--row-->
 
-        <div class="form-group">
-          <label>Asset State</label>
-          <input type="text" class="form-control" name="assetState" value="{{asset.assetState}}" readonly>
-        </div>
+            <div class="row g-3 pt-2 pb-2">
+                <div class="col-sm-10">
+                    <label for="microArea" class="form-label-sm">Model</label>
+                    <input id="microArea" name="microArea" type="text"
+                            style="min-width: 100px; max-width: 150px;" class="form-control-sm"
+                            placeholder="Micro Area" value="{{asset.microArea}}" readonly>
 
-        {% if currentUser.userRole == 'Admin' %}
-            <div class="form-group">
-                <button type="submit" class="btn btn-primary">Delete</button>
-                 <a href="/assets/asset-page" class="btn btn-success">Back</a>
-           </div>
-       {% endif %}
+                    <label for="assetState" class="form-label-sm">Asset State</label>
+                    <input id="assetState" name="assetState" type="text"
+                            style="min-width: 100px; max-width: 150px;" class="form-control-sm"
+                            placeholder="Asset State" value="{{asset.assetState}}" readonly>
+                </div>
 
+            </div> <!--row-->
       </form>
-      <div class="todos-list">
-            <h5 class="card-title">
-                Todo List
-            </h5>
-            <table class="table table-hover">
-                <thead>
-                    <tr>
-                        <th scope="col">Id</th>
-                        <th scope="col">Status</th>
-                        <th scope="col">Priority</th>
-                        <th scope="col">Title</th>
-                        <th scope="col">Actions</th>
-                    </tr>
-                </thead>
+     </div> <!-- card body -->
+     <div class="card-header">
+        <h5 class="card-title card-title-left">Asset Todo List</h5>
+     </div>
+     <div class="card-body">
+        <div class="row g-3 pt-0">
+         <div class="col-sm-10">
+             <div class="todos-list">
+                <table class="table-sm table-hover table-striped">
+                    <thead class="padding: 1px;">
+                        <tr>
+                            <th scope="col">Status</th>
+                            <th scope="col">Priority</th>
+                            <th scope="col">Title</th>
+                            <th scope="col">Actions</th>
+                        </tr>
+                    </thead>
 
-                <tbody>
-                    {% for todo in todo_list %}
-                    <tr class="pointer">
-                        <td>{{todo.id}}</td>
-                        <td>{{todo.todoStatus}}</td>
-                        <td>{{todo.priority}}</td>
-                        <td>{{todo.title}}</td>
-                        <td>
-                            <button onclick="window.location.href='/todos/view-todo-asset-page/{{todo.id}}'"
-                                    type="button" class="btn btn-info">View</button>
-                            &nbsp;
-                            <button onclick="window.location.href='/todos/edit-todo-asset-page/{{todo.id}}'"
-                                    type="button" class="btn btn-info">Edit</button>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-      </div>
+                    <tbody>
+                        {% for todo in todo_list %}
+                        <tr class="pointer">
+                            <td>{{todo.todoStatus}}</td>
+                            <td>{{todo.priority}}</td>
+                            <td style="min-width: 200px; max-width: 400px;">{{todo.title}}</td>
+                            <td>
+                                    <button class="btn-sm btn-primary btn-thin-sm"
+                                            onclick="window.location.href='/todos/view-todo-asset-page/{{todo.id}}'"
+                                            type="button">View</button>
+                                    &nbsp;
+                                    <button class="btn-sm btn-primary btn-thin-sm"
+                                            onclick="window.location.href='/todos/edit-todo-asset-page/{{todo.id}}'"
+                                            type="button">Edit</button>
 
-      <div class="todos-actions">
-             <button onclick="window.location.href='/todos/add-todo-asset-page/{{asset.id}}'"
-                     type="button" class="btn btn-info">Add a new Todo</button>
-      </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+             </div> <!-- todo_list -->
+         </div> <!-- col -->
+        </div> <!-- row -->
+        <div class="row g-3 pt-2">
+         <div class="col-sm-10">
+                 <div class="todos-actions">
+                    {% if currentUser.userRole == 'Admin' %}
+                        <button type="submit" class="btn-sm btn-primary btn-thin-sm">DELETE Asset</button>
+                    {% endif %}
+                        <button onclick="window.location.href='/todos/add-todo-asset-page/{{asset.id}}'"
+                           type="button" class="btn-sm btn-primary btn-thin-sm">Add a NEW Todo</button>
+                        <button onclick="/assets/asset-page'"
+                           type="button" class="btn-sm btn-primary btn-thin-sm">Back</button>
+            </div>
+         </div> <!-- col -->
+        </div> <!-- row -->
 
-    </div>
-  </div>
+     </div> <!-- card body -->
 </div>
 
