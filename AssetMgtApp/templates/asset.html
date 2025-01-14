@@ -6,7 +6,7 @@
             <h5 class="card-title card-title-left">Asset</h5>
         </div>
         <div class="card-body">
-            <table class="table-sm">
+            <table class="table table-sm">
                 <thead>
                     <tr>
                         <th scope="col">Major</th>
@@ -63,14 +63,14 @@
                 </thead>
                 <tbody>
                 {% for asset in assets %}
-                <tr class="group-{{asset.id}}" >
+                <tr data-id="{{asset.id}}" class="group-{{asset.id}}" >
                     <td>{{asset.majorArea}}</td>
                     <td>{{asset.minorArea}}</td>
                     <td>{{asset.assetType}}</td>
                     <td>{{asset.assetState}}</td>
                 </tr>
-                <tr class="group-{{asset.id}} bottom-border">
-                    <td colspan="3" class = "td150"><b></b>Desc:<b></b> {{asset.description}}</td>
+                <tr data-id="{{asset.id}}" class="group-{{asset.id}} bottom-border">
+                    <td colspan="3" class="td150"><b></b>Desc:<b></b> {{asset.description}}</td>
                     <td>
                         <button class="btn-sm btn-primary btn-thin-sm"
                                  onclick="window.location.href='view-asset-page/{{asset.id}}'"
@@ -211,6 +211,15 @@
           });
         }
       });
+
+      const id = row.dataset.id;
+      if (id) {
+          row.addEventListener('click', () => {
+            //alert(`Asset ID: ${id}`);
+            window.location.href = `view-asset-page/${id}`;
+          });
+      }
+
     });
 
 </script>

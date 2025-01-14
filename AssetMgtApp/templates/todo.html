@@ -236,11 +236,13 @@
         }
       });
 
-      row.addEventListener('click', () => {
-          const id = row.dataset.id;
-          alert(`ID: ${id}`);
-          window.location.href = `view-todo-page/${id}`;
-      });
+      const id = row.dataset.id;
+      if (id) {
+          row.addEventListener('click', () => {
+            //alert(`TODO ID: ${id}`);
+            window.location.href = `view-todo-page/${id}`;
+          });
+      }
 
     });
 
