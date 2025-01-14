@@ -50,6 +50,10 @@ table tr.bottom-border td {
       border-bottom: 3px solid black;
 }
 
+table tr.bottom-border th {
+      border-bottom: 3px solid black;
+}
+
 .card-body {
    padding: 1px 10px; /* Adjust the values to reduce or customize padding */
 }

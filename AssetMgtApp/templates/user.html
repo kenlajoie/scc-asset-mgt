@@ -12,14 +12,11 @@
                 <thead>
                     <tr>
                         <th scope="col">ID</th>
-                        <th scope="col">Email</th>
                         <th scope="col">First</th>
                         <th scope="col">Role</th>
                         <th scope="col">Status</th>
-                        <th scope="col">Actions</th>
                     </tr>
                     <tr>
-                        <th scope="col">&nbsp;</th>
                         <th scope="col">&nbsp;</th>
                         <th scope="col">&nbsp;</th>
                         <th scope="col">
@@ -48,7 +45,6 @@
                 {% for user in users %}
                 <tr class="pointer">
                     <td>{{user.username}}</td>
-                    <td>{{user.email}}</td>
                     <td>{{user.firstname}}</td>
                     <td>{{user.userRole}}</td>
                     <td>{{user.userStatus}}</td>
@@ -67,11 +63,14 @@
                     </td>
                 </tr>
                 {% endfor %}
+                <tr>
+                    <td>
+                        <button class="btn-sm btn-primary btn-thin-sm"
+                             onclick="window.location.href='add-user-page'" type="button">Add</button>
+                    </td>
+                </tr>
                 </tbody>
             </table>
-
-            <button class="btn-sm btn-primary btn-thin-sm"
-                     onclick="window.location.href='add-user-page'" type="button">Add</button>
 
              <script type="text/javascript">
                   function userRoleChangeEventHandler(event) {

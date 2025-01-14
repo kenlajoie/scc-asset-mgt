@@ -15,7 +15,6 @@
                         <th scope="col">Major</th>
                         <th scope="col">Minor</th>
                         <th scope="col">Type</th>
-                        <th scope="col">Actions</th>
                     </tr>
                     <tr>
                         <th scope="col">
@@ -80,7 +79,10 @@
                     <td>{{todo.majorArea}}</td>
                     <td>{{todo.minorArea}}</td>
                     <td>{{todo.assetType}}</td>
-                    <td>
+                </tr>
+                <tr class="group-{{todo.id}} bottom-border">
+                    <td colspan="4"><b>Title:</b> {{todo.title}}</td>
+                     <td>
                         <button class="btn-sm btn-primary btn-thin-sm btn-tight"
                                 onclick="window.location.href='view-todo-page/{{todo.id}}'"
                                 type="button">View</button>
@@ -93,10 +95,7 @@
                                 onclick="window.location.href='add-todo-page/{{todo.assetId}}'"
                                 type="button" >Add</button>
                     </td>
-                </tr>
-                <tr class="group-{{todo.id}} bottom-border">
-                    <td colspan="8"><b>Title:</b> {{todo.title}}</td>
-                </tr>
+               </tr>
                 {% endfor %}
                 </tbody>
             </table>

@@ -1,6 +1,6 @@
 {% include 'layout.html' %}
 
-<div class="container">
+<div class="containe-sm">
     <div class="card text-center">
         <div class="card-header">
             <h5 class="card-title card-title-left">Asset</h5>
@@ -9,15 +9,12 @@
             <table class="table-sm table-hover table-striped">
                 <thead>
                     <tr>
-                        <th scope="col">Description</th>
                         <th scope="col">Major</th>
                         <th scope="col">Minor</th>
                         <th scope="col">Type</th>
                         <th scope="col">State</th>
-                        <th scope="col">Actions</th>
                     </tr>
-                    <tr>
-                        <th scope="col">&nbsp;</th>
+                    <tr class="bottom-border">
                         <th scope="col">
                             <div class="major-filter">
                               <select id=major-filter class="majorArea" onchange="majorChangeEventHandler(event);">
@@ -66,13 +63,14 @@
                 </thead>
                 <tbody>
                 {% for asset in assets %}
-                <tr>
-                    <td class = "td150">{{asset.description}}</td>
+                <tr class="group-{{asset.id}}" >
                     <td>{{asset.majorArea}}</td>
                     <td>{{asset.minorArea}}</td>
                     <td>{{asset.assetType}}</td>
                     <td>{{asset.assetState}}</td>
-
+                </tr>
+                <tr class="group-{{asset.id}} bottom-border">
+                    <td colspan="3" class = "td150"><b></b>Desc:<b></b> {{asset.description}}</td>
                     <td>
                         <button class="btn-sm btn-primary btn-thin-sm"
                                  onclick="window.location.href='view-asset-page/{{asset.id}}'"
@@ -84,10 +82,14 @@
                     </td>
                 </tr>
                 {% endfor %}
-                </tbody>
+                <tr>
+                    <td>
+                        <button class="btn-sm btn-primary btn-thin-sm"
+                             onclick="window.location.href='add-asset-page'" type="button">Add</button>
+                    </td>
+                </tr>
+               </tbody>
             </table>
-            <button class="btn-sm btn-primary btn-thin-sm"
-                     onclick="window.location.href='add-asset-page'" type="button">Add</button>
 
 
              <script type="text/javascript">
@@ -189,6 +191,27 @@
            }
        }
     }
+
+    // Add hover effect for row groups
+    document.querySelectorAll('tr').forEach(row => {
+      row.addEventListener('mouseenter', () => {
+        const groupClass = Array.from(row.classList).find(cls => cls.startsWith('group-'));
+        if (groupClass) {
+          document.querySelectorAll(`.${groupClass}`).forEach(groupRow => {
+            groupRow.classList.add('hover-highlight');
+          });
+        }
+      });
+
+      row.addEventListener('mouseleave', () => {
+        const groupClass = Array.from(row.classList).find(cls => cls.startsWith('group-'));
+        if (groupClass) {
+          document.querySelectorAll(`.${groupClass}`).forEach(groupRow => {
+            groupRow.classList.remove('hover-highlight');
+          });
+        }
+      });
+    });
 
 </script>
 
