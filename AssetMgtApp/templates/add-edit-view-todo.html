@@ -156,9 +156,11 @@
             <div class="row g-3 pt-3 pb-3">
                 <div class="col-sm-3">
                     {% if mode == "VIEW"%}
-                        <button type="submit"
-                            class="btn-sm btn-primary btn-thin-sm">Delete</button>
-                    {% else %}  <!- assume ADD OR edit--!>
+                        {% if currentUser.userRole == 'Admin' %}
+                            <button type="submit"
+                                class="btn-sm btn-primary btn-thin-sm">Delete</button>
+                        {% endif %}
+                   {% else %}  <!- assume ADD OR edit--!>
                         <button type="submit"
                             class="btn-sm btn-primary btn-thin-sm">Save</button>
                     {% endif %}

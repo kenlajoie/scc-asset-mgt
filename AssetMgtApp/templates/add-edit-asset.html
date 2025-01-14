@@ -6,7 +6,12 @@
          <h5 class="card-title card-title-left">Asset</h5>
      </div>
      <div class="card-body">
+        {% if mode == "ADD"%}
+        <form id="addAssetForm">
+        {% endif %}
+        {% if mode == "EDIT"%}
         <form id="editAssetForm">
+        {% endif %}
             <div class="row g-5 pt-0">
                 <div class="col-sm-3">
                     <label for="majorArea"
@@ -65,7 +70,7 @@
                     <input id=description name="description" type="text"
                             style="min-width: 400px; max-width: 400px;" class="form-control-sm"
                             placeholder="Asset Description" value="{{asset.description}}" required>
-                    <div class="invalid-feedback"> Valid FirstName is required</div>
+                    <div class="invalid-feedback"> Valid Description is required</div>
                 </div>
             </div> <!--row-->
 
@@ -131,10 +136,12 @@
                         style="min-width: 125px; max-width: 125px;" class="form-control-sm" readonly>
                 </div>
             </div> <!--row-->
+
             <div class="row g-3 pt-1">
                 <div class="col-sm-3">
-                    <button type="submit" class="btn btn-primary"> Save </button>
-                    <a href="/assets/asset-page" class="btn btn-success">Back</a>
+                    <button type="submit" class="btn-sm btn-primary btn-thin-sm">Save</button>
+                    <button class="btn-sm btn-primary btn-thin-sm"
+                            onclick=window.location.href='/assets/asset-page' type="button">Back</button>
                 </div>
             </div> <!--row-->
 

@@ -1,0 +1,162 @@
+{% include 'layout.html' %}
+
+<div class="container">
+  <div class="card">
+    <div class="card-header">
+        <h5 class="card-title card-title-left">User</h5>
+    </div>
+    <div class="card-body">
+      {% if mode == "ADD"%}
+      <form id="addUserForm">
+      {% endif %}
+      {% if mode == "EDIT"%}
+      <form id="editUserForm">
+      {% endif %}
+      {% if mode == "VIEW"%}
+      <form id="viewUserForm">
+      {% endif %}
+
+            <div class="form-group">
+              <input type="text" class="form-control" name="mode" value="{{mode}}" hidden>
+            </div>
+
+            <div class="row g-3 pt-2">
+                <div class="col-sm-2">
+                    <label for="email" class="form-label-sm">Email</label>
+               </div>
+                <div class="col-sm-4">
+                    {% if mode == "VIEW"%}
+                        <input id=email name="email" type="text"
+                                style="min-width: 300px; max-width: 400px;" class="form-control-sm"
+                                placeholder="Email" value="{{user.email}}" readonly>
+                    {% else %}  <!- assume ADD OR edit--!>
+                        <input id=email name="email" type="email"
+                                style="min-width: 300px; max-width: 400px;" class="form-control-sm"
+                                placeholder="Email" value="{{user.email}}" required>
+                    {% endif %}
+                </div>
+            </div> <!--row-->
+
+            <div class="row g-3 pt-2">
+                <div class="col-sm-2">
+                    <label for="username" class="form-label-sm">Initials</label>
+               </div>
+                <div class="col-sm-4">
+                    {% if mode == "VIEW"%}
+                        <input id=username" type="text"
+                                style="min-width: 100px; max-width: 100px;" class="form-control-sm"
+                                placeholder="Initials" value="{{user.username}}" readonly>
+                    {% else %}  <!- assume ADD OR edit--!>
+                        <input id=username name="username" type="text"
+                                style="min-width: 100px; max-width: 100px;" class="form-control-sm"
+                                placeholder="Initials" value="{{user.username}}" required>
+                    {% endif %}
+                </div>
+            </div> <!--row-->
+
+            <div class="row g-3 pt-2">
+                <div class="col-sm-2">
+                    <label for="firstname" class="form-label-sm">First</label>
+               </div>
+                <div class="col-sm-4">
+                    {% if mode == "VIEW"%}
+                        <input id=firstname" name="firstname" type="text"
+                                style="min-width: 300px; max-width: 400px;" class="form-control-sm"
+                                placeholder="First Name" value="{{user.firstname}}" readonly>
+                    {% else %}  <!- assume ADD OR edit--!>
+                        <input id=firstname name="firstname" type="text"
+                                style="min-width: 300px; max-width: 300px;" class="form-control-sm"
+                                placeholder="First Name" value="{{user.firstname}}" required>
+                    {% endif %}
+                </div>
+            </div> <!--row-->
+
+            <div class="row g-3 pt-2">
+                <div class="col-sm-2">
+                    <label for="lastname" class="form-label-sm">Last</label>
+               </div>
+                <div class="col-sm-4">
+                    {% if mode == "VIEW"%}
+                        <input id=lastname" name="lastname" type="text"
+                                style="min-width: 300px; max-width: 400px;" class="form-control-sm"
+                                placeholder="Last Name" value="{{user.lastname}}" readonly>
+                    {% else %}  <!- assume ADD OR edit--!>
+                        <input id=lastname name="lastname" type="text"
+                                style="min-width: 300px; max-width: 300px;" class="form-control-sm"
+                                placeholder="Last Name" value="{{user.lastname}}" required>
+                    {% endif %}
+                </div>
+            </div> <!--row-->
+
+             <div class="row g-3 pt-2">
+                <div class="col-sm-2">
+                    <label for="userRole" class="form-label-sm">Role</label>
+               </div>
+                <div class="col-sm-4">
+                    {% if mode == "VIEW"%}
+                        <input id="userRole" name="userRole" type="text"
+                                style="min-width: 125px; max-width: 125px;" class="form-control-sm"
+                                placeholder="Role" value="{{user.userRole}}" readonly>
+                    {% else %}  <!- assume ADD OR edit--!>
+                        <select id="" name="userRole"
+                            style="min-width: 125px; max-width: 125px;" class="form-control-sm">
+                            <option {% if user.userRole =="Technician" %} selected="selected" {% endif %}>Technician</option>
+                            <option {% if user.userRole =="Admin" %} selected="selected" {% endif %}>Admin</option>
+                            <option {% if user.userRole =="Other" %} selected="selected" {% endif %}>Other</option>
+                        </select>
+                    {% endif %}
+                </div> <!--col -->
+            </div> <!--row-->
+
+             <div class="row g-3 pt-2">
+                <div class="col-sm-2">
+                    <label for="userStatus" class="form-label-sm">Status</label>
+               </div>
+                <div class="col-sm-4">
+                    {% if mode == "VIEW"%}
+                        <input id= name="userStatus" type="text"
+                                style="min-width: 125px; max-width: 125px;" class="form-control-sm"
+                                placeholder="Status" value="{{user.userStatus}}" readonly>
+                    {% else %}  <!- assume ADD OR edit--!>
+                        <select id="userStatus" name="userStatus"
+                            style="min-width: 125px; max-width: 125px;" class="form-control-sm">
+                            <option {% if user.userStatus =="Active" %} selected="selected" {% endif %}>Active</option>
+                            <option {% if user.userStatus =="Paused" %} selected="selected" {% endif %}>Paused</option>
+                            <option {% if user.userStatus =="Resigned" %} selected="selected" {% endif %}>Resigned</option>
+                        </select>
+                    {% endif %}
+                </div> <!--col -->
+            </div> <!--row-->
+
+            {% if mode == "ADD"%}
+             <div class="row g-3 pt-2">
+                <div class="col-sm-2">
+                    <label for="password" class="form-label-sm">Password</label>
+               </div>
+                <div class="col-sm-4">
+                    <input id=password name="password" type="text"
+                        style="min-width: 300px; max-width: 300px;" class="form-control-sm"
+                        placeholder="Password" value="" required>
+                </div> <!--col -->
+            </div> <!--row-->
+            {% endif %}
+
+            <div class="row g-3 pt-3 pb-3">
+                <div class="col-sm-3">
+                   {% if mode == "VIEW"%}
+                        <button type="submit"
+                             class="btn-sm btn-primary btn-thin-sm">Delete</button>
+                   {% else %}  <!- assume ADD OR edit--!>
+                        <button type="submit"
+                            class="btn-sm btn-primary btn-thin-sm">Save</button>
+                    {% endif %}
+
+                        <button
+                            class="btn-sm btn-primary btn-thin-sm"
+                            onclick=window.location.href='/users/user-page' type="button">Back</button>
+                </div>
+            </div> <!--row-->
+      </form>
+    </div> <!-- card body -->
+  </div> <!-- card -->
+</div> <!-- container -->

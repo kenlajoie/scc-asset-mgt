@@ -1,6 +1,5 @@
 from typing import Annotated
 
-from alembic.util import not_none
 from click import confirm
 from pydantic import BaseModel, Field
 from sqlalchemy.orm import Session
@@ -38,19 +37,19 @@ class UserVerification(BaseModel):
     new_password: str = Field(min_length=6)
 
 class UserAddRequest(BaseModel):
-    username: str = Field(min_length=3, max_length=15)
-    email: str = Field(min_length=3, max_length=20)
-    firstname: str = Field(min_length=1, max_length=15)
-    lastname: str = Field(min_length=3, max_length=15)
+    username: str = Field(min_length=2, max_length=10)
+    email: str = Field(min_length=8, max_length=30)
+    firstname: str = Field(min_length=2, max_length=30)
+    lastname: str = Field(min_length=2, max_length=30)
     userRole: str = Field(min_length=3,max_length=10)
     userStatus: str = Field(min_length=3, max_length=10)
     password: str = Field(min_length=6, max_length=20)
 
 class UserEditRequest(BaseModel):
-    username: str = Field(min_length=3, max_length=15)
-    email: str = Field(min_length=3, max_length=20)
-    firstname: str = Field(min_length=1, max_length=15)
-    lastname: str = Field(min_length=3, max_length=15)
+    username: str = Field(min_length=2, max_length=10)
+    email: str = Field(min_length=8, max_length=30)
+    firstname: str = Field(min_length=2, max_length=30)
+    lastname: str = Field(min_length=2, max_length=30)
     userRole: str = Field(min_length=3,max_length=10)
     userStatus: str = Field(min_length=3, max_length=10)
 
@@ -66,15 +65,14 @@ def redirect_to_login():
 @router.get("/user-page")
 async def render_user_page(request: Request, db: db_dependency):
     try:
-        user = await get_current_user(request.cookies.get('access_token'))
+        loginUser = await get_current_user(request.cookies.get('access_token'))
 
-        if user is None:
+        if loginUser is None:
            return redirect_to_login()
 
         ## Get saved filtering values
         userRoleFilter =request.cookies.get('userRoleFilter')
         userStatusFilter =request.cookies.get('userStatusFilter')
-
 
         ##build dynamic query
         query = db.query(Users)
@@ -87,7 +85,7 @@ async def render_user_page(request: Request, db: db_dependency):
 
         userList = query.all()
 
-        return templates.TemplateResponse("user.html", {"request": request, "users": userList, "currentUser": user})
+        return templates.TemplateResponse("user.html", {"request": request, "users": userList, "currentUser": loginUser})
 
     except:
         return redirect_to_login()
@@ -95,12 +93,23 @@ async def render_user_page(request: Request, db: db_dependency):
 @router.get('/add-user-page')
 async def render_user_page(request: Request):
     try:
-        user = await get_current_user(request.cookies.get('access_token'))
 
-        if user is None:
+        loginUser = await get_current_user(request.cookies.get('access_token'))
+        if loginUser is None:
             return redirect_to_login()
 
-        return templates.TemplateResponse("add-user.html", {"request": request, "currentUser": user})
+        #default values
+        user_default = Users(
+            username="FOO",
+            email="foo@foo.com",
+            firstname="Foo",
+            lastname="Bar",
+            userRole="",
+            userStatus="",
+        )
+
+        return templates.TemplateResponse("add-edit-view-user.html",
+                         {"request": request,"user": user_default, "currentUser": loginUser, "mode": "ADD"})
 
     except:
         return redirect_to_login()
@@ -109,52 +118,53 @@ async def render_user_page(request: Request):
 @router.get("/edit-user-page/{user_id}")
 async def render_user_edit_page(request: Request, user_id: int, db: db_dependency):
     try:
-        user = await get_current_user(request.cookies.get('access_token'))
-
-        if user is None:
+        loginUser = await get_current_user(request.cookies.get('access_token'))
+        if loginUser is None:
             return redirect_to_login()
 
         user_model = db.query(Users).filter(Users.id == user_id).first()
         if user_model is None:
             raise HTTPException(status_code=404, detail='User not found.')
 
-        return templates.TemplateResponse("edit-user.html", {"request": request, "user": user_model, "currentUser": user})
+        return templates.TemplateResponse("add-edit-view-user.html",
+                        {"request": request, "user": user_model, "currentUser": loginUser, "mode": "EDIT"})
 
     except:
         return redirect_to_login()
+
+@router.get("/view-user-page/{user_id}")
+async def render_user_view_page(request: Request, user_id: int, db: db_dependency):
+    try:
+        loginUser = await get_current_user(request.cookies.get('access_token'))
+
+        if loginUser is None:
+            return redirect_to_login()
+
+        user_model = db.query(Users).filter(Users.id == user_id).first()
+        if user_model is None:
+            raise HTTPException(status_code=404, detail='User not found.')
+
+        return templates.TemplateResponse("add-edit-view-user.html",
+                                {"request": request, "user": user_model, "currentUser": loginUser, "mode": "VIEW"})
+    except:
+        return redirect_to_login()
+
 
 
 @router.get("/password-user-page/{user_id}")
 async def render_user_password_page(request: Request, user_id: int, db: db_dependency):
     try:
-        user = await get_current_user(request.cookies.get('access_token'))
+        loginUser = await get_current_user(request.cookies.get('access_token'))
 
-        if user is None:
+        if loginUser is None:
             return redirect_to_login()
 
         user_model = db.query(Users).filter(Users.id == user_id).first()
         if user_model is None:
             raise HTTPException(status_code=404, detail='User not found.')
 
-        return templates.TemplateResponse("password-user.html", {"request": request, "user": user_model, "currentUser": user})
-
-    except:
-        return redirect_to_login()
-
-
-@router.get("/view-user-page/{user_id}")
-async def render_user_view_page(request: Request, user_id: int, db: db_dependency):
-    try:
-        user = await get_current_user(request.cookies.get('access_token'))
-
-        if user is None:
-            return redirect_to_login()
-
-        user_model = db.query(Users).filter(Users.id == user_id).first()
-        if user_model is None:
-            raise HTTPException(status_code=404, detail='User not found.')
-
-        return templates.TemplateResponse("view-user.html", {"request": request, "user": user_model, "currentUser": user})
+        return templates.TemplateResponse("password-user.html",
+                                    {"request": request, "user": user_model, "currentUser": loginUser})
 
     except:
         return redirect_to_login()
@@ -170,7 +180,7 @@ async def create_user(user: user_dependency, db: db_dependency,
         username = user_request.username,
         email = user_request.email,
         firstname = user_request.firstname,
-        lastname = user_request.lastname,
+        lastname =user_request.lastname,
         userRole = user_request.userRole,
         userStatus = user_request.userStatus,
         hashedPassword=bcrypt_context.hash(user_request.password),

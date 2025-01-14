@@ -2,7 +2,7 @@
 
     // User ---------------------------------------------------------------------------------------------
     // Add User JS --------------------------------------------------------------------
-    const userForm = document.getElementById('userForm');
+    const userForm = document.getElementById('addUserForm');
     if (userForm) {
         userForm.addEventListener('submit', async function (event) {
             event.preventDefault();
@@ -18,8 +18,10 @@
                 lastname: data.lastname,
                 userRole: data.userRole,
                 userStatus: data.userStatus,
-                password: data.password
+                password: data.password,
             };
+
+            alert(JSON.stringify(payload))
 
             try {
                 const response = await fetch('/users/user', {
@@ -67,7 +69,7 @@
                 userStatus: data.userStatus,
             };
 
-            //alert(JSON.stringify(payload));
+            alert(JSON.stringify(payload));
 
             try {
                 const token = getCookie('access_token');
@@ -93,7 +95,7 @@
                     alert(`Error User UPDATE: ${response.status}:${response.statusText}`);
                 }
             } catch (error) {
-                alert('#2 An error occurred. Please try again.');
+                alert('`Error User UPDATE:#2 An error occurred. Please try again.');
             }
         });
 
@@ -130,7 +132,7 @@
                     body: JSON.stringify(payload)
                 });
 
-                alert(JSON.stringify(payload))
+                //alert(JSON.stringify(payload))
 
                 if (response.ok) {
                     window.location.href = '/users/user-page'; // Redirect to the user pag
@@ -201,7 +203,7 @@
 
     // Asset ---------------------------------------------------------------------------------------------
     // Add Asset JS --------------------------------------------------------------------
-    const assetForm = document.getElementById('assetForm');
+    const assetForm = document.getElementById('addAssetForm');
     if (assetForm) {
         assetForm.addEventListener('submit', async function (event) {
             event.preventDefault();
@@ -272,10 +274,10 @@
                 }
 
                 console.log(`${assetId}`)
-                alert(`${assetId}`);
-                alert(data.majorArea);
-                alert(data.minorArea);
-                alert(data.microArea);
+                //alert(`${assetId}`);
+                //alert(data.majorArea);
+                //alert(data.minorArea);
+                //alert(data.microArea);
 
                 const response = await fetch(`/assets/asset/${assetId}`, {
                     method: 'PUT',
@@ -306,7 +308,7 @@
     // view asset JS  --------------------------------------------------------------------
     const viewAssetForm = document.getElementById('viewAssetForm');
     if (viewAssetForm) {
-        viewAssetForm.addEventListener('submit', async function (event) {
+            viewAssetForm.addEventListener('submit', async function (event) {
             event.preventDefault();
             const form = event.target;
             const formData = new FormData(form);
@@ -330,10 +332,13 @@
                     throw new Error('Authentication token not found');
                 }
 
-                console.log(`${assetId}`
-                )
+                console.log(`${assetId}`)
 
-                if (!confirm("Delete Asset! Are you sure?")) {
+                if (!confirm("Delete Asset! This will delete all todo for the Asset too!  Are you sure?")) {
+                    window.location.href = '/assets/asset-page'; // Redirect to the asset page
+                }
+
+                if (!confirm("Delete Asset! Really Sure?")) {
                     window.location.href = '/assets/asset-page'; // Redirect to the asset page
                 }
 
@@ -358,7 +363,6 @@
                 alert('#2 An error occurred. Please try again.');
             }
         });
-
     }
 
     // Todo ---------------------------------------------------------------------------------------------
@@ -441,14 +445,14 @@
 
                 console.log(`${todoId}`)
                 console.log(`${data.assetId}`)
-                alert(`${todoId}`);
-                alert(data.redirect);
-                alert(data.mode);
-                alert(JSON.stringify(payload));
-//                alert(data.title);
-//                alert(data.description);
-//                alert(data.priority);
-//                alert(data.todoStatus);
+                //alert(`${todoId}`);
+                //alert(data.redirect);
+                //alert(data.mode);
+                //alert(JSON.stringify(payload));
+                //alert(data.title);
+                //alert(data.description);
+                //alert(data.priority);
+                //alert(data.todoStatus);
 
             try {
                 const token = getCookie('access_token');

@@ -92,7 +92,18 @@ async def render_asset_page(request: Request):
         if user is None:
             return redirect_to_login()
 
-        return templates.TemplateResponse("add-asset.html", {"request": request, "currentUser": user})
+        #default values
+        asset_default = Assets(
+            majorArea="",
+            minorArea="",
+            microArea="",
+            assetType="",
+            description="",
+            assetState=""
+        )
+
+        return templates.TemplateResponse("add-edit-asset.html", {"request": request,
+                                    "asset" : asset_default, "currentUser": user,"mode": "ADD"})
 
     except:
         return redirect_to_login()
@@ -111,7 +122,8 @@ async def render_edit_asset_page(request: Request, asset_id: int, db: db_depende
 
 ##        confirm("hello3")
 
-        return templates.TemplateResponse("edit-asset.html", {"request": request, "asset": asset_model, "currentUser": user})
+        return templates.TemplateResponse("add-edit-asset.html", {"request": request,
+                                    "asset": asset_model, "currentUser": user, "mode": "EDIT"})
 
     except:
         return redirect_to_login()
@@ -205,8 +217,11 @@ async def delete_asset(user: user_dependency, db: db_dependency, asset_id: int =
     if user is None:
         raise HTTPException(status_code=401, detail='Authentication Failed')
 
-    asset_model = db.query(Assets).filter(Assets.id == asset_id).first()
 
+    #delete all todos for asset
+    db.query(Todos).filter(Todos.assetId == asset_id).delete()
+
+    asset_model = db.query(Assets).filter(Assets.id == asset_id).first()
     if asset_model is None:
         raise HTTPException(status_code=404, detail='Asset not found.')
     db.query(Assets).filter(Assets.id == asset_id).delete()

@@ -1,35 +1,34 @@
 {% include 'layout.html' %}
 
+{% include 'layout.html' %}
+
 <div class="container">
     <div class="card text-center">
+        <div class="card-header">
+            <h5 class="card-title card-title-left">User</h5>
+        </div>
         <div class="card-body">
-            <h5 class="card-title">
-                User List
-            </h5>
-            <table class="table table-hover">
+            <table class="table-sm table-hover table-striped">
                 <thead>
                     <tr>
-                        <th scope="col">Id</th>
-                        <th scope="col">Username</th>
+                        <th scope="col">ID</th>
                         <th scope="col">Email</th>
                         <th scope="col">First</th>
-                        <th scope="col">Last</th>
                         <th scope="col">Role</th>
                         <th scope="col">Status</th>
                         <th scope="col">Actions</th>
                     </tr>
                     <tr>
-                        <th scope="col">---</th>
-                        <th scope="col">---</th>
-                        <th scope="col">---</th>
-                        <th scope="col">---</th>
-                        <th scope="col">---</th>
+                        <th scope="col">&nbsp;</th>
+                        <th scope="col">&nbsp;</th>
+                        <th scope="col">&nbsp;</th>
                         <th scope="col">
                             <div class="userRole">
                               <select class="userRole" onchange="userRoleChangeEventHandler(event);">
                                 <option data-area="All">All</option>
                                 <option data-area="Admin">Admin</option>
                                 <option data-area="Technician">Technician</option>
+                                <option data-area="Other">Other</option>
                               </select>
                             </div>
                         </th>
@@ -39,6 +38,7 @@
                                 <option data-area="All">All</option>
                                 <option data-area="Active">Active</option>
                                 <option data-area="Paused">Paused</option>
+                                <option data-area="Resigned">Resigned</option>
                               </select>
                             </div>
                         </th>
@@ -47,29 +47,32 @@
                 <tbody>
                 {% for user in users %}
                 <tr class="pointer">
-                    <td>{{user.id}}</td>
                     <td>{{user.username}}</td>
                     <td>{{user.email}}</td>
                     <td>{{user.firstname}}</td>
-                    <td>{{user.lastname}}</td>
                     <td>{{user.userRole}}</td>
                     <td>{{user.userStatus}}</td>
-
                     <td>
-                        <button onclick="window.location.href='view-user-page/{{user.id}}'"
-                                type="button" class="btn btn-info">V</button>
+                        <button class="btn-sm btn-primary btn-thin-sm"
+                                onclick="window.location.href='view-user-page/{{user.id}}'"
+                                type="button">View</button>
 
-                        <button onclick="window.location.href='edit-user-page/{{user.id}}'"
-                                type="button" class="btn btn-info">E</button>
+                        <button class="btn-sm btn-primary btn-thin-sm"
+                                onclick="window.location.href='edit-user-page/{{user.id}}'"
+                                type="button">Edit</button>
 
-                        <button onclick="window.location.href='password-user-page/{{user.id}}'"
-                                type="button" class="btn btn-info">P</button>
+                        <button class="btn-sm btn-primary btn-thin-sm"
+                                onclick="window.location.href='password-user-page/{{user.id}}'"
+                                type="button">Pass</button>
                     </td>
                 </tr>
                 {% endfor %}
                 </tbody>
             </table>
-            <a href="add-user-page" class="btn btn-primary">Add a new User</a>
+
+            <button class="btn-sm btn-primary btn-thin-sm"
+                     onclick="window.location.href='add-user-page'" type="button">Add</button>
+
              <script type="text/javascript">
                   function userRoleChangeEventHandler(event) {
                     if (getCookie("userRoleFilter") != event.target.value) {
