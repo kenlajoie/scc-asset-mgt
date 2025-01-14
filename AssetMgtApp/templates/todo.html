@@ -20,9 +20,9 @@
                         <th scope="col">
                             <div class="todoStatus">
                               <select id=todoStatusFilter class="todoStatus" onchange="todoStatusChangeEventHandler(event);">
-                                <option data-area="All">All</option>
                                 <option data-area="Open">Open</option>
                                 <option data-area="Closed">Closed</option>
+                                <option data-area="All">All</option>
                               </select>
                             </div>
                         </th>
@@ -73,14 +73,14 @@
                 </thead>
                 <tbody>
                 {% for todo in todos %}
-                <tr class="group-{{todo.id}}">
+                <tr data-id="{{todo.id}}" class="group-{{todo.id}}">
                     <td>{{todo.todoStatus}}</td>
                     <td>{{todo.priority}}</td>
                     <td>{{todo.majorArea}}</td>
                     <td>{{todo.minorArea}}</td>
                     <td>{{todo.assetType}}</td>
                 </tr>
-                <tr class="group-{{todo.id}} bottom-border">
+                <tr data-id="{{todo.id}}" class="group-{{todo.id}} bottom-border">
                     <td colspan="4"><b>Title:</b> {{todo.title}}</td>
                      <td>
                         <button class="btn-sm btn-primary btn-thin-sm btn-tight"
@@ -235,7 +235,15 @@
           });
         }
       });
+
+      row.addEventListener('click', () => {
+          const id = row.dataset.id;
+          alert(`ID: ${id}`);
+          window.location.href = `view-todo-page/${id}`;
+      });
+
     });
+
 
 </script>
 
