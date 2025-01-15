@@ -2,9 +2,9 @@
 
     // User ---------------------------------------------------------------------------------------------
     // Add User JS --------------------------------------------------------------------
-    const userForm = document.getElementById('addUserForm');
-    if (userForm) {
-        userForm.addEventListener('submit', async function (event) {
+    const addUserForm = document.getElementById('addUserForm');
+    if (addUserForm) {
+            addUserForm.addEventListener('submit', async function (event) {
             event.preventDefault();
 
             const form = event.target;
@@ -203,9 +203,9 @@
 
     // Asset ---------------------------------------------------------------------------------------------
     // Add Asset JS --------------------------------------------------------------------
-    const assetForm = document.getElementById('addAssetForm');
-    if (assetForm) {
-        assetForm.addEventListener('submit', async function (event) {
+    const addAssetForm = document.getElementById('addAssetForm');
+    if (addAssetForm) {
+        addAssetForm.addEventListener('submit', async function (event) {
             event.preventDefault();
 
             const form = event.target;
@@ -367,9 +367,9 @@
 
     // Todo ---------------------------------------------------------------------------------------------
     // Add Todo JS --------------------------------------------------------------------
-    const todoForm = document.getElementById('addTodoForm');
-    if (todoForm) {
-        todoForm.addEventListener('submit', async function (event) {
+    const addTodoForm = document.getElementById('addTodoForm');
+    if (addTodoForm) {
+        addTodoForm.addEventListener('submit', async function (event) {
             event.preventDefault();
             const form = event.target;
             const formData = new FormData(form);
@@ -591,55 +591,6 @@
             } catch (error) {
                 console.error('Error:', error);
                 alert('#4 An error occurred. Please try again.');
-            }
-        });
-    }
-
-
-    // Register JS
-    const registerForm = document.getElementById('registerForm');
-    if (registerForm) {
-        registerForm.addEventListener('submit', async function (event) {
-            event.preventDefault();
-
-            const form = event.target;
-            const formData = new FormData(form);
-            const data = Object.fromEntries(formData.entries());
-
-            if (data.password !== data.password2) {
-                alert("Passwords do not match");
-                return;
-            }
-
-            const payload = {
-                email: data.email,
-                username: data.username,
-                first_name: data.firstname,
-                last_name: data.lastname,
-                role: data.role,
-                phone_number: data.phone_number,
-                password: data.password
-            };
-
-            try {
-                const response = await fetch('/auth', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(payload)
-                });
-
-                if (response.ok) {
-                    window.location.href = '/auth/login-page';
-                } else {
-                    // Handle error
-                    const errorData = await response.json();
-                    alert(`Error: ${errorData.message}`);
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                alert('#5 An error occurred. Please try again.');
             }
         });
     }
