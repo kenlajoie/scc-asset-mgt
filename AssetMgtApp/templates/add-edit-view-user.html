@@ -32,7 +32,9 @@
                     {% else %}  <!- assume ADD OR edit--!>
                         <input id=username name="username" type="text"
                                 style="min-width: 100px; max-width: 100px;" class="form-control-sm"
-                                placeholder="username" value="{{user.username}}" required>
+                                placeholder="username" value="{{user.username}}" required
+                                oninput="this.value = this.value.replace(/\s/g, '');"
+                                onkeydown="if (event.key === ' ') event.preventDefault();" />
                     {% endif %}
                 </div>
             </div> <!--row-->
@@ -48,8 +50,10 @@
                                 placeholder="initials" value="{{user.initials}}" readonly>
                     {% else %}  <!- assume ADD OR edit--!>
                         <input id=initials name="initials" type="text"
-                                style="min-width: 100px; max-width: 100px;" class="form-control-sm"
-                                placeholder="Initials" value="{{user.initials}}" required>
+                                style="min-width: 100px; max-width: 100px; text-transform: uppercase;" class="form-control-sm"
+                                placeholder="Initials" value="{{user.initials}}" required
+                                oninput="this.value = this.value.replace(/\s/g, '');"
+                                onkeydown="if (event.key === ' ') event.preventDefault();" />
                     {% endif %}
                 </div>
             </div> <!--row-->
