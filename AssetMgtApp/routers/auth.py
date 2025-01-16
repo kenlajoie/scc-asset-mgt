@@ -1,4 +1,3 @@
-from _pyrepl import console
 from datetime import timedelta, datetime, timezone
 from typing import Annotated
 
