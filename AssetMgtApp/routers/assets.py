@@ -1,4 +1,6 @@
 from typing import Annotated
+
+from click import confirm
 from pydantic import BaseModel, Field
 from sqlalchemy.orm import Session
 from fastapi import APIRouter, Depends, HTTPException, Path, Request, status
@@ -8,7 +10,6 @@ from ..database import SessionLocal
 from .auth import get_current_user
 from starlette.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
-
 
 templates = Jinja2Templates(directory="AssetMgtApp/templates")
 
@@ -30,18 +31,18 @@ user_dependency = Annotated[dict, Depends(get_current_user)]
 class AssetRequest(BaseModel):
     majorArea: str = Field(min_length=3, max_length=10)
     minorArea: str = Field(min_length=3, max_length=10)
-    microArea: str;
     assetType: str = Field(min_length=3, max_length=10)
     description: str = Field(max_length=30)
     assetState: str = Field(min_length=3, max_length=10)
+    model: str
+    satellite: str
+    station: str
 
 ##this should be a shared function
 def redirect_to_login():
     redirect_response = RedirectResponse(url="/auth/login-page", status_code=status.HTTP_302_FOUND)
     redirect_response.delete_cookie(key="access_token")
     return redirect_response
-
-### Pages ###
 
 @router.get("/asset-page")
 async def render_asset_page(request: Request, db: db_dependency):
@@ -96,10 +97,12 @@ async def render_asset_page(request: Request):
         asset_default = Assets(
             majorArea="",
             minorArea="",
-            microArea="",
             assetType="",
             description="",
-            assetState=""
+            assetState="",
+            model="",
+            satellite = "",
+            station = ""
         )
 
         return templates.TemplateResponse("add-edit-asset.html", {"request": request,
@@ -177,10 +180,12 @@ async def create_asset(user: user_dependency, db: db_dependency,
     create_asset_model = Assets(
         majorArea=asset_request.majorArea,
         minorArea=asset_request.minorArea,
-        microArea=asset_request.microArea,
         assetType=asset_request.assetType,
         description=asset_request.description,
-        assetState=asset_request.assetState
+        assetState=asset_request.assetState,
+        model=asset_request.model,
+        satellite = asset_request.satellite,
+        station = asset_request.station
     )
 
     #asset_model = Assets(**asset_request.model_dump())
@@ -203,10 +208,12 @@ async def update_asset(user: user_dependency, db: db_dependency,
 
     asset_model.majorArea = asset_request.majorArea
     asset_model.minorArea = asset_request.minorArea
-    asset_model.microArea = asset_request.microArea
     asset_model.assetType = asset_request.assetType
     asset_model.description = asset_request.description
     asset_model.assetState = asset_request.assetState
+    asset_model.model = asset_request.model
+    asset_model.satellite = asset_request.satellite
+    asset_model.station = asset_request.station
 
     db.add(asset_model)
     db.commit()

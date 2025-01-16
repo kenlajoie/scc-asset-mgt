@@ -46,15 +46,30 @@
 
             <div class="row g-3 pt-2 pb-2">
                 <div class="col-sm-10">
-                    <label for="microArea" class="form-label-sm">Model</label>
-                    <input id="microArea" name="microArea" type="text"
+                    <label for="model" class="form-label-sm">Model</label>
+                    <input id="model" name="model" type="text"
                             style="min-width: 100px; max-width: 150px;" class="form-control-sm"
-                            placeholder="Micro Area" value="{{asset.microArea}}" readonly>
+                            placeholder="Model" value="{{asset.model}}" readonly>
 
-                    <label for="assetState" class="form-label-sm">Asset State</label>
+                    <label for="assetState" class="form-label-sm">State</label>
                     <input id="assetState" name="assetState" type="text"
                             style="min-width: 100px; max-width: 150px;" class="form-control-sm"
                             placeholder="Asset State" value="{{asset.assetState}}" readonly>
+                </div>
+
+            </div> <!--row-->
+
+            <div class="row g-3 pt-2 pb-2">
+                <div class="col-sm-10">
+                    <label for="satellite" class="form-label-sm">Statelitte</label>
+                    <input id="satellite" name="Satellite" type="text"
+                            style="min-width: 100px; max-width: 150px;" class="form-control-sm"
+                            placeholder="Satellite" value="{{asset.satellite}}" readonly>
+
+                    <label for="station" class="form-label-sm">Station</label>
+                    <input id="station" name="station" type="text"
+                            style="min-width: 100px; max-width: 150px;" class="form-control-sm"
+                            placeholder="Station" value="{{asset.station}}" readonly>
                 </div>
 
             </div> <!--row-->

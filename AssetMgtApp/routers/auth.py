@@ -1,3 +1,4 @@
+from _pyrepl import console
 from datetime import timedelta, datetime, timezone
 from typing import Annotated
 
@@ -27,9 +28,8 @@ oauth2_bearer = OAuth2PasswordBearer(tokenUrl='auth/token')
 
 class CreateUserRequest(BaseModel):
     username: str
-    email: str
-    firstname: str
-    lastname: str
+    initials: str
+    name: str
     userRole: str
     userStatus: str
     password: str
@@ -96,15 +96,13 @@ async def create_user(db: db_dependency,
                       create_user_request: CreateUserRequest):
 
     create_user_model = Users(
-        email=create_user_request.email,
         username=create_user_request.username,
-        firstname = create_user_request.firstname,
-        lastname = create_user_request.lastname,
+        name = create_user_request.name,
         userRole = create_user_request.userRole,
         userStatus = create_user_request.userStatus,
         hashedPassword = bcrypt_context.hash(create_user_request.password),
-        createdById = -1,
-        updatedById = -1
+        createdBy = "KEL",
+        updatedBy = "KEL"
     )
 
     db.add(create_user_model)
@@ -118,6 +116,8 @@ async def read_all(db: db_dependency):
 @router.post("/token", response_model=Token)
 async def login_for_access_token(form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
                                  db: db_dependency):
+
+
     user = authenticate_user(form_data.username, form_data.password, db)
     if not user:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,

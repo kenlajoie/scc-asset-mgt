@@ -23,13 +23,13 @@
               <input type="text" class="form-control" name="assetId" value="{{asset.id}}" hidden>
            </div>
 
-           <div class="row g-5 pt-0">
+           <div class="row g-5 pt-1">
 
                 <div class="col-sm-3">
                     <label for="majorArea"
                         class="form-label-sm">Major Area</label>
                     <input id=majorArea name="majorArea" type="text"
-                            style="min-width: 100px; max-width: 150px;" class="form-control-sm"
+                            style="min-width: 90px; max-width: 150px;" class="form-control-sm"
                             placeholder="Major Area" value="{{asset.majorArea}}" readonly>
                 </div>
 
@@ -37,7 +37,7 @@
                     <label for="minorArea"
                         class="form-label-sm">Minor Area</label>
                     <input id=minorArea name="MinorArea" type="text"
-                            style="min-width: 100px; max-width: 150px;" class="form-control-sm"
+                            style="min-width: 90px; max-width: 150px;" class="form-control-sm"
                             placeholder="Asset Description" value="{{asset.minorArea}}" readonly>
                 </div>
 
@@ -45,7 +45,7 @@
                     <label for="assetType"
                         class="form-label-sm">Asset Type</label>
                     <input id=assetType name="assetType" type="text"
-                            style="min-width: 100px; max-width: 150px;" class="form-control-sm"
+                            style="min-width: 90px; max-width: 150px;" class="form-control-sm"
                             placeholder="Asset Type" value="{{asset.assetType}}" readonly>
                 </div>
 
@@ -62,12 +62,12 @@
 
             <div class="row g-3 pt-2 pb-2">
                 <div class="col-sm-10">
-                    <label for="microArea" class="form-label-sm">Model</label>
-                    <input id="microArea" name="microArea" type="text"
+                    <label for="model" class="form-label-sm">Model</label>
+                    <input id="model" name="model" type="text"
                             style="min-width: 100px; max-width: 150px;" class="form-control-sm"
-                            placeholder="Micro Area" value="{{asset.microArea}}" readonly>
+                            placeholder="Model" value="{{asset.model}}" readonly>
 
-                    <label for="assetState" class="form-label-sm">Asset State</label>
+                    <label for="assetState" class="form-label-sm">State</label>
                     <input id="assetState" name="assetState" type="text"
                             style="min-width: 100px; max-width: 150px;" class="form-control-sm"
                             placeholder="Asset State" value="{{asset.assetState}}" readonly>
@@ -76,10 +76,11 @@
             </div> <!--row-->
 
 <!------------todo stuff---------------->
+            <hr style="border: 3px solid #333;  margin: 5px 0;">
 
             <div class="row g-3 pt-2">
                 <div class="col-sm-8">
-                    <label for="title" class="form-label-sm">Title</label>
+                    <label for="title" class="form-label-sm">Todo Title</label>
                     {% if mode == "VIEW"%}
                         <input id=title name="title" type="text"
                                 style="min-width: 300px; max-width: 400px;" class="form-control-sm"
@@ -92,18 +93,23 @@
                 </div>
             </div> <!--row-->
 
-            <div class="row g-3 pt-2">
-                <div class="col-sm-8">
-                    <label for="description" class="form-label-sm">Notes</label>
+             <div class="row g-3 pt-1">
+                <div class="col-sm-3">
+                    <label for="assignedTo"
+                        class="form-label-sm">AssignedTo</label>
                     {% if mode == "VIEW"%}
-                        <textarea name="description" class="form-control" rows="3" readonly>{{todo.description}}</textarea>
+                        <input id=assignedTo name="assignedTo" type="text"
+                                style="min-width: 125px; max-width: 125px;" class="form-control-sm"
+                                placeholder="Assigned To" value="{{todo.assignedTo}}" readonly>
                     {% else %}  <!- assume ADD OR edit--!>
-                        <textarea name="description" class="form-control" rows="3">{{todo.description}}</textarea>
+                        <select id="assignedTo" name="assignedTo"
+                            style="min-width: 100px; max-width: 100px;" class="form-control-sm">
+                            <option {% if todo.assignedTo =="KEL" %} selected="selected" {% endif %}>KEL</option>
+                            <option {% if todo.assignedTo =="ZAC" %} selected="selected" {% endif %}>ZAC</option>
+                        </select>
                     {% endif %}
                 </div>
 
-            </div> <!--row-->
-             <div class="row g-3 pt-1">
                 <div class="col-sm-3">
                     <label for="priority"
                         class="form-label-sm">Priority</label>
@@ -123,7 +129,7 @@
 
                 <div class="col-sm-3">
                     <label for="todoStatus"
-                        class="form-label-sm">status</label>
+                        class="form-label-sm">Status</label>
                     {% if mode == "VIEW"%}
                         <input id=todoStatus name="todoStatus" type="text"
                                 style="min-width: 125px; max-width: 125px;" class="form-control-sm"
@@ -135,6 +141,17 @@
                             <option {% if todo.todoStatus =="Closed" %} selected="selected" {% endif %}>Closed</option>
                             <option {% if todo.todoStatus =="Wip" %} selected="selected" {% endif %}>Wip</option>
                         </select>
+                    {% endif %}
+                </div>
+            </div> <!--row-->
+
+            <div class="row g-3 pt-2">
+                <div class="col-sm-8">
+                    <label for="description" class="form-label-sm">Notes</label>
+                    {% if mode == "VIEW"%}
+                        <textarea name="description" class="form-control" rows="3" readonly>{{todo.description}}</textarea>
+                    {% else %}  <!- assume ADD OR edit--!>
+                        <textarea name="description" class="form-control" rows="3">{{todo.description}}</textarea>
                     {% endif %}
                 </div>
             </div> <!--row-->

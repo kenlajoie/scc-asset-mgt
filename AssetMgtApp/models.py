@@ -1,5 +1,8 @@
+import datetime
+
 from .database import Base
-from sqlalchemy import Column, Integer, String, Boolean, ForeignKey, Double, Table
+from sqlalchemy import Column, Integer, String, Boolean, ForeignKey, Double, Table, DateTime, func
+from datetime import datetime
 
 from sqlalchemy.orm import declarative_base, relationship, Mapped
 
@@ -8,15 +11,16 @@ class Users(Base):
     __tablename__ = 'users'
 
     id = Column(Integer, primary_key=True, index=True)
-    email = Column(String, unique=True)
     username = Column(String, unique=True)
-    firstname = Column(String)
-    lastname = Column(String)
+    initials = Column(String, unique=True)
+    name = Column(String)
     userRole = Column(String)
     userStatus = Column(String)
     hashedPassword = Column(String)
-    createdById = Column(Integer)
-    updatedById = Column(Integer)
+    createdBy = Column(String, ForeignKey("users.initials"))
+    createdDate = Column(DateTime, server_default=func.now())
+    updatedBy = Column(String, ForeignKey("users.initials"))
+    updatedDate = Column(DateTime)
 
 class Assets(Base):
     __tablename__ = 'assets'
@@ -24,14 +28,18 @@ class Assets(Base):
     id = Column(Integer, primary_key=True, index=True)
     majorArea = Column(String)
     minorArea = Column(String)
-    microArea = Column(String)
     assetType = Column(String)
+    model = Column(String)
     description = Column(String)
     assetState = Column(String)
+    satellite = Column(String)
+    station = Column(String)
     gpsLat  = Column(Double)
     gpsLng = Column(Double)
-    createdById = Column(Integer, ForeignKey("users.id"))
-    updatedById = Column(Integer, ForeignKey("users.id"))
+    createdBy = Column(Integer, ForeignKey("users.initials"))
+    createdDate = Column(DateTime, server_default=func.now())
+    updatedBy = Column(Integer, ForeignKey("users.initials"))
+    updatedDate = Column(DateTime)
 
 
 class Todos(Base):
@@ -43,8 +51,11 @@ class Todos(Base):
     priority = Column(String)
     todoStatus = Column(String)
     assetId = Column(Integer, ForeignKey("assets.id"))
-    ownerId = Column(Integer, ForeignKey("users.id"))
-    createdById = Column(Integer, ForeignKey("users.id"))
-    updatedById = Column(Integer, ForeignKey("users.id"))
-    closedById = Column(Integer, ForeignKey("users.id"))
+    assignedTo = Column(String, ForeignKey("users.initials"))
+    closedBy = Column(String, ForeignKey("users.initials"))
+    closedDate = Column(DateTime)
+    createdBy = Column(String, ForeignKey("users.initials"))
+    createdDate = Column(DateTime, server_default=func.now())
+    updatedBy = Column(String, ForeignKey("users.initials"))
+    updatedDate = Column(DateTime)
 

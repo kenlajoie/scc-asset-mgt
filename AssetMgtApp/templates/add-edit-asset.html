@@ -12,6 +12,12 @@
         {% if mode == "EDIT"%}
         <form id="editAssetForm">
         {% endif %}
+
+
+            <div class="form-group">
+              <input type="text" class="form-control" name="mode" value="{{mode}}" hidden>
+            </div>
+
             <div class="row g-5 pt-0">
                 <div class="col-sm-3">
                     <label for="majorArea"
@@ -76,17 +82,14 @@
 
              <div class="row g-3 pt-1">
                 <div class="col-sm-3">
-                    <label for="microArea"
+                    <label for="model"
                         class="form-label-sm">Model</label>
-                        <select id="microArea" name="microArea"
+                        <select id="model" name="model"
                             style="min-width: 125px; max-width: 125px;" class="form-control-sm">
             <option value="">Choose...</option>
-            <option {% if asset.microArea =="760" %} selected="selected" {% endif %}>760</option>
-            <option {% if asset.microArea =="740" %} selected="selected" {% endif %}>740</option>
+            <option {% if asset.model =="760" %} selected="selected" {% endif %}>760</option>
+            <option {% if asset.model =="740" %} selected="selected" {% endif %}>740</option>
                         </select>
-                     <div class="invalid-feedback"
-                        Valid Micro Area is required>
-                    </div>
                 </div>
 
                 <div class="col-sm-3">
@@ -102,7 +105,24 @@
                         Valid Asset State is required>
                     </div>
                 </div>
+            </div> <!--row-->
 
+            <div class="row g-3 pt-1">
+                <div class="col-sm-3">
+                    <label for="satellite"
+                        class="form-label-sm">Satellite</label>
+                        <input id=satellite name="satellite" type="text"
+                            style="min-width: 125px; max-width: 125px;" class="form-control-sm"
+                            placeholder="Satellite" value="{{asset.satellite}}">
+                </div>
+
+                <div class="col-sm-3">
+                    <label for="station" class="form-label-sm">Station</label>
+                        <input id=station name="station" type="text"
+                            style="min-width: 125px; max-width: 125px;" class="form-control-sm"
+                            placeholder="Station" value="{{asset.station}}">
+
+                </div>
             </div> <!--row-->
 
             <div class="row g-3 pt-1">
@@ -121,7 +141,6 @@
                 </div>
 
             </div> <!--row-->
-
 
             <div class="row g-3 pt-1">
                 <div class="col-sm-3">

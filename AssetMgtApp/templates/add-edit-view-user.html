@@ -22,68 +22,52 @@
 
             <div class="row g-3 pt-2">
                 <div class="col-sm-2">
-                    <label for="email" class="form-label-sm">Email</label>
-               </div>
-                <div class="col-sm-4">
-                    {% if mode == "VIEW"%}
-                        <input id=email name="email" type="text"
-                                style="min-width: 300px; max-width: 400px;" class="form-control-sm"
-                                placeholder="Email" value="{{user.email}}" readonly>
-                    {% else %}  <!- assume ADD OR edit--!>
-                        <input id=email name="email" type="email"
-                                style="min-width: 300px; max-width: 400px;" class="form-control-sm"
-                                placeholder="Email" value="{{user.email}}" required>
-                    {% endif %}
-                </div>
-            </div> <!--row-->
-
-            <div class="row g-3 pt-2">
-                <div class="col-sm-2">
-                    <label for="username" class="form-label-sm">Initials</label>
+                    <label for="username" class="form-label-sm">Username</label>
                </div>
                 <div class="col-sm-4">
                     {% if mode == "VIEW"%}
                         <input id=username" type="text"
                                 style="min-width: 100px; max-width: 100px;" class="form-control-sm"
-                                placeholder="Initials" value="{{user.username}}" readonly>
+                                placeholder="username" value="{{user.username}}" readonly>
                     {% else %}  <!- assume ADD OR edit--!>
                         <input id=username name="username" type="text"
                                 style="min-width: 100px; max-width: 100px;" class="form-control-sm"
-                                placeholder="Initials" value="{{user.username}}" required>
+                                placeholder="username" value="{{user.username}}" required>
                     {% endif %}
                 </div>
             </div> <!--row-->
 
             <div class="row g-3 pt-2">
                 <div class="col-sm-2">
-                    <label for="firstname" class="form-label-sm">First</label>
+                    <label for="initials" class="form-label-sm">Initials</label>
                </div>
                 <div class="col-sm-4">
                     {% if mode == "VIEW"%}
-                        <input id=firstname" name="firstname" type="text"
-                                style="min-width: 300px; max-width: 400px;" class="form-control-sm"
-                                placeholder="First Name" value="{{user.firstname}}" readonly>
+                        <input id=initials" type="text"
+                                style="min-width: 100px; max-width: 100px;" class="form-control-sm"
+                                placeholder="initials" value="{{user.initials}}" readonly>
                     {% else %}  <!- assume ADD OR edit--!>
-                        <input id=firstname name="firstname" type="text"
-                                style="min-width: 300px; max-width: 300px;" class="form-control-sm"
-                                placeholder="First Name" value="{{user.firstname}}" required>
+                        <input id=initials name="initials" type="text"
+                                style="min-width: 100px; max-width: 100px;" class="form-control-sm"
+                                placeholder="Initials" value="{{user.initials}}" required>
                     {% endif %}
                 </div>
             </div> <!--row-->
 
+
             <div class="row g-3 pt-2">
                 <div class="col-sm-2">
-                    <label for="lastname" class="form-label-sm">Last</label>
+                    <label for="name" class="form-label-sm">Name</label>
                </div>
                 <div class="col-sm-4">
                     {% if mode == "VIEW"%}
-                        <input id=lastname" name="lastname" type="text"
+                        <input id=name" name="name" type="text"
                                 style="min-width: 300px; max-width: 400px;" class="form-control-sm"
-                                placeholder="Last Name" value="{{user.lastname}}" readonly>
+                                placeholder="Name" value="{{user.name}}" readonly>
                     {% else %}  <!- assume ADD OR edit--!>
-                        <input id=lastname name="lastname" type="text"
+                        <input id=name name="name" type="text"
                                 style="min-width: 300px; max-width: 300px;" class="form-control-sm"
-                                placeholder="Last Name" value="{{user.lastname}}" required>
+                                placeholder="Name" value="{{user.name}}" required>
                     {% endif %}
                 </div>
             </div> <!--row-->

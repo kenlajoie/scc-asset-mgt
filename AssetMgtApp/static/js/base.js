@@ -13,15 +13,15 @@
 
             const payload = {
                 username: data.username,
+                initials: data.initials,
                 email: data.email,
-                firstname: data.firstname,
-                lastname: data.lastname,
+                name: data.name,
                 userRole: data.userRole,
                 userStatus: data.userStatus,
                 password: data.password,
             };
 
-            alert(JSON.stringify(payload))
+            //alert(JSON.stringify(payload))
 
             try {
                 const response = await fetch('/users/user', {
@@ -62,14 +62,13 @@
 
             const payload = {
                 username: data.username,
-                email: data.email,
-                firstname: data.firstname,
-                lastname: data.lastname,
+                initials: data.initials,
+                name: data.name,
                 userRole: data.userRole,
                 userStatus: data.userStatus,
             };
 
-            alert(JSON.stringify(payload));
+            //alert(JSON.stringify(payload));
 
             try {
                 const token = getCookie('access_token');
@@ -160,9 +159,8 @@
 
             const payload = {
                 username: data.username,
-                email: data.email,
-                firstname: data.firstname,
-                lastname: data.lastname,
+                initials: data.initials,
+                name: data.name,
                 userRole: data.userRole,
                 userStatus: data.userStatus
             };
@@ -215,11 +213,15 @@
             const payload = {
                 majorArea: data.majorArea,
                 minorArea: data.minorArea,
-                microArea: data.microArea,
                 assetType: data.assetType,
                 description: data.description,
-                assetState: data.assetState
+                model: data.model,
+                assetState: data.assetState,
+                satellite: data.satellite,
+                station: data.station
             };
+
+            alert(JSON.stringify(payload));
 
             try {
                 const response = await fetch('/assets/asset', {
@@ -260,10 +262,12 @@
             const payload = {
                 majorArea: data.majorArea,
                 minorArea: data.minorArea,
-                microArea: data.microArea,
                 assetType: data.assetType,
                 description: data.description,
-                assetState: data.assetState
+                model: data.model,
+                assetState: data.assetState,
+                satellite: data.satellite,
+                station: data.station
             };
 
             try {
@@ -319,10 +323,12 @@
             const payload = {
                 majorArea: data.majorArea,
                 minorArea: data.minorArea,
-                microArea: data.microArea,
                 assetType: data.assetType,
                 description: data.description,
-                assetState: data.assetState
+                model: data.model,
+                assetState: data.assetState,
+                satellite: data.satellite,
+                station: data.station
             };
 
             try {
@@ -381,7 +387,8 @@
                 title: data.title,
                 description: data.description,
                 priority: data.priority,
-                todoStatus: data.todoStatus
+                todoStatus: data.todoStatus,
+                assignedTo: data.assignedTo
             };
 
             try {
@@ -440,7 +447,8 @@
                 title: data.title,
                 description: data.description,
                 priority: data.priority,
-                todoStatus: data.todoStatus
+                todoStatus: data.todoStatus,
+                assignedTo: data.assignedTo
             };
 
                 console.log(`${todoId}`)
@@ -456,12 +464,9 @@
 
             try {
                 const token = getCookie('access_token');
-                console.log(token)
-
                 if (!token) {
                     throw new Error('Authentication token not found');
                 }
-
 
                 const response = await fetch(`/todos/todo-update/${todoId}`, {
                     method: 'PUT',
@@ -472,6 +477,8 @@
                     body: JSON.stringify(payload)
                 });
 
+                //alert(JSON.stringify(payload));
+
                 if (response.ok) {
                     if (data.redirect == 'T')
                         window.location.href = '/todos/todo-page'; // Redirect to the todo page
@@ -480,13 +487,13 @@
                     }
                 } else {
                     // Handle error
-                    const errorData = await response.json();
-                    alert(`#2 Error: ${errorData.detail}`);
+                    alert("call to todo-update failed");
+                    //const errorData = await response.json();
+                    //alert(`#2 Error: ${errorData.detail}`);
                 }
             } catch (error) {
-                alert(error)
                 alert('#3 An error occurred. Please try again.');
-                console.error('Error:', error);
+                //console.error('Error:', error);
             }
         });
     }
@@ -506,7 +513,8 @@
                 title: data.title,
                 description: data.description,
                 priority: data.priority,
-                todoStatus: data.todoStatus
+                todoStatus: data.todoStatus,
+                assignedTo: data.assignedTo
             };
 
             try {
@@ -564,6 +572,8 @@
                 payload.append(key, value);
             }
 
+            //alert(`${payload.toString()}`)
+
             try {
                 const response = await fetch('/auth/token', {
                     method: 'POST',
@@ -586,11 +596,11 @@
                 } else {
                     // Handle error
                     const errorData = await response.json();
-                    alert(`Error: ${errorData.detail}`);
-                }
+                    alert(`Error #3: ${errorData.detail}`);
+                                    }
             } catch (error) {
                 console.error('Error:', error);
-                alert('#4 An error occurred. Please try again.');
+                alert('ERROR #4 An error occurred. Please try again.');
             }
         });
     }

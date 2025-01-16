@@ -36,20 +36,19 @@ class UserVerification(BaseModel):
     password: str
     new_password: str = Field(min_length=6)
 
+
 class UserAddRequest(BaseModel):
-    username: str = Field(min_length=2, max_length=10)
-    email: str = Field(min_length=8, max_length=30)
-    firstname: str = Field(min_length=2, max_length=30)
-    lastname: str = Field(min_length=2, max_length=30)
+    username: str = Field(min_length=2, max_length=30)
+    initials: str = Field(min_length=2, max_length=4)
+    name: str = Field(min_length=2, max_length=30)
     userRole: str = Field(min_length=3,max_length=10)
     userStatus: str = Field(min_length=3, max_length=10)
     password: str = Field(min_length=6, max_length=20)
 
 class UserEditRequest(BaseModel):
-    username: str = Field(min_length=2, max_length=10)
-    email: str = Field(min_length=8, max_length=30)
-    firstname: str = Field(min_length=2, max_length=30)
-    lastname: str = Field(min_length=2, max_length=30)
+    username: str = Field(min_length=2, max_length=30)
+    initials: str = Field(min_length=2, max_length=4)
+    name: str = Field(min_length=2, max_length=30)
     userRole: str = Field(min_length=3,max_length=10)
     userStatus: str = Field(min_length=3, max_length=10)
 
@@ -100,10 +99,9 @@ async def render_user_page(request: Request):
 
         #default values
         user_default = Users(
-            username="FOO",
-            email="foo@foo.com",
-            firstname="Foo",
-            lastname="Bar",
+            username="foobar",
+            initials="FB",
+            name="Foo Bar",
             userRole="",
             userStatus="",
         )
@@ -178,9 +176,8 @@ async def create_user(user: user_dependency, db: db_dependency,
 
     create_user_model = Users(
         username = user_request.username,
-        email = user_request.email,
-        firstname = user_request.firstname,
-        lastname =user_request.lastname,
+        initials = user_request.initials,
+        name = user_request.name,
         userRole = user_request.userRole,
         userStatus = user_request.userStatus,
         hashedPassword=bcrypt_context.hash(user_request.password),
@@ -203,9 +200,8 @@ async def update_user(user: user_dependency, db: db_dependency,
     save = user_model.hashedPassword
 
     user_model.username = user_request.username
-    user_model.email = user_request.email
-    user_model.firstname = user_request.firstname
-    user_model.lastname = user_request.lastname
+    user_model.initials = user_request.initials
+    user_model.name = user_request.name
     user_model.userRole = user_request.userRole
     user_model.userStatus = user_request.userStatus
 

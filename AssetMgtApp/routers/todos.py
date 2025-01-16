@@ -1,3 +1,4 @@
+from _pyrepl import console
 from typing import Annotated
 
 from click import confirm
@@ -34,7 +35,7 @@ class TodoRequest(BaseModel):
     description: str
     priority: str = Field(min_length=3, max_length=10)
     todoStatus: str = Field(min_length=3, max_length=10)
-
+    assignedTo: str
 
 def redirect_to_login():
     redirect_response = RedirectResponse(url="/auth/login-page", status_code=status.HTTP_302_FOUND)
@@ -47,7 +48,6 @@ def redirect_to_login():
 async def render_todo_page(request: Request, db: db_dependency):
     try:
         user = await get_current_user(request.cookies.get('access_token'))
-
         if user is None:
            return redirect_to_login()
 
@@ -58,16 +58,16 @@ async def render_todo_page(request: Request, db: db_dependency):
         minorAreaFilter =request.cookies.get('minorAreaFilter')
         assetTypeFilter =request.cookies.get('assetTypeFilter')
 
+
         query = db.query(
             Todos.id,
             Todos.todoStatus,
             Todos.priority,
             Todos.title,
+            Todos.assignedTo,
             Todos.assetId,
-            Todos.ownerId,
             Assets.majorArea,
             Assets.minorArea,
-            Assets.microArea,
             Assets.description,
             Assets.assetType
         ).join(Assets, Todos.assetId == Assets.id)
@@ -117,8 +117,8 @@ async def render_todo_page(request: Request, asset_id: int,db: db_dependency):
             description="",
             todoStatus="OPEN",
             priority="HIGH",
-            assetId=asset_id,
-            ownerId=user.get('id')
+            assignedTo="KEL",
+            assetId=asset_id
         )
 
         return templates.TemplateResponse("add-edit-view-todo.html", {"request": request,
@@ -146,8 +146,8 @@ async def render_todo_page(request: Request, asset_id: int,db: db_dependency):
             description="",
             todoStatus="OPEN",
             priority="HIGH",
-            assetId=asset_id,
-            ownerId=user.get('id')
+            assignedTo="KEL",
+            assetId=asset_id
         )
         return templates.TemplateResponse("add-edit-view-todo.html", {"request": request,
                             "todo" : todo_default, "asset": asset_model,
@@ -278,14 +278,13 @@ async def create_todo(user: user_dependency, db: db_dependency,
     if user is None:
         raise HTTPException(status_code=401, detail='Authentication Failed')
 
-
     create_todo_model = Todos(
        title=todo_request.title,
        description=todo_request.description,
        todoStatus=todo_request.todoStatus,
        priority=todo_request.priority,
-       assetId =asset_id,
-       ownerId = user.get('id')
+       assignedTo =todo_request.assignedTo,
+       assetId = asset_id
     )
 
 #    todo_model = Todos(**todo_request.model_dump())
@@ -300,6 +299,7 @@ async def update_todo(user: user_dependency, db: db_dependency,
     if user is None:
         raise HTTPException(status_code=401, detail='Authentication Failed')
 
+
     # get the rows current values
     todo_model = db.query(Todos).filter(Todos.id == todo_id).first()
     if todo_model is None:
@@ -310,6 +310,8 @@ async def update_todo(user: user_dependency, db: db_dependency,
     todo_model.description = todo_request.description
     todo_model.priority = todo_request.priority
     todo_model.todoStatus = todo_request.todoStatus
+    todo_model.assignedTo = todo_request.assignedTo
+
 
     db.add(todo_model)
     db.commit()
