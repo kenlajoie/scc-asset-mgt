@@ -221,7 +221,7 @@
                 station: data.station
             };
 
-            alert(JSON.stringify(payload));
+            //alert(JSON.stringify(payload));
 
             try {
                 const response = await fetch('/assets/asset', {
@@ -234,6 +234,10 @@
                 });
 
                 if (response.ok) {
+                    //set the major area filter to the new asset major area
+                    if (getCookie("majorAreaFilter") != data.majorArea) {
+                        document.cookie = `majorAreaFilter=${data.majorArea}; path=/`;
+                    }
                     window.location.href = '/assets/asset-page'; // Redirect to the asset page
                     //form.reset(); // Clear the form
                 } else {
