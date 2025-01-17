@@ -12,7 +12,7 @@
                 <thead>
                     <tr>
                         <th scope="col">Username</th>
-                        <th scope="col">Name</th>
+                        <th scope="col">Id</th>
                         <th scope="col">Role</th>
                         <th scope="col">Status</th>
                     </tr>
@@ -45,7 +45,7 @@
                 {% for user in users %}
                 <tr class="pointer">
                     <td>{{user.username}}</td>
-                    <td>{{user.Name}}</td>
+                    <td>{{user.initials}}</td>
                     <td>{{user.userRole}}</td>
                     <td>{{user.userStatus}}</td>
                     <td>

@@ -25,11 +25,11 @@
                     <label for="username" class="form-label-sm">Username</label>
                </div>
                 <div class="col-sm-4">
-                    {% if mode == "VIEW"%}
-                        <input id=username" type="text"
+                    {% if mode == 'VIEW' %}
+                        <input id=username" name=username type="text"
                                 style="min-width: 100px; max-width: 100px;" class="form-control-sm"
                                 placeholder="username" value="{{user.username}}" readonly>
-                    {% else %}  <!- assume ADD OR edit--!>
+                    {% else %} <!- assume ADD OR edit--!>
                         <input id=username name="username" type="text"
                                 style="min-width: 100px; max-width: 100px;" class="form-control-sm"
                                 placeholder="username" value="{{user.username}}" required
@@ -44,11 +44,11 @@
                     <label for="initials" class="form-label-sm">Initials</label>
                </div>
                 <div class="col-sm-4">
-                    {% if mode == "VIEW"%}
-                        <input id=initials" type="text"
+                    {% if mode != 'ADD' %} <!- assume EDIT or VIEW --!>
+                        <input id=initials" name=initials type="text"
                                 style="min-width: 100px; max-width: 100px;" class="form-control-sm"
                                 placeholder="initials" value="{{user.initials}}" readonly>
-                    {% else %}  <!- assume ADD OR edit--!>
+                    {% else %}  <!- assume ADD --!>
                         <input id=initials name="initials" type="text"
                                 style="min-width: 100px; max-width: 100px; text-transform: uppercase;" class="form-control-sm"
                                 placeholder="Initials" value="{{user.initials}}" required

@@ -4,7 +4,7 @@
 <div class="container">
   <div class="card">
     <div class="card-header">
-        <h5 class="card-title card-title-left">Todo</h5>
+        <h5 class="card-title card-title-left">Todo {{todo_id}}</h5>
     </div>
     <div class="card-body">
         {% if mode == "ADD"%}
@@ -20,6 +20,7 @@
            <div class="form-group">
               <input type="text" class="form-control" name="redirect" value="{{redirect}}" hidden>
               <input type="text" class="form-control" name="mode" value="{{mode}}" hidden>
+              <input type="text" class="form-control" name="todo_id" value="{{todo_id}}" hidden>
               <input type="text" class="form-control" name="assetId" value="{{asset.id}}" hidden>
            </div>
 
@@ -184,19 +185,17 @@
                             <button type="submit"
                                 class="btn-sm btn-primary btn-thin-sm">Delete</button>
                         {% endif %}
-                   {% else %}  <!- assume ADD OR edit--!>
+                   {% else %}  <!- assume ADD OR EDIT--!>
                         <button type="submit"
                             class="btn-sm btn-primary btn-thin-sm">Save</button>
                     {% endif %}
 
                     {% if redirect == "T"%}
-                        <button
-                            class="btn-sm btn-primary btn-thin-sm"
-                            onclick=window.location.href='/todos/todo-page' type="button">Back</button>
+                        <button class="btn-sm btn-primary btn-thin-sm"
+                            onclick=window.location.href='/todos/todo-list/{{todo_id}}' type="button">Back</button>
                     {% else %}  <!- assume A  -->
-                        <button
-                            class="btn-sm btn-primary btn-thin-sm"
-                            onclick=window.location.href='/assets/view-asset-page/{{asset.id}}' type="button">Back</button>
+                            <button class="btn-sm btn-primary btn-thin-sm"
+                                onclick=window.location.href='/assets/view-asset-page/{{asset.id}}' type="button">Back</button>
                     {% endif %}
                 </div>
             </div> <!--row-->
