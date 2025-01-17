@@ -1,12 +1,15 @@
+from _pyrepl import console
 from typing import Annotated
 
 from click import confirm
 from pydantic import BaseModel, Field
+from sqlalchemy import func
+from sqlalchemy.cyextension.processors import to_str
 from sqlalchemy.orm import Session
 from fastapi import APIRouter, Depends, HTTPException, Path, Request, status
 from sqlalchemy.testing.schema import mapped_column
 from starlette import status
-from ..models import Todos, Assets
+from ..models import Todos, Assets, Users
 from ..database import SessionLocal
 from .auth import get_current_user
 from starlette.responses import RedirectResponse
@@ -91,7 +94,8 @@ async def render_todo_page(request: Request, db: db_dependency):
 
         todoList = query.all()
 
-        return templates.TemplateResponse("todo.html", {"request": request, "todos": todoList, "currentUser": user})
+        return templates.TemplateResponse("todo.html", {"request": request,
+                                    "todos": todoList, "currentUser": user})
 
     except:
         return redirect_to_login()
@@ -105,6 +109,13 @@ async def render_todo_page(request: Request, asset_id: int,db: db_dependency):
         if user is None:
             return redirect_to_login()
 
+        login_user_model = db.query(Users).filter(Users.id == user.get('id')).first()
+        if login_user_model is None:
+            raise HTTPException(status_code=404, detail='login user Not found.')
+
+        #list of users for assignedTo select options
+        userList = db.query(Users).all()
+
         # get the current asset details to show on the form in ready-only
         asset_model = db.query(Assets).filter(Assets.id == asset_id).first()
         if asset_model is None:
@@ -114,15 +125,15 @@ async def render_todo_page(request: Request, asset_id: int,db: db_dependency):
         todo_default = Todos(
             title="",
             description="",
-            todoStatus="OPEN",
-            priority="HIGH",
-            assignedTo="KEL",
+            todoStatus="",
+            priority="",
+            assignedTo=login_user_model.initials, # current user should be default assignedTo
             assetId=asset_id
         )
 
         return templates.TemplateResponse("add-edit-view-todo.html", {"request": request,
                             "todo" : todo_default, "asset": asset_model,
-                            "currentUser": user, "redirect": "T","mode": "ADD"})
+                              "currentUser": user, "users": userList, "redirect": "T","mode": "ADD"})
     except:
         return redirect_to_login()
 
@@ -134,6 +145,13 @@ async def render_todo_page(request: Request, asset_id: int,db: db_dependency):
         if user is None:
             return redirect_to_login()
 
+        login_user_model = db.query(Users).filter(Users.id == user.get('id')).first()
+        if login_user_model is None:
+            raise HTTPException(status_code=404, detail='login user Not found.')
+
+        #list of users for assignedTo select options
+        userList = db.query(Users).all()
+
         # get the current asset details to show on the form in ready-only
         asset_model = db.query(Assets).filter(Assets.id == asset_id).first()
         if asset_model is None:
@@ -143,13 +161,13 @@ async def render_todo_page(request: Request, asset_id: int,db: db_dependency):
         todo_default = Todos(
             title="",
             description="",
-            todoStatus="OPEN",
-            priority="HIGH",
-            assignedTo="KEL",
+            todoStatus="",
+            priority="",
+            assignedTo=login_user_model.initials,
             assetId=asset_id
         )
         return templates.TemplateResponse("add-edit-view-todo.html", {"request": request,
-                            "todo" : todo_default, "asset": asset_model,
+                            "todo" : todo_default, "asset": asset_model, "users": userList,
                             "currentUser": user, "redirect": "A","mode": "ADD"})
 
     except:
@@ -164,6 +182,9 @@ async def render_edit_todo_page(request: Request, todo_id: int, db: db_dependenc
         if user is None:
             return redirect_to_login()
 
+        #list of users for assignedTo select options
+        userList = db.query(Users).all()
+
         # get the current todo details
         todo_model = db.query(Todos).filter(Todos.id == todo_id).first()
         if todo_model is None:
@@ -175,7 +196,8 @@ async def render_edit_todo_page(request: Request, todo_id: int, db: db_dependenc
             raise HTTPException(status_code=404, detail='Asset not found.')
 
         return templates.TemplateResponse("add-edit-view-todo.html", {"request": request, "todo": todo_model,
-                                     "asset": asset_model, "currentUser": user,"redirect": "T","mode": "EDIT"})
+                                     "asset": asset_model, "users": userList,
+                                    "currentUser": user,"redirect": "T","mode": "EDIT"})
 
     except:
         return redirect_to_login()
@@ -188,6 +210,9 @@ async def render_edit_todo_page(request: Request, todo_id: int, db: db_dependenc
         if user is None:
             return redirect_to_login()
 
+        #list of users for assignedTo select options
+        userList = db.query(Users).all()
+
         # get the current todo details
         todo_model = db.query(Todos).filter(Todos.id == todo_id).first()
         if todo_model is None:
@@ -199,7 +224,8 @@ async def render_edit_todo_page(request: Request, todo_id: int, db: db_dependenc
             raise HTTPException(status_code=404, detail='Asset not found.')
 
         return templates.TemplateResponse("add-edit-view-todo.html", {"request": request, "todo": todo_model,
-                                     "asset": asset_model, "currentUser": user,"redirect": "A","mode": "EDIT"})
+                                     "asset": asset_model, "users": userList,
+                                     "currentUser": user,"redirect": "A","mode": "EDIT"})
     except:
         return redirect_to_login()
 
@@ -277,13 +303,18 @@ async def create_todo(user: user_dependency, db: db_dependency,
     if user is None:
         raise HTTPException(status_code=401, detail='Authentication Failed')
 
+    login_user_model = db.query(Users).filter(Users.id == user.get('id')).first()
+    if login_user_model is None:
+        raise HTTPException(status_code=404, detail='login user Not found.')
+
     create_todo_model = Todos(
        title=todo_request.title,
        description=todo_request.description,
        todoStatus=todo_request.todoStatus,
        priority=todo_request.priority,
        assignedTo =todo_request.assignedTo,
-       assetId = asset_id
+       assetId = asset_id,
+       createdBy = login_user_model.initials,
     )
 
 #    todo_model = Todos(**todo_request.model_dump())
@@ -298,6 +329,10 @@ async def update_todo(user: user_dependency, db: db_dependency,
     if user is None:
         raise HTTPException(status_code=401, detail='Authentication Failed')
 
+    login_user_model = db.query(Users).filter(Users.id == user.get('id')).first()
+    if login_user_model is None:
+        raise HTTPException(status_code=404, detail='login user Not found.')
+
 
     # get the rows current values
     todo_model = db.query(Todos).filter(Todos.id == todo_id).first()
@@ -310,7 +345,8 @@ async def update_todo(user: user_dependency, db: db_dependency,
     todo_model.priority = todo_request.priority
     todo_model.todoStatus = todo_request.todoStatus
     todo_model.assignedTo = todo_request.assignedTo
-
+    todo_model.updatedDate = server_default=func.now()
+    todo_model.updatedBy= login_user_model.initials
 
     db.add(todo_model)
     db.commit()

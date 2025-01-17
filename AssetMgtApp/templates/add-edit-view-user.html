@@ -129,6 +129,19 @@
             </div> <!--row-->
             {% endif %}
 
+            {% if mode != "ADD"%}
+            <div class="row g-3 pt-1">
+                <div class="col-sm-8">
+                    <b>&nbsp;Created On:</b> {{user.createdDate}}   <b>By: </b>{{user.createdBy}}
+                </div>
+            </div> <!--row-->
+            <div class="row g-3 pt-1">
+                <div class="col-sm-8">
+                    <b>Updated On:</b> {{user.updatedDate}}   <b>By: </b>{{user.updatedBy}}
+                </div>
+            </div> <!--row-->
+            {% endif %}
+
             <div class="row g-3 pt-3 pb-3">
                 <div class="col-sm-3">
                    {% if mode == "VIEW"%}

@@ -142,19 +142,18 @@
 
             </div> <!--row-->
 
+            {% if mode != "ADD"%}
             <div class="row g-3 pt-1">
-                <div class="col-sm-3">
-                    <label for="addedDate" class="form-label-sm">Added On</label>
-                    <input id=addedDate type="date"
-                        style="min-width: 125px; max-width: 125px;" class="form-control-sm" readonly>
-                </div>
-
-                <div class="col-sm-3">
-                    <label for="updatedDate" class="form-label-sm">Updated On</label>
-                    <input id=updatedDate type="date"
-                        style="min-width: 125px; max-width: 125px;" class="form-control-sm" readonly>
+                <div class="col-sm-8">
+                    <b>&nbsp;Created On:</b> {{asset.createdDate}}   <b>By: </b>{{asset.createdBy}}
                 </div>
             </div> <!--row-->
+            <div class="row g-3 pt-1">
+                <div class="col-sm-8">
+                    <b>Updated On:</b> {{asset.updatedDate}}   <b>By: </b>{{asset.updatedBy}}
+                </div>
+            </div> <!--row-->
+            {% endif %}
 
             <div class="row g-3 pt-1">
                 <div class="col-sm-3">

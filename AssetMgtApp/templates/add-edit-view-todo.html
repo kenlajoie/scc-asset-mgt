@@ -93,6 +93,13 @@
                 </div>
             </div> <!--row-->
 
+<!--
+                <div>
+                {% for x in users %}
+                    {{x.initials}}
+                {% endfor %}
+                </div>
+-->
              <div class="row g-3 pt-1">
                 <div class="col-sm-3">
                     <label for="assignedTo"
@@ -104,8 +111,9 @@
                     {% else %}  <!- assume ADD OR edit--!>
                         <select id="assignedTo" name="assignedTo"
                             style="min-width: 100px; max-width: 100px;" class="form-control-sm">
-                            <option {% if todo.assignedTo =="KEL" %} selected="selected" {% endif %}>KEL</option>
-                            <option {% if todo.assignedTo =="ZAC" %} selected="selected" {% endif %}>ZAC</option>
+                            {% for user in users %}
+                               <option{% if todo.assignedTo==user.initials %} selected="selected" {% endif %}>{{user.initials}}</option>
+                            {% endfor %}
                         </select>
                     {% endif %}
                 </div>
@@ -156,19 +164,18 @@
                 </div>
             </div> <!--row-->
 
+            {% if mode != "ADD"%}
             <div class="row g-3 pt-1">
-                <div class="col-sm-3">
-                    <label for="addedDate" class="form-label-sm">Added On</label>
-                    <input id=addedDate type="date"
-                        style="min-width: 125px; max-width: 125px;" class="form-control-sm" readonly>
-                </div>
-
-                <div class="col-sm-3">
-                    <label for="updatedDate" class="form-label-sm">Updated On</label>
-                    <input id=updatedDate type="date"
-                        style="min-width: 125px; max-width: 125px;" class="form-control-sm" readonly>
+                <div class="col-sm-8">
+                    <b>&nbsp;Created On:</b> {{todo.createdDate}}   <b>By: </b>{{todo.createdBy}}
                 </div>
             </div> <!--row-->
+            <div class="row g-3 pt-1">
+                <div class="col-sm-8">
+                    <b>Updated On:</b> {{todo.updatedDate}}   <b>By: </b>{{todo.updatedBy}}
+                </div>
+            </div> <!--row-->
+            {% endif %}
 
             <div class="row g-3 pt-3 pb-3">
                 <div class="col-sm-3">

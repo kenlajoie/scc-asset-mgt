@@ -2,10 +2,11 @@ from typing import Annotated
 
 from click import confirm
 from pydantic import BaseModel, Field
+from sqlalchemy import func
 from sqlalchemy.orm import Session
 from fastapi import APIRouter, Depends, HTTPException, Path, Request, status
 from starlette import status
-from ..models import Assets, Todos
+from ..models import Assets, Todos, Users
 from ..database import SessionLocal
 from .auth import get_current_user
 from starlette.responses import RedirectResponse
@@ -177,6 +178,10 @@ async def create_asset(user: user_dependency, db: db_dependency,
     if user is None:
         raise HTTPException(status_code=401, detail='Authentication Failed')
 
+    login_user_model = db.query(Users).filter(Users.id == user.get('id')).first()
+    if login_user_model is None:
+        raise HTTPException(status_code=404, detail='login user Not found.')
+
     create_asset_model = Assets(
         majorArea=asset_request.majorArea,
         minorArea=asset_request.minorArea,
@@ -185,7 +190,8 @@ async def create_asset(user: user_dependency, db: db_dependency,
         assetState=asset_request.assetState,
         model=asset_request.model,
         satellite = asset_request.satellite,
-        station = asset_request.station
+        station = asset_request.station,
+        createdBy = login_user_model.initials,
     )
 
     #asset_model = Assets(**asset_request.model_dump())
@@ -201,6 +207,10 @@ async def update_asset(user: user_dependency, db: db_dependency,
     if user is None:
         raise HTTPException(status_code=401, detail='Authentication Failed')
 
+    login_user_model = db.query(Users).filter(Users.id == user.get('id')).first()
+    if login_user_model is None:
+        raise HTTPException(status_code=404, detail='login user Not found.')
+
     asset_model = db.query(Assets).filter(Assets.id == asset_id).first()
 
     if asset_model is None:
@@ -214,6 +224,8 @@ async def update_asset(user: user_dependency, db: db_dependency,
     asset_model.model = asset_request.model
     asset_model.satellite = asset_request.satellite
     asset_model.station = asset_request.station
+    asset_model.updatedDate = server_default=func.now()
+    asset_model.updatedBy= login_user_model.initials
 
     db.add(asset_model)
     db.commit()
