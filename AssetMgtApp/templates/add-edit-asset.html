@@ -21,6 +21,7 @@
             <div class="row g-5 pt-0">
                 <div class="col-sm-3">
                     <label for="majorArea"
+                    <label for="majorArea"
                         class="form-label-sm">Major Area</label>
                         <select id="majorArea" name="majorArea"
                             style="min-width: 125px; max-width: 125px;" class="form-control-sm mb-1">
@@ -71,17 +72,16 @@
             </div> <!--row-->
 
             <div class="row g-3 pt-0">
-                <div class="col-sm-8">
-                    <label for="description" class="form-label-sm">Description</label>
+                <div class="col-sm-10">
+                    <label for="description" class="form-label-sm">Asset</label>
                     <input id=description name="description" type="text"
-                            style="min-width: 400px; max-width: 400px;" class="form-control-sm"
+                            style="min-width: 350px; max-width: 350px;" class="form-control-sm"
                             placeholder="Asset Description" value="{{asset.description}}" required>
-                    <div class="invalid-feedback"> Valid Description is required</div>
                 </div>
             </div> <!--row-->
 
              <div class="row g-3 pt-1">
-                <div class="col-sm-3">
+                <div class="col-sm-10">
                     <label for="model"
                         class="form-label-sm">Model</label>
                         <select id="model" name="model"
@@ -90,9 +90,7 @@
             <option {% if asset.model =="760" %} selected="selected" {% endif %}>760</option>
             <option {% if asset.model =="740" %} selected="selected" {% endif %}>740</option>
                         </select>
-                </div>
 
-                <div class="col-sm-3">
                     <label for="assetState"
                         class="form-label-sm">State</label>
                         <select id="assetState" name="assetState"
@@ -101,52 +99,41 @@
             <option {% if asset.assetState =="Bad" %} selected="selected" {% endif %}>Bad</option>
             <option {% if asset.assetState =="Unknown" %} selected="selected" {% endif %}>Unknown</option>
                         </select>
-                     <div class="invalid-feedback"
-                        Valid Asset State is required>
-                    </div>
                 </div>
             </div> <!--row-->
 
             <div class="row g-3 pt-1">
-                <div class="col-sm-3">
+                <div class="col-sm-10">
                     <label for="satellite"
                         class="form-label-sm">Satellite</label>
                         <input id=satellite name="satellite" type="text"
                             style="min-width: 10opx; max-width: 100px;" class="form-control-sm"
                             placeholder="Satellite" value="{{asset.satellite}}">
-                </div>
 
-                <div class="col-sm-3">
                     <label for="station" class="form-label-sm">Station</label>
                         <input id=station name="station" type="text"
                             style="min-width: 100px; max-width: 100px;" class="form-control-sm"
                             placeholder="Station" value="{{asset.station}}">
-
                 </div>
             </div> <!--row-->
 
             <div class="row g-3 pt-1">
-                <div class="col-sm-3">
-                    <label for="gpslat" class="form-label-sm">Latitude</label>
+                <div class="col-sm-10">
+                    <label for="gpslat" class="form-label-sm">Lat:</label>
                     <input name=gpsLat id=gpsLat type="number"
-                        style="min-width: 125px; max-width: 125px;" class="form-control-sm"
+                        style="min-width: 110px; max-width: 110px;" class="form-control-sm"
                         placeholder="Latitude" value="{{asset.gpsLat}}" readonly>
-                </div>
 
-                <div class="col-sm-3">
-                    <label for="gpslng" class="form-label-sm">Longitude</label>
+                    <label for="gpslng" class="form-label-sm">Long:</label>
                     <input name=gpsLng id=gpsLng type="number"
-                        style="min-width: 125px; max-width: 125px;" class="form-control-sm"
+                        style="min-width: 110px; max-width: 110px;" class="form-control-sm"
                         placeholder="longitude" value="{{asset.gpsLng}}" readonly>
-                </div>
-                <div class="col-sm-6">
-                    <label for="capture" class="form-label-sm">&nbsp;</label>
-                    <div>
+
                         <button name=capture id=capture class="btn-sm btn-primary btn-thin-sm"
                             onclick="getLocation()" type="button">Capture</button>
-                    </div>
                 </div> <!-- col -->
             </div> <!--row-->
+
             <div class="row g-3 pt-1">
                 <div class="col-sm-8">
                     <div>
