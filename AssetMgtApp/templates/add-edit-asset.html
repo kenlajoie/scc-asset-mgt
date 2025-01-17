@@ -112,14 +112,14 @@
                     <label for="satellite"
                         class="form-label-sm">Satellite</label>
                         <input id=satellite name="satellite" type="text"
-                            style="min-width: 125px; max-width: 125px;" class="form-control-sm"
+                            style="min-width: 10opx; max-width: 100px;" class="form-control-sm"
                             placeholder="Satellite" value="{{asset.satellite}}">
                 </div>
 
                 <div class="col-sm-3">
                     <label for="station" class="form-label-sm">Station</label>
                         <input id=station name="station" type="text"
-                            style="min-width: 125px; max-width: 125px;" class="form-control-sm"
+                            style="min-width: 100px; max-width: 100px;" class="form-control-sm"
                             placeholder="Station" value="{{asset.station}}">
 
                 </div>
@@ -128,19 +128,34 @@
             <div class="row g-3 pt-1">
                 <div class="col-sm-3">
                     <label for="gpslat" class="form-label-sm">Latitude</label>
-                    <input id=gpsLat type="text"
+                    <input name=gpsLat id=gpsLat type="number"
                         style="min-width: 125px; max-width: 125px;" class="form-control-sm"
-                        placeholder="GPS Lat" readonly>
+                        placeholder="Latitude" value="{{asset.gpsLat}}" readonly>
                 </div>
 
                 <div class="col-sm-3">
-                    <label for="gpslong" class="form-label-sm">Longitude</label>
-                    <input id=gpsLong type="text"
+                    <label for="gpslng" class="form-label-sm">Longitude</label>
+                    <input name=gpsLng id=gpsLng type="number"
                         style="min-width: 125px; max-width: 125px;" class="form-control-sm"
-                        placeholder="GPS Long" readonly>
+                        placeholder="longitude" value="{{asset.gpsLng}}" readonly>
                 </div>
-
+                <div class="col-sm-6">
+                    <label for="capture" class="form-label-sm">&nbsp;</label>
+                    <div>
+                        <button name=capture id=capture class="btn-sm btn-primary btn-thin-sm"
+                            onclick="getLocation()" type="button">Capture</button>
+                    </div>
+                </div> <!-- col -->
             </div> <!--row-->
+            <div class="row g-3 pt-1">
+                <div class="col-sm-8">
+                    <div>
+                        <p id="location"></p>
+                    </div>
+                </div> <!-- col -->
+            </div> <!--row-->
+
+            <hr style="border: 1px solid #333; margin: 19px 0px 5px 0px;">
 
             {% if mode != "ADD"%}
             <div class="row g-3 pt-1">
@@ -162,8 +177,41 @@
                             onclick=window.location.href='/assets/asset-page' type="button">Back</button>
                 </div>
             </div> <!--row-->
-
         </form>
      </div> <!-- card body -->
   </div> <!-- card -->
 </div>  <!-- container -->
+
+
+
+<script>
+    function getLocation() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(showPosition, showError);
+        } else {
+            document.getElementById("location").innerHTML = "Geolocation is not supported by this browser.";
+        }
+    }
+
+    function showPosition(position) {
+        document.getElementById('gpsLat').value = position.coords.latitude;;
+        document.getElementById('gpsLng').value = position.coords.longitude;
+    }
+
+    function showError(error) {
+        switch (error.code) {
+            case error.PERMISSION_DENIED:
+                document.getElementById("location").innerHTML = "User denied the request for Geolocation.";
+                break;
+            case error.POSITION_UNAVAILABLE:
+                document.getElementById("location").innerHTML = "Location information is unavailable.";
+                break;
+            case error.TIMEOUT:
+                document.getElementById("location").innerHTML = "The request to get user location timed out.";
+                break;
+            case error.UNKNOWN_ERROR:
+                document.getElementById("location").innerHTML = "An unknown error occurred.";
+                break;
+        }
+    }
+</script>

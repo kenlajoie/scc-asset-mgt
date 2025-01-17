@@ -38,6 +38,8 @@ class AssetRequest(BaseModel):
     model: str
     satellite: str
     station: str
+    gpsLat: float
+    gpsLng: float
 
 ##this should be a shared function
 def redirect_to_login():
@@ -103,7 +105,9 @@ async def render_asset_page(request: Request):
             assetState="",
             model="",
             satellite = "",
-            station = ""
+            station = "",
+            gpsLat=0,
+            gpsLng=0
         )
 
         return templates.TemplateResponse("add-edit-asset.html", {"request": request,
@@ -191,6 +195,8 @@ async def create_asset(user: user_dependency, db: db_dependency,
         model=asset_request.model,
         satellite = asset_request.satellite,
         station = asset_request.station,
+        gpsLat=asset_request.gpsLat,
+        gpsLng=asset_request.gpsLng,
         createdBy = login_user_model.initials,
     )
 
@@ -224,6 +230,8 @@ async def update_asset(user: user_dependency, db: db_dependency,
     asset_model.model = asset_request.model
     asset_model.satellite = asset_request.satellite
     asset_model.station = asset_request.station
+    asset_model.gpsLat = asset_request.gpsLat
+    asset_model.gpsLng = asset_request.gpsLng
     asset_model.updatedDate = server_default=func.now()
     asset_model.updatedBy= login_user_model.initials
 

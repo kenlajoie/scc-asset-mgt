@@ -218,7 +218,9 @@
                 model: data.model,
                 assetState: data.assetState,
                 satellite: data.satellite,
-                station: data.station
+                station: data.station,
+                gpsLat: data.gpsLat,
+                gpsLng: data.gpsLng
             };
 
             //alert(JSON.stringify(payload));
@@ -271,7 +273,9 @@
                 model: data.model,
                 assetState: data.assetState,
                 satellite: data.satellite,
-                station: data.station
+                station: data.station,
+                gpsLat: data.gpsLat,
+                gpsLng: data.gpsLng
             };
 
             try {
@@ -332,7 +336,9 @@
                 model: data.model,
                 assetState: data.assetState,
                 satellite: data.satellite,
-                station: data.station
+                station: data.station,
+                gpsLat: data.gpsLat,
+                gpsLng: data.gpsLng
             };
 
             try {
