@@ -36,9 +36,9 @@ class Assets(Base):
     station = Column(String)
     gpsLat  = Column(Double)
     gpsLng = Column(Double)
-    createdBy = Column(Integer, ForeignKey("users.initials"))
+    createdBy = Column(String, ForeignKey("users.initials"))
     createdDate = Column(DateTime, server_default=func.now())
-    updatedBy = Column(Integer, ForeignKey("users.initials"))
+    updatedBy = Column(String, ForeignKey("users.initials"))
     updatedDate = Column(DateTime)
 
 

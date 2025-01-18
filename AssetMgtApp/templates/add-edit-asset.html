@@ -25,14 +25,27 @@
                         class="form-label-sm">Major Area</label>
                         <select id="majorArea" name="majorArea"
                             style="min-width: 125px; max-width: 125px;" class="form-control-sm mb-1">
-            <option {% if asset.majorArea =="1st" %} selected="selected" {% endif %}>1st</option>
-            <option {% if asset.majorArea =="2nd" %} selected="selected" {% endif %}>2nd</option>
-            <option {% if asset.majorArea =="3rd" %} selected="selected" {% endif %}>3rd</option>
-            <option {% if asset.majorArea =="17th" %} selected="selected" {% endif %}>17th</option>
-            <option {% if asset.majorArea =="18th" %} selected="selected" {% endif %}>18th</option>
-            <option {% if asset.majorArea =="Range" %} selected="selected" {% endif %}>Range</option>
-            <option {% if asset.majorArea =="Practice" %} selected="selected" {% endif %}>Practice</option>
-            <option {% if asset.majorArea =="ClubHouse" %} selected="selected" {% endif %}>clubHouse</option>
+                                <option {% if asset.majorArea =="01ST" %} selected="selected" {% endif %}>01ST</option>
+                                <option {% if asset.majorArea =="02ND" %} selected="selected" {% endif %}>02ND</option>
+                                <option {% if asset.majorArea =="03RD" %} selected="selected" {% endif %}>03RD</option>
+                                <option {% if asset.majorArea =="04TH" %} selected="selected" {% endif %}>04TH</option>
+                                <option {% if asset.majorArea =="05TH" %} selected="selected" {% endif %}>05TH</option>
+                                <option {% if asset.majorArea =="06TH" %} selected="selected" {% endif %}>06TH</option>
+                                <option {% if asset.majorArea =="07TH" %} selected="selected" {% endif %}>07TH</option>
+                                <option {% if asset.majorArea =="08TH" %} selected="selected" {% endif %}>08TH</option>
+                                <option {% if asset.majorArea =="09TH" %} selected="selected" {% endif %}>09TH</option>
+                                <option {% if asset.majorArea =="10TH" %} selected="selected" {% endif %}>10TH</option>
+                                <option {% if asset.majorArea =="11TH" %} selected="selected" {% endif %}>11TH</option>
+                                <option {% if asset.majorArea =="12TH" %} selected="selected" {% endif %}>12TH</option>
+                                <option {% if asset.majorArea =="13TH" %} selected="selected" {% endif %}>13TH</option>
+                                <option {% if asset.majorArea =="14TH" %} selected="selected" {% endif %}>14TH</option>
+                                <option {% if asset.majorArea =="15TH" %} selected="selected" {% endif %}>05TH</option>
+                                <option {% if asset.majorArea =="16TH" %} selected="selected" {% endif %}>16TH</option>
+                                <option {% if asset.majorArea =="17TH" %} selected="selected" {% endif %}>17TH</option>
+                                <option {% if asset.majorArea ==="18TH" %} selected="selected" {% endif %}>18TH</option>
+                                <option {% if asset.majorArea =="PA" %} selected="selected" {% endif %}>PA</option>
+                                <option {% if asset.majorArea =="RANGE" %} selected="selected" {% endif %}>RANGE</option>
+                                <option {% if asset.majorArea =="ALL">ALL</option>
                       </select>
                      <div class="invalid-feedback"
                         Valid Major Area is required>
@@ -44,10 +57,11 @@
                         class="form-label-sm">Minor Area</label>
                         <select id="minorArea" name="minorArea"
                             style="min-width: 125px; max-width: 125px;" class="form-control-sm">
-            <option {% if asset.minorArea =="Tee" %} selected="selected" {% endif %}>Tee</option>
-            <option {% if asset.minorArea =="Fairway" %} selected="selected" {% endif %}>Fairway</option>
-            <option {% if asset.minorArea =="Rough" %} selected="selected" {% endif %}>Rough</option>
-            <option {% if asset.minorArea =="Green" %} selected="selected" {% endif %}>Green</option>
+            <option {% if asset.minorArea =="TEE" %} selected="selected" {% endif %}>TEE</option>
+            <option {% if asset.minorArea =="FRWY" %} selected="selected" {% endif %}>FRWY</option>
+            <option {% if asset.minorArea =="ROUGH" %} selected="selected" {% endif %}>ROUGH</option>
+            <option {% if asset.minorArea =="GREEN" %} selected="selected" {% endif %}>GREEN</option>
+            <option {% if asset.minorArea =="FIELD" %} selected="selected" {% endif %}>FIELD</option>
                         </select>
                      <div class="invalid-feedback"
                         Valid Minor Area is required>
@@ -59,11 +73,11 @@
                         class="form-label-sm">Type</label>
                         <select id="assetType" name="assetType"
                             style="min-width: 125px; max-width: 125px;" class="form-control-sm">
-            <option {% if asset.assetType =="Head" %} selected="selected" {% endif %}>Head</option>
-            <option {% if asset.assetType =="GroupValve" %} selected="selected" {% endif %}>GroupValve</option>
-            <option {% if asset.assetTYpe =="AreaValve" %} selected="selected" {% endif %}>AreaValve</option>
-            <option {% if asset.assetType =="MainValve" %} selected="selected" {% endif %}>MainValve</option>
-            <option {% if asset.assetType =="Satellite" %} selected="selected" {% endif %}>Satellite</option>
+            <option {% if asset.assetType =="HEAD" %} selected="selected" {% endif %}>HEAD</option>
+            <option {% if asset.assetType =="GVALVR" %} selected="selected" {% endif %}>GVALVE</option>
+            <option {% if asset.assetTYpe =="AVALVE" %} selected="selected" {% endif %}>AVALVE</option>
+            <option {% if asset.assetType =="MVALVE" %} selected="selected" {% endif %}>MVALVE</option>
+            <option {% if asset.assetType =="SATEL" %} selected="selected" {% endif %}>SATEL</option>
                         </select>
                      <div class="invalid-feedback"
                         Valid Asset Type is required>
@@ -95,9 +109,8 @@
                         class="form-label-sm">State</label>
                         <select id="assetState" name="assetState"
                             style="min-width: 125px; max-width: 125px;" class="form-control-sm">
-            <option {% if asset.assetState =="Good" %} selected="selected" {% endif %}>Good</option>
-            <option {% if asset.assetState =="Bad" %} selected="selected" {% endif %}>Bad</option>
-            <option {% if asset.assetState =="Unknown" %} selected="selected" {% endif %}>Unknown</option>
+            <option {% if asset.assetState =="GOOD" %} selected="selected" {% endif %}>Good</option>
+            <option {% if asset.assetState =="BAD" %} selected="selected" {% endif %}>Bad</option>
                         </select>
                 </div>
             </div> <!--row-->

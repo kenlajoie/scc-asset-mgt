@@ -89,9 +89,9 @@
                     {% else %}  <!- assume ADD OR edit--!>
                         <select id="" name="userRole"
                             style="min-width: 125px; max-width: 125px;" class="form-control-sm">
-                            <option {% if user.userRole =="Technician" %} selected="selected" {% endif %}>Technician</option>
-                            <option {% if user.userRole =="Admin" %} selected="selected" {% endif %}>Admin</option>
-                            <option {% if user.userRole =="Other" %} selected="selected" {% endif %}>Other</option>
+                            <option {% if user.userRole =="TECH" %} selected="selected" {% endif %}>TECH</option>
+                            <option {% if user.userRole =="ADMIN" %} selected="selected" {% endif %}>ADMIN</option>
+                            <option {% if user.userRole =="DBA" %} selected="selected" {% endif %}>DBA</option>
                         </select>
                     {% endif %}
                 </div> <!--col -->
@@ -109,9 +109,9 @@
                     {% else %}  <!- assume ADD OR edit--!>
                         <select id="userStatus" name="userStatus"
                             style="min-width: 125px; max-width: 125px;" class="form-control-sm">
-                            <option {% if user.userStatus =="Active" %} selected="selected" {% endif %}>Active</option>
-                            <option {% if user.userStatus =="Paused" %} selected="selected" {% endif %}>Paused</option>
-                            <option {% if user.userStatus =="Resigned" %} selected="selected" {% endif %}>Resigned</option>
+                            <option {% if user.userStatus =="ACTIVE" %} selected="selected" {% endif %}>ACTIVE</option>
+                            <option {% if user.userStatus =="PAUSED" %} selected="selected" {% endif %}>PAUSED</option>
+                            <option {% if user.userStatus =="RESIGNED" %} selected="selected" {% endif %}>RESIGNED</option>
                         </select>
                     {% endif %}
                 </div> <!--col -->

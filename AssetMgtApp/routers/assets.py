@@ -58,7 +58,7 @@ async def render_asset_page(request: Request, db: db_dependency):
         ## Get saved filtering values
         majorAreaFilter =request.cookies.get('majorAreaFilter')
         if majorAreaFilter is None:
-            majorAreaFilter = '1st' ##make the 1st the default to prevent loading a big table by default
+            majorAreaFilter = '01ST' ##make the 1st the default to prevent loading a big table by default
 
         minorAreaFilter =request.cookies.get('minorAreaFilter')
         assetTypeFilter =request.cookies.get('assetTypeFilter')
@@ -68,16 +68,16 @@ async def render_asset_page(request: Request, db: db_dependency):
         ##build dynamic query
         query = db.query(Assets)
 
-        if majorAreaFilter is not None and majorAreaFilter != "All":
+        if majorAreaFilter is not None and majorAreaFilter != "ALL":
             query = query.filter(Assets.majorArea == majorAreaFilter)
 
-        if minorAreaFilter is not None and minorAreaFilter != "All":
+        if minorAreaFilter is not None and minorAreaFilter != "ALL":
             query = query.filter(Assets.minorArea == minorAreaFilter)
 
-        if assetTypeFilter is not None and assetTypeFilter != "All":
+        if assetTypeFilter is not None and assetTypeFilter != "ALL":
             query = query.filter(Assets.assetType == assetTypeFilter)
 
-        if assetStateFilter is not None and assetStateFilter != "All":
+        if assetStateFilter is not None and assetStateFilter != "ALL":
             query = query.filter(Assets.assetState == assetStateFilter)
 
         assetList = query.all()

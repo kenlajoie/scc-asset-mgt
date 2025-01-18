@@ -96,7 +96,7 @@ async def create_user(db: db_dependency,
 
     create_user_model = Users(
         username=create_user_request.username,
-        initials=create_user_request.initils,
+        initials=create_user_request.initials,
         name = create_user_request.name,
         userRole = create_user_request.userRole,
         userStatus = create_user_request.userStatus,

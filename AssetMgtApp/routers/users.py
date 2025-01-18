@@ -1,5 +1,5 @@
+from _pyrepl import console
 from typing import Annotated
-
 from click import confirm
 from pydantic import BaseModel, Field
 from sqlalchemy import func
@@ -45,7 +45,6 @@ class UserAddRequest(BaseModel):
     userRole: str = Field(min_length=3,max_length=10)
     userStatus: str = Field(min_length=3, max_length=10)
     password: str = Field(min_length=6, max_length=20)
-    createdBy : str
 
 class UserEditRequest(BaseModel):
     username: str = Field(min_length=2, max_length=30)
@@ -78,10 +77,10 @@ async def render_user_page(request: Request, db: db_dependency):
         ##build dynamic query
         query = db.query(Users)
 
-        if userRoleFilter is not None and userRoleFilter != "All":
+        if userRoleFilter is not None and userRoleFilter != "ALL":
             query = query.filter(Users.userRole == userRoleFilter)
 
-        if userStatusFilter is not None and userStatusFilter != "All":
+        if userStatusFilter is not None and userStatusFilter != "ALL":
             query = query.filter(Users.userStatus == userStatusFilter)
 
         userList = query.all()
@@ -93,6 +92,7 @@ async def render_user_page(request: Request, db: db_dependency):
 
 @router.get('/add-user-page')
 async def render_user_page(request: Request):
+
     try:
 
         loginUser = await get_current_user(request.cookies.get('access_token'))
@@ -101,9 +101,9 @@ async def render_user_page(request: Request):
 
         #default values
         user_default = Users(
-            username="foobar",
-            initials="FB",
-            name="Foo Bar",
+            username="",
+            initials="",
+            name="",
             userRole="",
             userStatus="",
         )
@@ -117,6 +117,7 @@ async def render_user_page(request: Request):
 
 @router.get("/edit-user-page/{user_id}")
 async def render_user_edit_page(request: Request, user_id: int, db: db_dependency):
+
     try:
         loginUser = await get_current_user(request.cookies.get('access_token'))
         if loginUser is None:
@@ -139,6 +140,7 @@ async def render_user_view_page(request: Request, user_id: int, db: db_dependenc
 
         if loginUser is None:
             return redirect_to_login()
+
 
         user_model = db.query(Users).filter(Users.id == user_id).first()
         if user_model is None:
@@ -226,7 +228,7 @@ async def update_user(user: user_dependency, db: db_dependency,
 async def delete_user(user: user_dependency, db: db_dependency,
                       user_id: int = Path(gt=0)):
 
-    if user is None or user.get('userRole') != 'Admin' :
+    if user is None or user.get('userRole') != 'ADMIN' :
         raise HTTPException(status_code=401, detail='Authentication Failed')
 
     user_model = db.query(Users).filter(Users.id == user_id).first()
