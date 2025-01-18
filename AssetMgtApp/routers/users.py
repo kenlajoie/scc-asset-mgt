@@ -1,4 +1,3 @@
-from _pyrepl import console
 from typing import Annotated
 from click import confirm
 from pydantic import BaseModel, Field
