@@ -129,9 +129,9 @@
                     {% else %}  <!- assume ADD OR edit--!>
                         <select id="priority" name="priority"
                             style="min-width: 125px; max-width: 125px;" class="form-control-sm">
-                            <option {% if todo.priority =="High" %} selected="selected" {% endif %}>High</option>
-                            <option {% if todo.priority =="Medium" %} selected="selected" {% endif %}>Medium</option>
-                            <option {% if todo.priority =="Low" %} selected="selected" {% endif %}>Low</option>
+                            <option {% if todo.priority =="HIGH" %} selected="selected" {% endif %}>HIGH</option>
+                            <option {% if todo.priority =="MEDIUM" %} selected="selected" {% endif %}>MEDIUM</option>
+                            <option {% if todo.priority =="LOW" %} selected="selected" {% endif %}>LOW</option>
                         </select>
                     {% endif %}
                 </div>
@@ -146,9 +146,9 @@
                     {% else %}  <!- assume ADD OR edit--!>
                         <select id="todoStatus" name="todoStatus"
                             style="min-width: 125px; max-width: 125px;" class="form-control-sm">
-                            <option {% if todo.todoStatus =="Open" %} selected="selected" {% endif %}>Open</option>
-                            <option {% if todo.todoStatus =="Closed" %} selected="selected" {% endif %}>Closed</option>
-                            <option {% if todo.todoStatus =="Wip" %} selected="selected" {% endif %}>Wip</option>
+                            <option {% if todo.todoStatus =="OPEN" %} selected="selected" {% endif %}>OPEN</option>
+                            <option {% if todo.todoStatus =="CLOSE" %} selected="selected" {% endif %}>CLOSE</option>
+                            <option {% if todo.todoStatus =="WIP" %} selected="selected" {% endif %}>WIP</option>
                         </select>
                     {% endif %}
                 </div>
