@@ -13,76 +13,62 @@
         <form id="editAssetForm">
         {% endif %}
 
-
             <div class="form-group">
               <input type="text" class="form-control" name="mode" value="{{mode}}" hidden>
             </div>
 
             <div class="row g-5 pt-0">
                 <div class="col-sm-3">
-                    <label for="majorArea"
-                    <label for="majorArea"
-                        class="form-label-sm">Major Area</label>
-                        <select id="majorArea" name="majorArea"
-                            style="min-width: 125px; max-width: 125px;" class="form-control-sm mb-1">
-                                <option {% if asset.majorArea =="01ST" %} selected="selected" {% endif %}>01ST</option>
-                                <option {% if asset.majorArea =="02ND" %} selected="selected" {% endif %}>02ND</option>
-                                <option {% if asset.majorArea =="03RD" %} selected="selected" {% endif %}>03RD</option>
-                                <option {% if asset.majorArea =="04TH" %} selected="selected" {% endif %}>04TH</option>
-                                <option {% if asset.majorArea =="05TH" %} selected="selected" {% endif %}>05TH</option>
-                                <option {% if asset.majorArea =="06TH" %} selected="selected" {% endif %}>06TH</option>
-                                <option {% if asset.majorArea =="07TH" %} selected="selected" {% endif %}>07TH</option>
-                                <option {% if asset.majorArea =="08TH" %} selected="selected" {% endif %}>08TH</option>
-                                <option {% if asset.majorArea =="09TH" %} selected="selected" {% endif %}>09TH</option>
-                                <option {% if asset.majorArea =="10TH" %} selected="selected" {% endif %}>10TH</option>
-                                <option {% if asset.majorArea =="11TH" %} selected="selected" {% endif %}>11TH</option>
-                                <option {% if asset.majorArea =="12TH" %} selected="selected" {% endif %}>12TH</option>
-                                <option {% if asset.majorArea =="13TH" %} selected="selected" {% endif %}>13TH</option>
-                                <option {% if asset.majorArea =="14TH" %} selected="selected" {% endif %}>14TH</option>
-                                <option {% if asset.majorArea =="15TH" %} selected="selected" {% endif %}>15TH</option>
-                                <option {% if asset.majorArea =="16TH" %} selected="selected" {% endif %}>16TH</option>
-                                <option {% if asset.majorArea =="17TH" %} selected="selected" {% endif %}>17TH</option>
-                                <option {% if asset.majorArea ==="18TH" %} selected="selected" {% endif %}>18TH</option>
-                                <option {% if asset.majorArea =="PA" %} selected="selected" {% endif %}>PA</option>
-                                <option {% if asset.majorArea =="RANGE" %} selected="selected" {% endif %}>RANGE</option>
-                                <option {% if asset.majorArea =="ALL">ALL</option>
-                      </select>
-                     <div class="invalid-feedback"
-                        Valid Major Area is required>
-                    </div>
-                </div>
+                    <label for="majorArea" class="form-label-sm">Major Area</label>
+                    <select id="majorArea" name="majorArea"
+                        style="min-width: 125px; max-width: 125px;" class="form-control-sm mb-1">
+                            <option {% if asset.majorArea =="01ST" %} selected="selected" {% endif %}>01ST</option>
+                            <option {% if asset.majorArea =="02ND" %} selected="selected" {% endif %}>02ND</option>
+                            <option {% if asset.majorArea =="03RD" %} selected="selected" {% endif %}>03RD</option>
+                            <option {% if asset.majorArea =="04TH" %} selected="selected" {% endif %}>04TH</option>
+                            <option {% if asset.majorArea =="05TH" %} selected="selected" {% endif %}>05TH</option>
+                            <option {% if asset.majorArea =="06TH" %} selected="selected" {% endif %}>06TH</option>
+                            <option {% if asset.majorArea =="07TH" %} selected="selected" {% endif %}>07TH</option>
+                            <option {% if asset.majorArea =="08TH" %} selected="selected" {% endif %}>08TH</option>
+                            <option {% if asset.majorArea =="09TH" %} selected="selected" {% endif %}>09TH</option>
+                            <option {% if asset.majorArea =="10TH" %} selected="selected" {% endif %}>10TH</option>
+                            <option {% if asset.majorArea =="11TH" %} selected="selected" {% endif %}>11TH</option>
+                            <option {% if asset.majorArea =="12TH" %} selected="selected" {% endif %}>12TH</option>
+                            <option {% if asset.majorArea =="13TH" %} selected="selected" {% endif %}>13TH</option>
+                            <option {% if asset.majorArea =="14TH" %} selected="selected" {% endif %}>14TH</option>
+                            <option {% if asset.majorArea =="15TH" %} selected="selected" {% endif %}>15TH</option>
+                            <option {% if asset.majorArea =="16TH" %} selected="selected" {% endif %}>16TH</option>
+                            <option {% if asset.majorArea =="17TH" %} selected="selected" {% endif %}>17TH</option>
+                            <option {% if asset.majorArea =="18TH" %} selected="selected" {% endif %}>18TH</option>
+                            <option {% if asset.majorArea =="PA" %} selected="selected" {% endif %}>PA</option>
+                            <option {% if asset.majorArea =="RANGE" %} selected="selected" {% endif %}>RANGE</option>
+                            <option {% if asset.majorArea =="ALL" %} selected="selected" {% endif %}>ALL</option>
+                   </select>
+                </div>  <!-- col -->
 
                 <div class="col-sm-3">
-                    <label for="minorArea"
-                        class="form-label-sm">Minor Area</label>
-                        <select id="minorArea" name="minorArea"
-                            style="min-width: 125px; max-width: 125px;" class="form-control-sm">
-            <option {% if asset.minorArea =="TEE" %} selected="selected" {% endif %}>TEE</option>
-            <option {% if asset.minorArea =="FRWY" %} selected="selected" {% endif %}>FRWY</option>
-            <option {% if asset.minorArea =="ROUGH" %} selected="selected" {% endif %}>ROUGH</option>
-            <option {% if asset.minorArea =="GREEN" %} selected="selected" {% endif %}>GREEN</option>
-            <option {% if asset.minorArea =="FIELD" %} selected="selected" {% endif %}>FIELD</option>
-                        </select>
-                     <div class="invalid-feedback"
-                        Valid Minor Area is required>
-                    </div>
-                </div>
+                    <label for="minorArea" class="form-label-sm">Minor Area</label>
+                    <select id="minorArea" name="minorArea"
+                        style="min-width: 125px; max-width: 125px;" class="form-control-sm">
+                        <option {% if asset.minorArea =="TEE" %} selected="selected" {% endif %}>TEE</option>
+                        <option {% if asset.minorArea =="FRWY" %} selected="selected" {% endif %}>FRWY</option>
+                        <option {% if asset.minorArea =="ROUGH" %} selected="selected" {% endif %}>ROUGH</option>
+                        <option {% if asset.minorArea =="GREEN" %} selected="selected" {% endif %}>GREEN</option>
+                        <option {% if asset.minorArea =="FIELD" %} selected="selected" {% endif %}>FIELD</option>
+                    </select>
+                </div>  <!-- col -->
 
                 <div class="col-sm-3">
-                    <label for="assetType"
-                        class="form-label-sm">Type</label>
-                        <select id="assetType" name="assetType"
-                            style="min-width: 125px; max-width: 125px;" class="form-control-sm">
-            <option {% if asset.assetType =="HEAD" %} selected="selected" {% endif %}>HEAD</option>
-            <option {% if asset.assetType =="GVALVR" %} selected="selected" {% endif %}>GVALVE</option>
-            <option {% if asset.assetTYpe =="AVALVE" %} selected="selected" {% endif %}>AVALVE</option>
-            <option {% if asset.assetType =="MVALVE" %} selected="selected" {% endif %}>MVALVE</option>
-            <option {% if asset.assetType =="SATEL" %} selected="selected" {% endif %}>SATEL</option>
-                        </select>
-                     <div class="invalid-feedback"
-                        Valid Asset Type is required>
-                    </div>
-                </div>
+                    <label for="assetType" class="form-label-sm">Type</label>
+                    <select id="assetType" name="assetType"
+                        style="min-width: 125px; max-width: 125px;" class="form-control-sm">
+                        <option {% if asset.assetType =="HEAD" %} selected="selected" {% endif %}>HEAD</option>
+                        <option {% if asset.assetType =="GVALVR" %} selected="selected" {% endif %}>GVALVE</option>
+                        <option {% if asset.assetTYpe =="AVALVE" %} selected="selected" {% endif %}>AVALVE</option>
+                        <option {% if asset.assetType =="MVALVE" %} selected="selected" {% endif %}>MVALVE</option>
+                        <option {% if asset.assetType =="SATEL" %} selected="selected" {% endif %}>SATEL</option>
+                    </select>
+                </div>  <!-- col -->
             </div> <!--row-->
 
             <div class="row g-3 pt-0">
@@ -91,43 +77,40 @@
                     <input id=description name="description" type="text"
                             style="min-width: 350px; max-width: 350px;" class="form-control-sm"
                             placeholder="Asset Description" value="{{asset.description}}" required>
-                </div>
+                </div>  <!-- col -->
             </div> <!--row-->
 
              <div class="row g-3 pt-1">
                 <div class="col-sm-10">
-                    <label for="model"
-                        class="form-label-sm">Model</label>
-                        <select id="model" name="model"
-                            style="min-width: 125px; max-width: 125px;" class="form-control-sm">
-            <option value="">Choose...</option>
-            <option {% if asset.model =="760" %} selected="selected" {% endif %}>760</option>
-            <option {% if asset.model =="740" %} selected="selected" {% endif %}>740</option>
-                        </select>
+                    <label for="model" class="form-label-sm">Model</label>
+                    <select id="model" name="model"
+                        style="min-width: 125px; max-width: 125px;" class="form-control-sm">
+                        <option value="">Choose...</option>
+                        <option {% if asset.model =="760" %} selected="selected" {% endif %}>760</option>
+                        <option {% if asset.model =="740" %} selected="selected" {% endif %}>740</option>
+                    </select>
 
-                    <label for="assetState"
-                        class="form-label-sm">State</label>
-                        <select id="assetState" name="assetState"
-                            style="min-width: 125px; max-width: 125px;" class="form-control-sm">
-            <option {% if asset.assetState =="GOOD" %} selected="selected" {% endif %}>Good</option>
-            <option {% if asset.assetState =="BAD" %} selected="selected" {% endif %}>Bad</option>
-                        </select>
-                </div>
+                    <label for="assetState" class="form-label-sm">State</label>
+                    <select id="assetState" name="assetState"
+                        style="min-width: 125px; max-width: 125px;" class="form-control-sm">
+                        <option {% if asset.assetState =="GOOD" %} selected="selected" {% endif %}>Good</option>
+                        <option {% if asset.assetState =="BAD" %} selected="selected" {% endif %}>Bad</option>
+                    </select>
+                </div>  <!-- col -->
             </div> <!--row-->
 
             <div class="row g-3 pt-1">
                 <div class="col-sm-10">
-                    <label for="satellite"
-                        class="form-label-sm">Satellite</label>
-                        <input id=satellite name="satellite" type="text"
-                            style="min-width: 10opx; max-width: 100px;" class="form-control-sm"
-                            placeholder="Satellite" value="{{asset.satellite}}">
+                    <label for="satellite" class="form-label-sm">Satellite</label>
+                    <input id=satellite name="satellite" type="text"
+                        style="min-width: 10opx; max-width: 100px;" class="form-control-sm"
+                        placeholder="Satellite" value="{{asset.satellite}}">
 
                     <label for="station" class="form-label-sm">Station</label>
-                        <input id=station name="station" type="text"
-                            style="min-width: 100px; max-width: 100px;" class="form-control-sm"
-                            placeholder="Station" value="{{asset.station}}">
-                </div>
+                    <input id=station name="station" type="text"
+                        style="min-width: 100px; max-width: 100px;" class="form-control-sm"
+                        placeholder="Station" value="{{asset.station}}">
+                </div>  <!-- col -->
             </div> <!--row-->
 
             <div class="row g-3 pt-1">
@@ -161,12 +144,12 @@
             <div class="row g-3 pt-1">
                 <div class="col-sm-8">
                     <b>&nbsp;Created On:</b> {{asset.createdDate}}   <b>By: </b>{{asset.createdBy}}
-                </div>
+                </div> <!-- col -->
             </div> <!--row-->
             <div class="row g-3 pt-1">
                 <div class="col-sm-8">
                     <b>Updated On:</b> {{asset.updatedDate}}   <b>By: </b>{{asset.updatedBy}}
-                </div>
+                </div> <!-- col -->
             </div> <!--row-->
             {% endif %}
 
@@ -175,7 +158,7 @@
                     <button type="submit" class="btn-sm btn-primary btn-thin-sm">Save</button>
                     <button class="btn-sm btn-primary btn-thin-sm"
                             onclick=window.location.href='/assets/asset-page' type="button">Back</button>
-                </div>
+                </div> <!-- col -->
             </div> <!--row-->
         </form>
      </div> <!-- card body -->

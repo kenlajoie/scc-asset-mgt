@@ -87,7 +87,8 @@
                     <td>{{asset.assetState}}</td>
                 </tr>
                 <tr data-id="{{asset.id}}" class="group-{{asset.id}} bottom-border">
-                    <td colspan="3" class="td150"><b></b>Desc:<b></b> {{asset.description}}</td>
+                    <td colspan="2" class="td150"><b>Desc:</b> {{asset.description}}</td>
+                    <td>{{asset.satellite}}/{{asset.station}}</td>
                     <td>
                         <button class="btn-sm btn-primary btn-thin-sm"
                                  onclick="window.location.href='view-asset-page/{{asset.id}}'"
