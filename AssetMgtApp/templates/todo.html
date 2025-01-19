@@ -20,7 +20,7 @@
                         <th scope="col">
                             <div class="assignedTo">
                               <select id=assignedToFilter class="assignedTo" onchange="assignedToChangeEventHandler(event);">
-                                <option data-area="All">All</option>
+                                <option data-area="ALL">ALL</option>
                                 <option data-area="KEL">KEL</option>
                                 <option data-area="ZAC">ZAC</option>
                               </select>
@@ -29,25 +29,26 @@
                         <th scope="col">
                             <div class="todoStatus">
                               <select id=todoStatusFilter class="todoStatus" onchange="todoStatusChangeEventHandler(event);">
-                                <option data-area="Open">Open</option>
-                                <option data-area="Closed">Closed</option>
-                                <option data-area="All">All</option>
+                                <option data-area="ALL">ALL</option>
+                                <option data-area="OPEN">OPEN</option>
+                                <option data-area="CLOSED">CLOSED</option>
                               </select>
                             </div>
                         </th>
                         <th scope="col">
                             <div class="priority">
                               <select id=todoPriorityFilter class="priority" onchange="priorityChangeEventHandler(event);">
-                                <option data-area="All">All</option>
-                                <option data-area="High">High</option>
-                                <option data-area="Medium">Medium</option>
-                                <option data-area="Low">Low</option>
+                                <option data-area="ALL">ALL</option>
+                                <option data-area="HIGH">HIGH</option>
+                                <option data-area="MEDIUM">MEDIUM</option>
+                                <option data-area="LOW">LW</option>
                               </select>
                             </div>
                         </th>
                         <th scope="col">
                             <div class="major-filter">
                               <select id=assetMajorFilter class="majorArea" onchange="majorChangeEventHandler(event);">
+                                <option data-area="ALL">ALL</option>
                                 <option data-area="01ST">01ST</option>
                                 <option data-area="02ND">02ND</option>
                                 <option data-area="03RD">03RD</option>
@@ -62,13 +63,12 @@
                                 <option data-area="12TH">12TH</option>
                                 <option data-area="13TH">13TH</option>
                                 <option data-area="14TH">14TH</option>
-                                <option data-area="15TH">05TH</option>
+                                <option data-area="15TH">15TH</option>
                                 <option data-area="16TH">16TH</option>
                                 <option data-area="17TH">17TH</option>
                                 <option data-area="18TH">18TH</option>
                                 <option data-area="PA">PA</option>
                                 <option data-area="RANGE">RANGE</option>
-                                <option data-area="ALL">ALL</option>
                               </select>
                             </div>
                         </th>
@@ -137,19 +137,19 @@
                   }
                   function majorChangeEventHandler(event) {
                     if (getCookie("majorAreaFilter") != event.target.value) {
-                        document.cookie = `majorAreaFilter=${event.target.value}; path=/`;
+                        document.cookie = `todoMajorAreaFilter=${event.target.value}; path=/`;
                         window.location.href=window.location.href;
                     }
                   }
                   function minorChangeEventHandler(event) {
                     if (getCookie("minorAreaFilter") != event.target.value) {
-                        document.cookie = `minorAreaFilter=${event.target.value}; path=/`;
+                        document.cookie = `todoMinorAreaFilter=${event.target.value}; path=/`;
                         window.location.href=window.location.href;
                     }
                   }
                   function typeChangeEventHandler(event) {
                     if (getCookie("assetTypeFilter") != event.target.value) {
-                        document.cookie = `assetTypeFilter=${event.target.value}; path=/`;
+                        document.cookie = `todoAssetTypeFilter=${event.target.value}; path=/`;
                         window.location.href=window.location.href;
                     }
                   }
@@ -214,7 +214,7 @@
        }
     }
     // majorArea
-    filter = getCookie("majorAreaFilter")
+    filter = getCookie("todoMajorAreaFilter")
     select = document.querySelector(".majorArea");
     options = document.querySelectorAll(".majorArea option");
     if (filter) {
@@ -227,7 +227,7 @@
        }
     }
     //minorArea
-    filter = getCookie("minorAreaFilter")
+    filter = getCookie("todoMinorAreaFilter")
     select = document.querySelector(".minorArea");
     options = document.querySelectorAll(".minorArea option");
     if (filter) {
@@ -240,7 +240,7 @@
        }
     }
     //assetType
-    filter = getCookie("assetTypeFilter")
+    filter = getCookie("todoAssetTypeFilter")
     select = document.querySelector(".assetType");
     options = document.querySelectorAll(".assetType option");
     if (filter) {

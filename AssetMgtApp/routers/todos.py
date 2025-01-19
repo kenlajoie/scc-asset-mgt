@@ -56,9 +56,9 @@ async def render_todo_page(request: Request, db: db_dependency):
         assignedToFilter =request.cookies.get('assignedToFilter')
         todoStatusFilter =request.cookies.get('todoStatusFilter')
         priorityFilter =request.cookies.get('priorityFilter')
-        majorAreaFilter =request.cookies.get('majorAreaFilter')
-        minorAreaFilter =request.cookies.get('minorAreaFilter')
-        assetTypeFilter =request.cookies.get('assetTypeFilter')
+        todoMajorAreaFilter =request.cookies.get('todoMajorAreaFilter')
+        todoMinorAreaFilter =request.cookies.get('todoMinorAreaFilter')
+        todoAssetTypeFilter =request.cookies.get('todoAssetTypeFilter')
 
 
         query = db.query(
@@ -77,23 +77,23 @@ async def render_todo_page(request: Request, db: db_dependency):
 #       todoList = query.all()
 
 #       build dynamic query
-        if assignedToFilter is not None and assignedToFilter != "All":
+        if assignedToFilter is not None and assignedToFilter != "ALL":
             query = query.filter(Todos.assignedTo == assignedToFilter)
 
-        if todoStatusFilter is not None and todoStatusFilter != "All":
+        if todoStatusFilter is not None and todoStatusFilter != "ALL":
             query = query.filter(Todos.todoStatus == todoStatusFilter)
 
-        if priorityFilter is not None and priorityFilter != "All":
+        if priorityFilter is not None and priorityFilter != "ALL":
             query = query.filter(Todos.priority == priorityFilter)
 
-        if majorAreaFilter is not None and majorAreaFilter != "All":
-            query = query.filter(Assets.majorArea == majorAreaFilter)
+        if todoMajorAreaFilter is not None and todoMajorAreaFilter != "ALL":
+            query = query.filter(Assets.majorArea == todoMajorAreaFilter)
 
-        if minorAreaFilter is not None and minorAreaFilter != "All":
-            query = query.filter(Assets.minorArea == minorAreaFilter)
+        if todoMinorAreaFilter is not None and todoMinorAreaFilter != "ALL":
+            query = query.filter(Assets.minorArea == todoMinorAreaFilter)
 
-        if assetTypeFilter is not None and assetTypeFilter != "All":
-            query = query.filter(Assets.assetType == assetTypeFilter)
+        if todoAssetTypeFilter is not None and todoAssetTypeFilter != "ALL":
+            query = query.filter(Assets.assetType == todoAssetTypeFilter)
 
         todoList = query.all()
 
@@ -115,9 +115,9 @@ async def render_todo_list(request: Request, todo_id: int, db: db_dependency):
         assignedToFilter =request.cookies.get('assignedToFilter')
         todoStatusFilter =request.cookies.get('todoStatusFilter')
         priorityFilter =request.cookies.get('priorityFilter')
-        majorAreaFilter =request.cookies.get('majorAreaFilter')
-        minorAreaFilter =request.cookies.get('minorAreaFilter')
-        assetTypeFilter =request.cookies.get('assetTypeFilter')
+        todoMajorAreaFilter =request.cookies.get('todoMajorAreaFilter')
+        todoMinorAreaFilter =request.cookies.get('todoMinorAreaFilter')
+        todoAssetTypeFilter =request.cookies.get('todoAssetTypeFilter')
 
 
         query = db.query(
@@ -136,23 +136,23 @@ async def render_todo_list(request: Request, todo_id: int, db: db_dependency):
 #       todoList = query.all()
 
 #       build dynamic query
-        if assignedToFilter is not None and assignedToFilter != "All":
+        if assignedToFilter is not None and assignedToFilter != "ALL":
             query = query.filter(Todos.assignedTo == assignedToFilter)
 
-        if todoStatusFilter is not None and todoStatusFilter != "All":
+        if todoStatusFilter is not None and todoStatusFilter != "ALL":
             query = query.filter(Todos.todoStatus == todoStatusFilter)
 
-        if priorityFilter is not None and priorityFilter != "All":
+        if priorityFilter is not None and priorityFilter != "ALL":
             query = query.filter(Todos.priority == priorityFilter)
 
-        if majorAreaFilter is not None and majorAreaFilter != "All":
-            query = query.filter(Assets.majorArea == majorAreaFilter)
+        if todoMajorAreaFilter is not None and todoMajorAreaFilter != "ALL":
+            query = query.filter(Assets.majorArea == todoMajorAreaFilter)
 
-        if minorAreaFilter is not None and minorAreaFilter != "All":
-            query = query.filter(Assets.minorArea == minorAreaFilter)
+        if todoMinorAreaFilter is not None and todoMinorAreaFilter != "ALL":
+            query = query.filter(Assets.minorArea == todoMinorAreaFilter)
 
-        if assetTypeFilter is not None and assetTypeFilter != "All":
-            query = query.filter(Assets.assetType == assetTypeFilter)
+        if todoAssetTypeFilter is not None and todoAssetTypeFilter != "ALL":
+            query = query.filter(Assets.assetType == todoAssetTypeFilter)
 
         todoList = query.all()
 
