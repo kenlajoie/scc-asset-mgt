@@ -1,0 +1,23 @@
+id,majorArea,minorArea,assetType,model,description,assetState,satellite,station,gpsLat,gpsLng,createdBy
+,01ST ,FRWY,HEAD,,"[361 yards, (1)]",GOOD,001,12,,,DBA
+                            <option {% if asset.majorArea =="01ST" %} selected="selected" {% endif %}>01ST</option>
+                            <option {% if asset.majorArea =="02ND" %} selected="selected" {% endif %}>02ND</option>
+                            <option {% if asset.majorArea =="03RD" %} selected="selected" {% endif %}>03RD</option>
+                            <option {% if asset.majorArea =="04TH" %} selected="selected" {% endif %}>04TH</option>
+                            <option {% if asset.majorArea =="05TH" %} selected="selected" {% endif %}>05TH</option>
+                            <option {% if asset.majorArea =="06TH" %} selected="selected" {% endif %}>06TH</option>
+                            <option {% if asset.majorArea =="07TH" %} selected="selected" {% endif %}>07TH</option>
+                            <option {% if asset.majorArea =="08TH" %} selected="selected" {% endif %}>08TH</option>
+                            <option {% if asset.majorArea =="09TH" %} selected="selected" {% endif %}>09TH</option>
+                            <option {% if asset.majorArea =="10TH" %} selected="selected" {% endif %}>10TH</option>
+                            <option {% if asset.majorArea =="11TH" %} selected="selected" {% endif %}>11TH</option>
+                            <option {% if asset.majorArea =="12TH" %} selected="selected" {% endif %}>12TH</option>
+                            <option {% if asset.majorArea =="13TH" %} selected="selected" {% endif %}>13TH</option>
+                            <option {% if asset.majorArea =="14TH" %} selected="selected" {% endif %}>14TH</option>
+                            <option {% if asset.majorArea =="15TH" %} selected="selected" {% endif %}>15TH</option>
+                            <option {% if asset.majorArea =="16TH" %} selected="selected" {% endif %}>16TH</option>
+                            <option {% if asset.majorArea =="17TH" %} selected="selected" {% endif %}>17TH</option>
+                            <option {% if asset.majorArea =="18TH" %} selected="selected" {% endif %}>18TH</option>
+                            <option {% if asset.majorArea =="PA" %} selected="selected" {% endif %}>PA</option>
+                            <option {% if asset.majorArea =="RANGE" %} selected="selected" {% endif %}>RANGE</option>
+                            <option {% if asset.majorArea =="ALL">ALL</option>
