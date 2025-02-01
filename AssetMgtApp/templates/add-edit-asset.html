@@ -130,12 +130,12 @@
             <div class="row g-3 pt-1">
                 <div class="col-sm-10">
                     <label for="gpslat" class="form-label-sm">Lat:</label>
-                    <input name=gpsLat id=gpsLat type="number"
+                    <input name=gpslat id=gpslat type="number"
                         style="min-width: 110px; max-width: 110px;" class="form-control-sm"
                         placeholder="Latitude" value="{{asset.gpsLat}}" readonly>
 
                     <label for="gpslng" class="form-label-sm">Lng:</label>
-                    <input name=gpsLng id=gpsLng type="number"
+                    <input name=gpslng id=gpslng type="number"
                         style="min-width: 110px; max-width: 110px;" class="form-control-sm"
                         placeholder="longitude" value="{{asset.gpsLng}}" readonly>
 
@@ -191,8 +191,8 @@
     }
 
     function showPosition(position) {
-        document.getElementById('gpsLat').value = position.coords.latitude;;
-        document.getElementById('gpsLng').value = position.coords.longitude;
+        document.getElementById('gpslat').value = position.coords.latitude;;
+        document.getElementById('gpslng').value = position.coords.longitude;
     }
 
     function showError(error) {

@@ -40,8 +40,9 @@ class AssetRequest(BaseModel):
     model: str = Field(max_length=20)
     satellite: str = Field(max_length=20)
     station: str = Field(max_length=20)
-    gpsLat: Optional[float]
-    gpsLng: Optional[float]
+    gpsLat: Optional[float] = None
+    gpsLng: Optional[float] = None
+
 
 ##this should be a shared function
 def redirect_to_login():
@@ -108,8 +109,8 @@ async def render_asset_page(request: Request):
             model="",
             satellite = "",
             station = "",
-            gpsLat=0,
-            gpsLng=0
+            gpsLat = "",
+            gpsLng = ""
         )
 
         return templates.TemplateResponse("add-edit-asset.html", {"request": request,
@@ -130,7 +131,12 @@ async def render_edit_asset_page(request: Request, asset_id: int, db: db_depende
         if asset_model is None:
             raise HTTPException(status_code=404, detail='Asset not found.')
 
-        ##confirm("hello3")
+        #force None to ""
+        if asset_model.gpsLat is None:
+            asset_model.gpsLat = ""
+
+        if asset_model.gpsLng is None:
+            asset_model.gpsLng = ""
 
         return templates.TemplateResponse("add-edit-asset.html", {"request": request,
                                     "asset": asset_model, "currentUser": user, "mode": "EDIT"})

@@ -228,7 +228,7 @@
                 } else {
                     // Handle error
                     const errorData = await response.json();
-                    alert(`Error user DELTET: ${response.status}:${response.statusText}`);
+                    alert(`Error user DELETE: ${response.status}:${response.statusText}`);
                 }
             } catch (error) {
                 console.error('Error:', error);
@@ -273,6 +273,13 @@
                     body: JSON.stringify(payload)
                 });
 
+                // clear all error spans
+                document.querySelectorAll('span').forEach(row => {
+                    if (row.id.startsWith('error-')) {
+                        row.textContent = "";
+                    }
+                });
+
                 if (response.ok) {
                     //set the major area filter to the new asset major area
                     if (getCookie("majorAreaFilter") != data.majorArea) {
@@ -281,9 +288,16 @@
                     window.location.href = '/assets/asset-page'; // Redirect to the asset page
                     //form.reset(); // Clear the form
                 } else {
-                    // Handle error
-                    const errorData = await response.json();
-                    alert(`XXX Error: ${errorData.detail}`);
+                    const rdata = await response.json();
+                    //set all span errors
+                    for (const key in rdata.detail) {
+                        console.log(`${key}: ${rdata.detail[key]}`);
+                        const spanElement = document.getElementById(`error-${key}`);
+                        if (spanElement) {
+                            spanElement.textContent = `${rdata.detail[key]}`;
+                        }
+                    }
+                    //alert(`Error password UPDATE: ${response.status}:${response.statusText}`);
                 }
             } catch (error) {
                 console.error('Error:', error);
@@ -303,13 +317,6 @@
             var url = window.location.pathname;
             const assetId = url.substring(url.lastIndexOf('/') + 1);
 
-            //had to convert empty string to null for pydantic
-            if (data.gpsLat.length == 0) {
-                data.gpsLat = null;
-            }
-            if (data.gpsLng.length == 0) {
-                data.gpsLng = null;
-            }
             const payload = {
                 majorArea: data.majorArea,
                 minorArea: data.minorArea,
