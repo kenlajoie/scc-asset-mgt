@@ -5,6 +5,9 @@ from .routers import auth, todos, admin, users, assets
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import RedirectResponse
 
+from fastapi.exceptions import RequestValidationError
+from fastapi.responses import JSONResponse
+
 app = FastAPI()
 
 Base.metadata.create_all(bind=engine)
@@ -20,6 +23,12 @@ def test(request: Request):
 @app.get("/healthy")
 def health_check():
     return {'status': 'Healthy'}
+
+# Custom Validation Error Handler
+@app.exception_handler(RequestValidationError)
+async def validation_exception_handler(request, exc):
+    errors = {err["loc"][-1]: err["msg"] for err in exc.errors()}  # Extract errors in a clean format
+    return JSONResponse(status_code=422, content={"detail": errors})
 
 
 app.include_router(auth.router)

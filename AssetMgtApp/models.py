@@ -11,8 +11,8 @@ class Users(Base):
     __tablename__ = 'users'
 
     id = Column(Integer, primary_key=True, index=True)
-    username = Column(String, unique=True)
-    initials = Column(String, unique=True)
+    username = Column(String, unique=True, nullable=False)
+    initials = Column(String, unique=True, nullable=False)
     name = Column(String)
     userRole = Column(String)
     userStatus = Column(String)

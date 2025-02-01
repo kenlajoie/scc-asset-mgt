@@ -4,6 +4,7 @@ from typing import Annotated
 from click import confirm
 from fastapi import APIRouter, Depends, HTTPException, Request
 from pydantic import BaseModel
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 from starlette import status
 from ..database import SessionLocal
@@ -93,20 +94,25 @@ async def get_current_user(token: Annotated[str, Depends(oauth2_bearer)]):
 @router.post("/", status_code=status.HTTP_201_CREATED)
 async def create_user(db: db_dependency,
                       create_user_request: CreateUserRequest):
+    try:
+        create_user_model = Users(
+            username=create_user_request.username,
+            initials=create_user_request.initials,
+            name=create_user_request.name,
+            userRole=create_user_request.userRole,
+            userStatus=create_user_request.userStatus,
+            hashedPassword=bcrypt_context.hash(create_user_request.password),
+            createdBy="KEL",
+            updatedBy="KEL"
+        )
 
-    create_user_model = Users(
-        username=create_user_request.username,
-        initials=create_user_request.initials,
-        name = create_user_request.name,
-        userRole = create_user_request.userRole,
-        userStatus = create_user_request.userStatus,
-        hashedPassword = bcrypt_context.hash(create_user_request.password),
-        createdBy = "KEL",
-        updatedBy = "KEL"
-    )
+        db.add(create_user_model)
+        db.commit()
+        return {"message": "User created successfully"}
 
-    db.add(create_user_model)
-    db.commit()
+    except IntegrityError:
+        db.rollback()
+        raise HTTPException(status_code=400, detail="initials or username already exists")
 
 @router.get("/list", status_code=status.HTTP_200_OK)
 async def read_all(db: db_dependency):

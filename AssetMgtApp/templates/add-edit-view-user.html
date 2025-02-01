@@ -7,7 +7,7 @@
     </div>
     <div class="card-body">
       {% if mode == "ADD"%}
-      <form id="addUserForm">
+      <form id="addUserForm" class="none">
       {% endif %}
       {% if mode == "EDIT"%}
       <form id="editUserForm">
@@ -30,13 +30,13 @@
                                 style="min-width: 100px; max-width: 100px;" class="form-control-sm"
                                 placeholder="username" value="{{user.username}}" readonly>
                     {% else %} <!- assume ADD OR edit--!>
-                        <input id=username name="username" type="text"
+                        <input id=username name="username" type="text" autocomplete="off"
                                 style="min-width: 100px; max-width: 100px;" class="form-control-sm"
                                 placeholder="username" value="{{user.username}}" required
                                 oninput="this.value = this.value.replace(/\s/g, '');"
                                 onkeydown="if (event.key === ' ') event.preventDefault();" />
+                        <div><span id="error-username" class="error"></span></div>
                     {% endif %}
-                    <span>--> Must be unique in the database!</span>
                 </div>
             </div> <!--row-->
 
@@ -44,17 +44,18 @@
                 <div class="col-sm-2">
                     <label for="initials" class="form-label-sm">Initials</label>
                </div>
-                <div class="col-sm-4">
+                <div class="col-sm-10">
                     {% if mode != 'ADD' %} <!- assume EDIT or VIEW --!>
-                        <input id=initials" name=initials type="text"
+                        <input id="initials" name=initials type="text"
                                 style="min-width: 100px; max-width: 100px;" class="form-control-sm"
                                 placeholder="initials" value="{{user.initials}}" readonly>
                     {% else %}  <!- assume ADD --!>
-                        <input id=initials name="initials" type="text"
+                        <input id="initials" name="initials" type="text" autocomplete="off"
                                 style="min-width: 100px; max-width: 100px; text-transform: uppercase;" class="form-control-sm"
                                 placeholder="Initials" value="{{user.initials}}" required
                                 oninput="this.value = this.value.replace(/\s/g, '');"
                                 onkeydown="if (event.key === ' ') event.preventDefault();" />
+                        <div><span id="error-initials" class="error"></span></div>
                     {% endif %}
                 </div>
             </div> <!--row-->
@@ -64,15 +65,16 @@
                 <div class="col-sm-2">
                     <label for="name" class="form-label-sm">Name</label>
                </div>
-                <div class="col-sm-4">
+                <div class="col-sm-10">
                     {% if mode == "VIEW"%}
-                        <input id=name" name="name" type="text"
-                                style="min-width: 300px; max-width: 400px;" class="form-control-sm"
+                        <input id="name" name="name" type="text"
+                                style="min-width: 1500px; max-width: 200px;" class="form-control-sm"
                                 placeholder="Name" value="{{user.name}}" readonly>
                     {% else %}  <!- assume ADD OR edit--!>
-                        <input id=name name="name" type="text"
+                        <input id="name" name="name" type="text" autocomplete="off"
                                 style="min-width: 300px; max-width: 300px;" class="form-control-sm"
                                 placeholder="Name" value="{{user.name}}" required>
+                        <div><span id="error-name" class="error"></span></div>
                     {% endif %}
                 </div>
             </div> <!--row-->
@@ -81,13 +83,13 @@
                 <div class="col-sm-2">
                     <label for="userRole" class="form-label-sm">Role</label>
                </div>
-                <div class="col-sm-4">
+                <div class="col-sm-3">
                     {% if mode == "VIEW"%}
                         <input id="userRole" name="userRole" type="text"
                                 style="min-width: 125px; max-width: 125px;" class="form-control-sm"
                                 placeholder="Role" value="{{user.userRole}}" readonly>
                     {% else %}  <!- assume ADD OR edit--!>
-                        <select id="" name="userRole"
+                        <select id="userRole" name="userRole"
                             style="min-width: 125px; max-width: 125px;" class="form-control-sm">
                             <option {% if user.userRole =="TECH" %} selected="selected" {% endif %}>TECH</option>
                             <option {% if user.userRole =="ADMIN" %} selected="selected" {% endif %}>ADMIN</option>
@@ -101,9 +103,9 @@
                 <div class="col-sm-2">
                     <label for="userStatus" class="form-label-sm">Status</label>
                </div>
-                <div class="col-sm-4">
+                <div class="col-sm-3">
                     {% if mode == "VIEW"%}
-                        <input id= name="userStatus" type="text"
+                        <input id="userStatus" name="userStatus" type="text"
                                 style="min-width: 125px; max-width: 125px;" class="form-control-sm"
                                 placeholder="Status" value="{{user.userStatus}}" readonly>
                     {% else %}  <!- assume ADD OR edit--!>
@@ -122,10 +124,11 @@
                 <div class="col-sm-2">
                     <label for="password" class="form-label-sm">Password</label>
                </div>
-                <div class="col-sm-4">
-                    <input id=password name="password" type="text"
-                        style="min-width: 300px; max-width: 300px;" class="form-control-sm"
+                <div class="col-sm-10">
+                    <input id="password" name="password" type="text" autocomplete="off"
+                        style="min-width: 150px; max-width: 100px;" class="form-control-sm"
                         placeholder="Password" value="" required>
+                    <div><span id="error-password" class="error"></span></div>
                 </div> <!--col -->
             </div> <!--row-->
             {% endif %}

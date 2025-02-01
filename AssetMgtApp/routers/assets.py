@@ -2,8 +2,10 @@ from typing import Annotated
 
 from click import confirm
 from pydantic import BaseModel, Field
+from typing import Optional
 from sqlalchemy import func
 from sqlalchemy.orm import Session
+from sqlalchemy.exc import SQLAlchemyError, IntegrityError, OperationalError
 from fastapi import APIRouter, Depends, HTTPException, Path, Request, status
 from starlette import status
 from ..models import Assets, Todos, Users
@@ -33,13 +35,13 @@ class AssetRequest(BaseModel):
     majorArea: str = Field(min_length=3, max_length=10)
     minorArea: str = Field(min_length=3, max_length=10)
     assetType: str = Field(min_length=3, max_length=10)
-    description: str = Field(max_length=30)
+    description: str = Field(min_length=3, max_length=40)
     assetState: str = Field(min_length=3, max_length=10)
-    model: str
-    satellite: str
-    station: str
-    gpsLat: float
-    gpsLng: float
+    model: str = Field(max_length=20)
+    satellite: str = Field(max_length=20)
+    station: str = Field(max_length=20)
+    gpsLat: Optional[float]
+    gpsLng: Optional[float]
 
 ##this should be a shared function
 def redirect_to_login():
@@ -128,7 +130,7 @@ async def render_edit_asset_page(request: Request, asset_id: int, db: db_depende
         if asset_model is None:
             raise HTTPException(status_code=404, detail='Asset not found.')
 
-##        confirm("hello3")
+        ##confirm("hello3")
 
         return templates.TemplateResponse("add-edit-asset.html", {"request": request,
                                     "asset": asset_model, "currentUser": user, "mode": "EDIT"})
@@ -222,21 +224,33 @@ async def update_asset(user: user_dependency, db: db_dependency,
     if asset_model is None:
         raise HTTPException(status_code=404, detail='Asset not found.')
 
-    asset_model.majorArea = asset_request.majorArea
-    asset_model.minorArea = asset_request.minorArea
-    asset_model.assetType = asset_request.assetType
-    asset_model.description = asset_request.description
-    asset_model.assetState = asset_request.assetState
-    asset_model.model = asset_request.model
-    asset_model.satellite = asset_request.satellite
-    asset_model.station = asset_request.station
-    asset_model.gpsLat = asset_request.gpsLat
-    asset_model.gpsLng = asset_request.gpsLng
-    asset_model.updatedDate = server_default=func.now()
-    asset_model.updatedBy= login_user_model.initials
+    errors = {}
+    try:
+        asset_model.majorArea = asset_request.majorArea
+        asset_model.minorArea = asset_request.minorArea
+        asset_model.assetType = asset_request.assetType
+        asset_model.description = asset_request.description
+        asset_model.assetState = asset_request.assetState
+        asset_model.model = asset_request.model
+        asset_model.satellite = asset_request.satellite
+        asset_model.station = asset_request.station
+        asset_model.gpsLat = asset_request.gpsLat
+        asset_model.gpsLng = asset_request.gpsLng
+        asset_model.updatedDate = func.now()
+        asset_model.updatedBy= login_user_model.initials
 
-    db.add(asset_model)
-    db.commit()
+        db.add(asset_model)
+        db.commit()
+        return {"message": "User updated successfully"}
+
+    except IntegrityError as e:
+        db.rollback()
+        #no expected errors
+        raise HTTPException(status_code=422, detail=errors)
+
+    except SQLAlchemyError as e:
+        db.rollback()
+        raise HTTPException(status_code=422, detail=errors)
 
 
 @router.delete("/asset/{asset_id}", status_code=status.HTTP_204_NO_CONTENT)

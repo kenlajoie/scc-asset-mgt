@@ -1,5 +1,3 @@
-
-
     // User ---------------------------------------------------------------------------------------------
     // Add User JS --------------------------------------------------------------------
     const addUserForm = document.getElementById('addUserForm');
@@ -11,10 +9,11 @@
             const formData = new FormData(form);
             const data = Object.fromEntries(formData.entries());
 
+            data.initials = data.initials.toUpperCase();
+
             const payload = {
                 username: data.username,
                 initials: data.initials,
-                email: data.email,
                 name: data.name,
                 userRole: data.userRole,
                 userStatus: data.userStatus,
@@ -33,32 +32,47 @@
                     body: JSON.stringify(payload)
                 });
 
+                // clear all error spans
+                document.querySelectorAll('span').forEach(row => {
+                    if (row.id.startsWith('error-')) {
+                        row.textContent = "";
+                    }
+                });
+
                 if (response.ok) {
                     window.location.href = '/users/user-page'; // Redirect to the asset page
                     //form.reset(); // Clear the form
                 } else {
-                    // Handle error
-                    const errorData = await response.json();
-                    alert(`Error User ADD: ${response.status}:${response.statusText}`);
+                    //set all span errors
+                    const rdata = await response.json();
+                    for (const key in rdata.detail) {
+                        console.log(`${key}: ${rdata.detail[key]}`);
+                        const spanElement = document.getElementById(`error-${key}`);
+                        if (spanElement) {
+                            spanElement.textContent = `${rdata.detail[key]}`;
+                        }
+                    }
                 }
+
             } catch (error) {
-                console.error('Error:', error);
                 alert('#1xx An error occurred. Please try again.');
             }
         });
     }
 
-
-    // Edit user JS  --------------------------------------------------------------------
+    // Edit User JS --------------------------------------------------------------------
     const editUserForm = document.getElementById('editUserForm');
     if (editUserForm) {
-        editUserForm.addEventListener('submit', async function (event) {
+            editUserForm.addEventListener('submit', async function (event) {
             event.preventDefault();
+
             const form = event.target;
             const formData = new FormData(form);
             const data = Object.fromEntries(formData.entries());
             var url = window.location.pathname;
             const userId = url.substring(url.lastIndexOf('/') + 1);
+
+            data.initials = data.initials.toUpperCase();
 
             const payload = {
                 username: data.username,
@@ -68,37 +82,46 @@
                 userStatus: data.userStatus,
             };
 
-            //alert(JSON.stringify(payload));
+            //alert(JSON.stringify(payload))
 
             try {
-                const token = getCookie('access_token');
-                console.log(token)
-                if (!token) {
-                    throw new Error('Authentication token not found');
-                }
-
                 const response = await fetch(`/users/user/${userId}`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}`
+                        'Authorization': `Bearer ${getCookie('access_token')}`
                     },
                     body: JSON.stringify(payload)
                 });
 
+                // clear all error spans
+                document.querySelectorAll('span').forEach(row => {
+                    if (row.id.startsWith('error-')) {
+                        row.textContent = "";
+                    }
+                });
+
                 if (response.ok) {
-                    window.location.href = '/users/user-page'; // Redirect to the user pag
+                    window.location.href = '/users/user-page'; // Redirect to the asset page
+                    //form.reset(); // Clear the form
                 } else {
-                    // Handle error
-                    const errorData = await response.json();
-                    alert(`Error User UPDATE: ${response.status}:${response.statusText}`);
+                    //set all span errors
+                    const rdata = await response.json();
+                    for (const key in rdata.detail) {
+                        console.log(`${key}: ${rdata.detail[key]}`);
+                        const spanElement = document.getElementById(`error-${key}`);
+                        if (spanElement) {
+                            spanElement.textContent = `${rdata.detail[key]}`;
+                        }
+                    }
+                    //alert(`Error user UPDATE: ${response.status}:${response.statusText}`);
                 }
             } catch (error) {
-                alert('`Error User UPDATE:#2 An error occurred. Please try again.');
+                alert(`Error user UPDATE:#2 An error occurred. Please try again.`);
             }
         });
-
     }
+
 
     // password user JS  --------------------------------------------------------------------
     const passwordUserForm = document.getElementById('passwordUserForm');
@@ -122,6 +145,8 @@
                     throw new Error('Authentication token not found');
                 }
 
+                //alert(JSON.stringify(payload))
+
                 const response = await fetch(`/users/password/${userId}`, {
                     method: 'PUT',
                     headers: {
@@ -131,17 +156,30 @@
                     body: JSON.stringify(payload)
                 });
 
-                //alert(JSON.stringify(payload))
+                // clear all error spans
+                document.querySelectorAll('span').forEach(row => {
+                    if (row.id.startsWith('error-')) {
+                        row.textContent = "";
+                    }
+                });
 
                 if (response.ok) {
                     window.location.href = '/users/user-page'; // Redirect to the user pag
                 } else {
                     // Handle error
-                    const errorData = await response.json();
-                    alert(`Error User Password UPDATE: ${response.status}:${response.statusText}`);
+                    const rdata = await response.json();
+                    //set all span errors
+                    for (const key in rdata.detail) {
+                        console.log(`${key}: ${rdata.detail[key]}`);
+                        const spanElement = document.getElementById(`error-${key}`);
+                        if (spanElement) {
+                            spanElement.textContent = `${rdata.detail[key]}`;
+                        }
+                    }
+                    //alert(`Error password UPDATE: ${response.status}:${response.statusText}`);
                 }
             } catch (error) {
-                alert('#2 An error occurred. Please try again.');
+                alert(`Error password UPDATE:#2 An error occurred. Please try again.`);
             }
         });
     }
@@ -265,6 +303,13 @@
             var url = window.location.pathname;
             const assetId = url.substring(url.lastIndexOf('/') + 1);
 
+            //had to convert empty string to null for pydantic
+            if (data.gpsLat.length == 0) {
+                data.gpsLat = null;
+            }
+            if (data.gpsLng.length == 0) {
+                data.gpsLng = null;
+            }
             const payload = {
                 majorArea: data.majorArea,
                 minorArea: data.minorArea,
@@ -301,17 +346,30 @@
                 });
 
 
+                // clear all error spans
+                document.querySelectorAll('span').forEach(row => {
+                    if (row.id.startsWith('error-')) {
+                        row.textContent = "";
+                    }
+                });
+
                 if (response.ok) {
                     window.location.href = '/assets/asset-page'; // Redirect to the asset page
                 } else {
-
-                    // Handle error
-                    const errorData = await response.json();
-                    alert(`Error: ${errorData.detail}`);
+                    const rdata = await response.json();
+                    //set all span errors
+                    for (const key in rdata.detail) {
+                        console.log(`${key}: ${rdata.detail[key]}`);
+                        const spanElement = document.getElementById(`error-${key}`);
+                        if (spanElement) {
+                            spanElement.textContent = `${rdata.detail[key]}`;
+                        }
+                    }
+                    //alert(`Error password UPDATE: ${response.status}:${response.statusText}`);
                 }
             } catch (error) {
                 console.error('Error:', error);
-                alert('#2 An error occurred. Please try again.');
+                alert(`Error asset UPDATE:#2 An error occurred. Please try again.`);
             }
         });
 

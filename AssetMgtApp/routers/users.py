@@ -1,9 +1,12 @@
 from typing import Annotated
+
 from click import confirm
 from pydantic import BaseModel, Field
 from sqlalchemy import func
+from sqlalchemy.exc import SQLAlchemyError, IntegrityError, OperationalError
 from sqlalchemy.orm import Session
 from fastapi import APIRouter, Depends, HTTPException, Path, Request, status
+
 from starlette import status
 from ..models import Users
 from ..database import SessionLocal
@@ -38,22 +41,22 @@ class UserVerification(BaseModel):
 
 
 class UserAddRequest(BaseModel):
-    username: str = Field(min_length=2, max_length=30)
+    username: str = Field(min_length=4, max_length=20)
     initials: str = Field(min_length=2, max_length=4)
-    name: str = Field(min_length=2, max_length=30)
+    name: str = Field(min_length=2, max_length=20)
     userRole: str = Field(min_length=3,max_length=10)
     userStatus: str = Field(min_length=3, max_length=10)
-    password: str = Field(min_length=6, max_length=20)
+    password: str = Field(min_length=4, max_length=20)
 
 class UserEditRequest(BaseModel):
-    username: str = Field(min_length=2, max_length=30)
+    username: str = Field(min_length=4, max_length=20)
     initials: str = Field(min_length=2, max_length=4)
-    name: str = Field(min_length=2, max_length=30)
+    name: str = Field(min_length=2, max_length=20)
     userRole: str = Field(min_length=3,max_length=10)
     userStatus: str = Field(min_length=3, max_length=10)
 
 class UserPasswordRequest(BaseModel):
-    password: str = Field(min_length=6, max_length=20)
+    password: str = Field(min_length=4, max_length=20)
 
 ##this should be a shared function
 def redirect_to_login():
@@ -174,6 +177,7 @@ async def render_user_password_page(request: Request, user_id: int, db: db_depen
 @router.post("/user", status_code=status.HTTP_201_CREATED)
 async def create_user(user: user_dependency, db: db_dependency,
                       user_request: UserAddRequest):
+
     if user is None:
         raise HTTPException(status_code=401, detail='Authentication Failed')
 
@@ -181,19 +185,43 @@ async def create_user(user: user_dependency, db: db_dependency,
     if login_user_model is None:
         raise HTTPException(status_code=404, detail='login user Not found.')
 
+    errors = {}
+    try:
+        create_user_model = Users(
+            username=user_request.username,
+            initials=user_request.initials.upper(),
+            name=user_request.name,
+            userRole=user_request.userRole,
+            userStatus=user_request.userStatus,
+            hashedPassword=bcrypt_context.hash(user_request.password),
+            createdBy=login_user_model.initials,
+        )
+        create_user_model.createdDate = func.now()
 
-    create_user_model = Users(
-        username = user_request.username,
-        initials = user_request.initials,
-        name = user_request.name,
-        userRole = user_request.userRole,
-        userStatus = user_request.userStatus,
-        hashedPassword=bcrypt_context.hash(user_request.password),
-        createdBy=login_user_model.initials,
-    )
+        db.add(create_user_model)
+        db.commit()
+        return {"message": "User created successfully"}
 
-    db.add(create_user_model)
-    db.commit()
+    except IntegrityError as e:
+        db.rollback()
+        # Split the string at the first occurrence of ":"
+        tableColumn = ""
+        parts = e.__str__().split(":", 1)  # Split at the first ":"
+        if len(parts) > 1:
+            # Take the part after the colon and split again to get the first word
+            tableColumn = parts[1].split()[0]
+
+        if tableColumn == "users.initials" :
+            errors["initials"] = 'This Initial is already used!'
+
+        if tableColumn == "users.username" :
+            errors["username"] = 'This Username is already used!'
+
+        raise HTTPException(status_code=422, detail=errors)
+
+    except SQLAlchemyError as e:
+        db.rollback()
+        raise HTTPException(status_code=422, detail=errors)
 
 @router.put("/user/{user_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def update_user(user: user_dependency, db: db_dependency,
@@ -210,18 +238,43 @@ async def update_user(user: user_dependency, db: db_dependency,
     if user_model is None:
         raise HTTPException(status_code=404, detail='User not found.')
 
-    save = user_model.hashedPassword
+    errors = {}
+    try:
+        save = user_model.hashedPassword
 
-    user_model.username = user_request.username
-    user_model.initials = user_request.initials
-    user_model.name = user_request.name
-    user_model.userRole = user_request.userRole
-    user_model.userStatus = user_request.userStatus
-    user_model.updatedDate = server_default=func.now()
-    user_model.updatedBy= login_user_model.initials
+        user_model.username = user_request.username
+        user_model.initials = user_request.initials
+        user_model.name = user_request.name
+        user_model.userRole = user_request.userRole
+        user_model.userStatus = user_request.userStatus
+        user_model.updatedDate = func.now()
+        user_model.updatedBy= login_user_model.initials
 
-    db.add(user_model)
-    db.commit()
+        db.add(user_model)
+        db.commit()
+        return {"message": "User updated successfully"}
+
+    except IntegrityError as e:
+        db.rollback()
+        # Split the string at the first occurrence of ":"
+        tableColumn = ""
+        parts = e.__str__().split(":", 1)  # Split at the first ":"
+        if len(parts) > 1:
+            # Take the part after the colon and split again to get the first word
+            tableColumn = parts[1].split()[0]
+
+        if tableColumn == "users.initials" :
+            errors["initials"] = 'This Initial is already used!'
+
+        if tableColumn == "users.username" :
+            errors["username"] = 'This Username is already used!'
+
+        raise HTTPException(status_code=422, detail=errors)
+
+    except SQLAlchemyError as e:
+        db.rollback()
+        raise HTTPException(status_code=422, detail=errors)
+
 
 @router.delete("/user/{user_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_user(user: user_dependency, db: db_dependency,
@@ -253,12 +306,32 @@ async def update_user_password(user: user_dependency, db: db_dependency,
     if user_model is None:
         raise HTTPException(status_code=404, detail='User not found.')
 
-    user_model.hashedPassword = bcrypt_context.hash(user_request.password)
-    user_model.updatedDate = server_default=func.now()
-    user_model.updatedBy = login_user_model.initials
+    errors = {}
+    try:
+        user_model.hashedPassword = bcrypt_context.hash(user_request.password)
+        user_model.updatedDate = func.now()
+        user_model.updatedBy = login_user_model.initials
 
-    db.add(user_model)
-    db.commit()
+        db.add(user_model)
+        db.commit()
+        #confirm("Ken1")
+        return {"message": "User updated successfully"}
+
+    except IntegrityError as e:
+        confirm("Ken2")
+        db.rollback()
+        errors["password"] = e.__str__()
+        raise HTTPException(status_code=422, detail=errors)
+
+
+    except SQLAlchemyError as e:
+        confirm("Ken3")
+        db.rollback()
+        errors["???"] = e.__str__()
+        raise HTTPException(status_code=422, detail=errors)
+
+    except:
+        confirm("Ken4")
 
 
 @router.get("/user/{user_id}", status_code=status.HTTP_200_OK)
@@ -284,11 +357,25 @@ async def change_password(user: user_dependency, db: db_dependency,
     if not bcrypt_context.verify(user_verification.password, user_model.hashedPassword):
        raise HTTPException(status_code=401, detail='Error on password change')
 
-    user_model.hashedPassword = bcrypt_context.hash(user_verification.new_password)
-    user_model.updatedDate = server_default=func.now()
+    errors = {}
+    try:
+        user_model.hashedPassword = bcrypt_context.hash(user_verification.new_password)
+        user_model.updatedDate = func.now()
 
-    db.add(user_model)
-    db.commit()
+        db.add(user_model)
+        db.commit()
+        return {"message": "password changed successfully"}
+
+    except IntegrityError as e:
+        db.rollback()
+        errors["password"] = e.__str__()
+        raise HTTPException(status_code=422, detail=errors)
+
+
+    except SQLAlchemyError as e:
+        db.rollback()
+        errors["???"] = e.__str__()
+        raise HTTPException(status_code=422, detail=errors)
 
 
 @router.get('/', status_code=status.HTTP_200_OK)

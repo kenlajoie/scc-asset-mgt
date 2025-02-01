@@ -77,6 +77,8 @@
                     <input id=description name="description" type="text"
                             style="min-width: 350px; max-width: 350px;" class="form-control-sm"
                             placeholder="Asset Description" value="{{asset.description}}" required>
+                    <div><span id="error-description" class="error"></span></div>
+
                 </div>  <!-- col -->
             </div> <!--row-->
 
@@ -102,9 +104,21 @@
             <div class="row g-3 pt-1">
                 <div class="col-sm-10">
                     <label for="satellite" class="form-label-sm">Satellite</label>
-                    <input id=satellite name="satellite" type="text"
-                        style="min-width: 10opx; max-width: 100px;" class="form-control-sm"
-                        placeholder="Satellite" value="{{asset.satellite}}">
+                    <select id="satellite" name="satellite"
+                        style="min-width: 125px; max-width: 125px;" class="form-control-sm">
+                        <option value="">Choose...</option>
+                        <option {% if asset.satellite =="001" %} selected="selected" {% endif %}>001</option>
+                        <option {% if asset.satellite =="003" %} selected="selected" {% endif %}>003</option>
+                        <option {% if asset.satellite =="006" %} selected="selected" {% endif %}>006</option>
+                        <option {% if asset.satellite =="009" %} selected="selected" {% endif %}>009</option>
+                        <option {% if asset.satellite =="010" %} selected="selected" {% endif %}>010</option>
+                        <option {% if asset.satellite =="014" %} selected="selected" {% endif %}>014</option>
+                        <option {% if asset.satellite =="018" %} selected="selected" {% endif %}>018</option>
+                        <option {% if asset.satellite =="081" %} selected="selected" {% endif %}>081</option>
+                        <option {% if asset.satellite =="082" %} selected="selected" {% endif %}>082</option>
+                        <option {% if asset.satellite =="151" %} selected="selected" {% endif %}>151</option>
+                        <option {% if asset.satellite =="152" %} selected="selected" {% endif %}>152</option>
+                    </select>
 
                     <label for="station" class="form-label-sm">Station</label>
                     <input id=station name="station" type="text"
@@ -120,7 +134,7 @@
                         style="min-width: 110px; max-width: 110px;" class="form-control-sm"
                         placeholder="Latitude" value="{{asset.gpsLat}}" readonly>
 
-                    <label for="gpslng" class="form-label-sm">Long:</label>
+                    <label for="gpslng" class="form-label-sm">Lng:</label>
                     <input name=gpsLng id=gpsLng type="number"
                         style="min-width: 110px; max-width: 110px;" class="form-control-sm"
                         placeholder="longitude" value="{{asset.gpsLng}}" readonly>
