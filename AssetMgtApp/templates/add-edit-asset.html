@@ -22,27 +22,11 @@
                     <label for="majorArea" class="form-label-sm">Major Area</label>
                     <select id="majorArea" name="majorArea"
                         style="min-width: 125px; max-width: 125px;" class="form-control-sm mb-1">
-                            <option {% if asset.majorArea =="01ST" %} selected="selected" {% endif %}>01ST</option>
-                            <option {% if asset.majorArea =="02ND" %} selected="selected" {% endif %}>02ND</option>
-                            <option {% if asset.majorArea =="03RD" %} selected="selected" {% endif %}>03RD</option>
-                            <option {% if asset.majorArea =="04TH" %} selected="selected" {% endif %}>04TH</option>
-                            <option {% if asset.majorArea =="05TH" %} selected="selected" {% endif %}>05TH</option>
-                            <option {% if asset.majorArea =="06TH" %} selected="selected" {% endif %}>06TH</option>
-                            <option {% if asset.majorArea =="07TH" %} selected="selected" {% endif %}>07TH</option>
-                            <option {% if asset.majorArea =="08TH" %} selected="selected" {% endif %}>08TH</option>
-                            <option {% if asset.majorArea =="09TH" %} selected="selected" {% endif %}>09TH</option>
-                            <option {% if asset.majorArea =="10TH" %} selected="selected" {% endif %}>10TH</option>
-                            <option {% if asset.majorArea =="11TH" %} selected="selected" {% endif %}>11TH</option>
-                            <option {% if asset.majorArea =="12TH" %} selected="selected" {% endif %}>12TH</option>
-                            <option {% if asset.majorArea =="13TH" %} selected="selected" {% endif %}>13TH</option>
-                            <option {% if asset.majorArea =="14TH" %} selected="selected" {% endif %}>14TH</option>
-                            <option {% if asset.majorArea =="15TH" %} selected="selected" {% endif %}>15TH</option>
-                            <option {% if asset.majorArea =="16TH" %} selected="selected" {% endif %}>16TH</option>
-                            <option {% if asset.majorArea =="17TH" %} selected="selected" {% endif %}>17TH</option>
-                            <option {% if asset.majorArea =="18TH" %} selected="selected" {% endif %}>18TH</option>
-                            <option {% if asset.majorArea =="PA" %} selected="selected" {% endif %}>PA</option>
-                            <option {% if asset.majorArea =="RANGE" %} selected="selected" {% endif %}>RANGE</option>
-                            <option {% if asset.majorArea =="ALL" %} selected="selected" {% endif %}>ALL</option>
+                        {% for ddv in dropdown %}
+                          {% if ddv.column == "MAJORAREA" %}
+                             <option value="{{ddv.value}}">{{ddv.value}}</option>
+                          {% endif %}
+                        {% endfor %}
                    </select>
                 </div>  <!-- col -->
 
@@ -50,11 +34,11 @@
                     <label for="minorArea" class="form-label-sm">Minor Area</label>
                     <select id="minorArea" name="minorArea"
                         style="min-width: 125px; max-width: 125px;" class="form-control-sm">
-                        <option {% if asset.minorArea =="TEE" %} selected="selected" {% endif %}>TEE</option>
-                        <option {% if asset.minorArea =="FRWY" %} selected="selected" {% endif %}>FRWY</option>
-                        <option {% if asset.minorArea =="ROUGH" %} selected="selected" {% endif %}>ROUGH</option>
-                        <option {% if asset.minorArea =="GREEN" %} selected="selected" {% endif %}>GREEN</option>
-                        <option {% if asset.minorArea =="FIELD" %} selected="selected" {% endif %}>FIELD</option>
+                        {% for ddv in dropdown %}
+                          {% if ddv.column == "MINORAREA" %}
+                             <option value="{{ddv.value}}">{{ddv.value}}</option>
+                          {% endif %}
+                        {% endfor %}
                     </select>
                 </div>  <!-- col -->
 
@@ -62,11 +46,11 @@
                     <label for="assetType" class="form-label-sm">Type</label>
                     <select id="assetType" name="assetType"
                         style="min-width: 125px; max-width: 125px;" class="form-control-sm">
-                        <option {% if asset.assetType =="HEAD" %} selected="selected" {% endif %}>HEAD</option>
-                        <option {% if asset.assetType =="GVALVR" %} selected="selected" {% endif %}>GVALVE</option>
-                        <option {% if asset.assetTYpe =="AVALVE" %} selected="selected" {% endif %}>AVALVE</option>
-                        <option {% if asset.assetType =="MVALVE" %} selected="selected" {% endif %}>MVALVE</option>
-                        <option {% if asset.assetType =="SATEL" %} selected="selected" {% endif %}>SATEL</option>
+                        {% for ddv in dropdown %}
+                          {% if ddv.column == "ASSETTYPE" %}
+                             <option value="{{ddv.value}}">{{ddv.value}}</option>
+                          {% endif %}
+                        {% endfor %}
                     </select>
                 </div>  <!-- col -->
             </div> <!--row-->
@@ -88,15 +72,21 @@
                     <select id="model" name="model"
                         style="min-width: 125px; max-width: 125px;" class="form-control-sm">
                         <option value="">Choose...</option>
-                        <option {% if asset.model =="760" %} selected="selected" {% endif %}>760</option>
-                        <option {% if asset.model =="740" %} selected="selected" {% endif %}>740</option>
+                        {% for ddv in dropdown %}
+                          {% if ddv.column == "MODEL" %}
+                             <option value="{{ddv.value}}">{{ddv.value}}</option>
+                          {% endif %}
+                        {% endfor %}
                     </select>
 
                     <label for="assetState" class="form-label-sm">State</label>
                     <select id="assetState" name="assetState"
                         style="min-width: 125px; max-width: 125px;" class="form-control-sm">
-                        <option {% if asset.assetState =="GOOD" %} selected="selected" {% endif %}>Good</option>
-                        <option {% if asset.assetState =="BAD" %} selected="selected" {% endif %}>Bad</option>
+                        {% for ddv in dropdown %}
+                          {% if ddv.column == "ASSETSTATE" %}
+                             <option value="{{ddv.value}}">{{ddv.value}}</option>
+                          {% endif %}
+                        {% endfor %}
                     </select>
                 </div>  <!-- col -->
             </div> <!--row-->
@@ -107,17 +97,11 @@
                     <select id="satellite" name="satellite"
                         style="min-width: 125px; max-width: 125px;" class="form-control-sm">
                         <option value="">Choose...</option>
-                        <option {% if asset.satellite =="001" %} selected="selected" {% endif %}>001</option>
-                        <option {% if asset.satellite =="003" %} selected="selected" {% endif %}>003</option>
-                        <option {% if asset.satellite =="006" %} selected="selected" {% endif %}>006</option>
-                        <option {% if asset.satellite =="009" %} selected="selected" {% endif %}>009</option>
-                        <option {% if asset.satellite =="010" %} selected="selected" {% endif %}>010</option>
-                        <option {% if asset.satellite =="014" %} selected="selected" {% endif %}>014</option>
-                        <option {% if asset.satellite =="018" %} selected="selected" {% endif %}>018</option>
-                        <option {% if asset.satellite =="081" %} selected="selected" {% endif %}>081</option>
-                        <option {% if asset.satellite =="082" %} selected="selected" {% endif %}>082</option>
-                        <option {% if asset.satellite =="151" %} selected="selected" {% endif %}>151</option>
-                        <option {% if asset.satellite =="152" %} selected="selected" {% endif %}>152</option>
+                        {% for ddv in dropdown %}
+                          {% if ddv.column == "SATELLITE" %}
+                             <option value="{{ddv.value}}">{{ddv.value}}</option>
+                          {% endif %}
+                        {% endfor %}
                     </select>
 
                     <label for="station" class="form-label-sm">Station</label>

@@ -98,7 +98,7 @@ async def render_user_page(request: Request, db: db_dependency):
         return redirect_to_login()
 
 @router.get('/add-user-page')
-async def render_user_page(request: Request):
+async def render_user_page(request: Request, db: db_dependency):
 
     try:
 

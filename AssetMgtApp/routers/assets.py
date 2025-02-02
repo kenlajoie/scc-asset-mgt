@@ -8,7 +8,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy.exc import SQLAlchemyError, IntegrityError, OperationalError
 from fastapi import APIRouter, Depends, HTTPException, Path, Request, status
 from starlette import status
-from ..models import Assets, Todos, Users
+from ..models import Assets, Todos, Users, Dropdown
 from ..database import SessionLocal
 from .auth import get_current_user
 from starlette.responses import RedirectResponse
@@ -58,6 +58,10 @@ async def render_asset_page(request: Request, db: db_dependency):
         if user is None:
            return redirect_to_login()
 
+        dropdownList= db.query(Dropdown).order_by(Dropdown.column,Dropdown.order).all()
+        if dropdownList is None:
+           return redirect_to_login()
+
         ## Get saved filtering values
         majorAreaFilter =request.cookies.get('majorAreaFilter')
         if majorAreaFilter is None:
@@ -85,7 +89,8 @@ async def render_asset_page(request: Request, db: db_dependency):
 
         assetList = query.all()
 
-        return templates.TemplateResponse("asset.html", {"request": request, "assets": assetList, "currentUser": user})
+        return templates.TemplateResponse("asset.html", {"request": request, "assets": assetList,
+                                                         "currentUser": user,"dropdown": dropdownList})
 
     except:
         return redirect_to_login()
@@ -98,6 +103,10 @@ async def render_asset_page(request: Request):
 
         if user is None:
             return redirect_to_login()
+
+        dropdownList= db.query(Dropdown).order_by(Dropdown.column,Dropdown.order).all()
+        if dropdownList is None:
+           return redirect_to_login()
 
         #default values
         asset_default = Assets(
@@ -114,7 +123,8 @@ async def render_asset_page(request: Request):
         )
 
         return templates.TemplateResponse("add-edit-asset.html", {"request": request,
-                                    "asset" : asset_default, "currentUser": user,"mode": "ADD"})
+                                    "asset" : asset_default, "currentUser": user,
+                                    "dropdown": dropdownList,"mode": "ADD"})
 
     except:
         return redirect_to_login()
@@ -126,6 +136,10 @@ async def render_edit_asset_page(request: Request, asset_id: int, db: db_depende
 
         if user is None:
             return redirect_to_login()
+
+        dropdownList= db.query(Dropdown).order_by(Dropdown.column,Dropdown.order).all()
+        if dropdownList is None:
+           return redirect_to_login()
 
         asset_model = db.query(Assets).filter(Assets.id == asset_id).first()
         if asset_model is None:
@@ -139,7 +153,8 @@ async def render_edit_asset_page(request: Request, asset_id: int, db: db_depende
             asset_model.gpsLng = ""
 
         return templates.TemplateResponse("add-edit-asset.html", {"request": request,
-                                    "asset": asset_model, "currentUser": user, "mode": "EDIT"})
+                                    "asset": asset_model, "currentUser": user,
+                                    "dropdown": dropdownList, "mode": "EDIT"})
 
     except:
         return redirect_to_login()
@@ -159,7 +174,8 @@ async def render_view_asset_page(request: Request, asset_id: int, db: db_depende
 
         todo_list = db.query(Todos).filter(Todos.assetId == asset_id).all()
 
-        return templates.TemplateResponse("view-asset.html", {"request": request, "asset": asset_model, "todo_list": todo_list, "currentUser": user})
+        return templates.TemplateResponse("view-asset.html", {"request": request, "asset": asset_model,
+                                                              "todo_list": todo_list, "currentUser": user})
 
     except:
         return redirect_to_login()

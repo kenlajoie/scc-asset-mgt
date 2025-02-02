@@ -1,3 +1,5 @@
+import logging
+
 from fastapi import FastAPI, Request, status
 from .models import Base
 from .database import engine
@@ -8,15 +10,19 @@ from fastapi.responses import RedirectResponse
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 
+#configure and create logger
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
 app = FastAPI()
 
 Base.metadata.create_all(bind=engine)
 
 app.mount("/static", StaticFiles(directory="AssetMgtApp/static"), name="static")
 
-
 @app.get("/")
 def test(request: Request):
+    logger.info("--------------------------------------------")
     return RedirectResponse(url="/assets/asset-page", status_code=status.HTTP_302_FOUND)
 
 

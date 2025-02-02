@@ -48,7 +48,6 @@ def redirect_to_login():
     redirect_response.delete_cookie(key="access_token")
     return redirect_response
 
-
 @router.get("/dropdown-page")
 async def render_dropdown_page(request: Request, db: db_dependency):
     try:
