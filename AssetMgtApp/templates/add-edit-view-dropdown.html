@@ -1,0 +1,127 @@
+{% include 'layout.html' %}
+
+<div class="container">
+  <div class="card">
+    <div class="card-header">
+        <h5 class="card-title card-title-left">Dropdown</h5>
+    </div>
+    <div class="card-body">
+      {% if mode in ["ADD","ADDX"] %}
+      <form id="addDropdownForm">
+      {% endif %}
+      {% if mode == "EDIT"%}
+      <form id="editDropdownForm">
+      {% endif %}
+      {% if mode == "VIEW"%}
+      <form id="viewDropdownForm">
+      {% endif %}
+
+            <div class="form-group">
+              <input type="text" class="form-control" name="mode" value="{{mode}}" hidden>
+
+            <div class="row g-3 pt-2">
+                <div class="col-sm-2">
+                    <label for="column" class="form-label-sm">Column</label>
+               </div>
+               <div class="col-sm-10">
+                    {% if mode in ["ADD","EDIT", "VIEW"] %}  <!--column is ready only -->
+                        <input id="column" name="column" type="text"
+                                style="min-width: 150px; max-width: 200px; text-transform: uppercase;" class="form-control-sm"
+                                placeholder="Column" value="{{dropdown.column}}" readonly>
+                    {% else %}  <!- ADDX is for adding a new column from the botton ADD button --!>
+                        <input id="column" name="column" type="text" autocomplete="off"
+                                style="min-width: 150px; max-width: 200px; text-transform: uppercase;" class="form-control-sm"
+                                placeholder="column" value="{{dropdown.column}}" required>
+                        <div><span id="error-column" class="error"></span></div>
+                    {% endif %}
+                </div>
+            </div> <!--row-->
+
+            <div class="row g-3 pt-2">
+                <div class="col-sm-2">
+                    <label for="value" class="form-label-sm">Value</label>
+               </div>
+                <div class="col-sm-10">
+                    {% if mode == 'VIEW' %}
+                        <input id=value" name=value type="text"
+                                style="min-width: 100px; max-width: 100px;" class="form-control-sm"
+                                placeholder="value" value="{{dropdown.value}}" readonly>
+                    {% else %} <!- assume ADD OR edit--!>
+                        <input id=value name="value" type="text" autocomplete="off"
+                                style="min-width: 100px; max-width: 100px;text-transform: uppercase;" class="form-control-sm"
+                                placeholder="value" value="{{dropdown.value}}" required
+                                oninput="this.value = this.value.replace(/\s/g, '');"
+                                onkeydown="if (event.key === ' ') event.preventDefault();" />
+                        <div><span id="error-value" class="error"></span></div>
+                    {% endif %}
+                </div>
+            </div> <!--row-->
+
+            <div class="row g-3 pt-2">
+                <div class="col-sm-2">
+                    <label for="description" class="form-label-sm">Description</label>
+               </div>
+                <div class="col-sm-10">
+                    {% if mode == "VIEW"%}
+                        <input id="description" name="description" type="text"
+                                style="min-width: 150px; max-width: 200px;" class="form-control-sm"
+                                placeholder="Description" value="{{dropdown.description}}" readonly>
+                    {% else %}  <!- assume ADD OR edit--!>
+                        <input id="description" name="description" type="text" autocomplete="off"
+                                style="min-width: 150px; max-width: 200px;" class="form-control-sm"
+                                placeholder="Description" value="{{dropdown.description}}" required>
+                        <div><span id="error-description" class="error"></span></div>
+                    {% endif %}
+                </div>
+            </div> <!--row-->
+
+            <div class="row g-3 pt-2">
+                <div class="col-sm-2">
+                    <label for="order" class="form-label-sm">Order</label>
+               </div>
+                <div class="col-sm-10">
+                    {% if mode == "VIEW"%}
+                        <input id="order" name="order" type="text"
+                                style="min-width: 150px; max-width: 200px;" class="form-control-sm"
+                                placeholder="Order" value="{{dropdown.order}}" type="number" readonly>
+                    {% else %}  <!- assume ADD OR edit--!>
+                        <input id="order" name="order" type="text" autocomplete="off"
+                                style="min-width: 150px; max-width: 200px;" class="form-control-sm"
+                                placeholder="Order" value="{{dropdown.order}}" type="number" required>
+                        <div><span id="error-order" class="error"></span></div>
+                    {% endif %}
+                </div>
+            </div> <!--row-->
+
+            {% if mode != "ADD"%}
+            <div class="row g-3 pt-1">
+                <div class="col-sm-8">
+                    <b>&nbsp;Created On:</b> {{dropdown.createdDate}}   <b>By: </b>{{dropdown.createdBy}}
+                </div>
+            </div> <!--row-->
+            <div class="row g-3 pt-1">
+                <div class="col-sm-8">
+                    <b>Updated On:</b> {{dropdown.updatedDate}}   <b>By: </b>{{dropdown.updatedBy}}
+                </div>
+            </div> <!--row-->
+            {% endif %}
+
+            <div class="row g-3 pt-3 pb-3">
+                <div class="col-sm-3">
+                   {% if mode == "VIEW" %}
+                        <button type="submit"
+                             class="btn-sm btn-primary btn-thin-sm">Delete</button>
+                   {% else %}  <!- assume ADDX, ADD OR EDIT--!>
+                        <button type="submit"
+                            class="btn-sm btn-primary btn-thin-sm">Save</button>
+                    {% endif %}
+
+                        <button
+                            class="btn-sm btn-primary btn-thin-sm"
+                            onclick=window.location.href='/dropdown/dropdown-page' type="button">Back</button>
+                </div>
+            </div> <!--row-->
+      </form>
+    </div> <!-- card body -->
+  </div> <!-- card -->
+</div> <!-- container -->

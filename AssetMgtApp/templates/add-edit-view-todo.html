@@ -4,7 +4,7 @@
 <div class="container">
   <div class="card">
     <div class="card-header">
-        <h5 class="card-title card-title-left">Todo {{todo_id}}</h5>
+        <h5 class="card-title card-title-left">Todo</h5>
     </div>
     <div class="card-body">
         {% if mode == "ADD"%}
@@ -90,6 +90,8 @@
                         <input id=title name="title" type="text"
                                 style="min-width: 300px; max-width: 400px;" class="form-control-sm"
                                 placeholder="Todo Title" value="{{todo.title}}" required>
+                        <div><span id="error-title" class="error"></span></div>
+
                     {% endif %}
                 </div>
             </div> <!--row-->

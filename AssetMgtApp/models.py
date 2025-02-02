@@ -59,3 +59,16 @@ class Todos(Base):
     updatedBy = Column(String, ForeignKey("users.initials"))
     updatedDate = Column(DateTime)
 
+
+class Dropdown(Base):
+    __tablename__ = 'dropdown'
+
+    id = Column(Integer, primary_key=True, index=True)
+    column = Column(String)
+    value = Column(String)
+    description = Column(String)
+    order  = Column(Double)
+    createdBy = Column(String, ForeignKey("users.initials"))
+    createdDate = Column(DateTime, server_default=func.now())
+    updatedBy = Column(String, ForeignKey("users.initials"))
+    updatedDate = Column(DateTime)

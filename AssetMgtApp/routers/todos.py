@@ -32,11 +32,11 @@ db_dependency = Annotated[Session, Depends(get_db)]
 user_dependency = Annotated[dict, Depends(get_current_user)]
 
 class TodoRequest(BaseModel):
-    title: str = Field(min_length=3)
+    title: str = Field(min_length=3, max_length=40)
     description: str
     priority: str = Field(min_length=3, max_length=10)
     todoStatus: str = Field(min_length=3, max_length=10)
-    assignedTo: str
+    assignedTo: str= Field(min_length=3, max_length=10)
 
 def redirect_to_login():
     redirect_response = RedirectResponse(url="/auth/login-page", status_code=status.HTTP_302_FOUND)

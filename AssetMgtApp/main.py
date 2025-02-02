@@ -1,7 +1,7 @@
 from fastapi import FastAPI, Request, status
 from .models import Base
 from .database import engine
-from .routers import auth, todos, admin, users, assets
+from .routers import auth, todos, admin, users, assets, dropdown
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import RedirectResponse
 
@@ -36,3 +36,4 @@ app.include_router(assets.router)
 app.include_router(todos.router)
 app.include_router(admin.router)
 app.include_router(users.router)
+app.include_router(dropdown.router)

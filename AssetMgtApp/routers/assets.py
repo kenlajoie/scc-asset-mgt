@@ -265,12 +265,14 @@ async def delete_asset(user: user_dependency, db: db_dependency, asset_id: int =
         raise HTTPException(status_code=401, detail='Authentication Failed')
 
 
-    #delete all todos for asset
-    db.query(Todos).filter(Todos.assetId == asset_id).delete()
-
     asset_model = db.query(Assets).filter(Assets.id == asset_id).first()
     if asset_model is None:
         raise HTTPException(status_code=404, detail='Asset not found.')
+
+    #delete all todos for asset
+    db.query(Todos).filter(Todos.assetId == asset_id).delete()
+
+    #delete asset
     db.query(Assets).filter(Assets.id == asset_id).delete()
 
     db.commit()

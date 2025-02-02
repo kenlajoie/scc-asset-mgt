@@ -1,3 +1,174 @@
+    // Dropdown ---------------------------------------------------------------------------------------------
+    // Add Dropdown JS --------------------------------------------------------------------
+    const addDropdownForm = document.getElementById('addDropdownForm');
+    if (addDropdownForm) {
+            addDropdownForm.addEventListener('submit', async function (event) {
+            event.preventDefault();
+
+            const form = event.target;
+            const formData = new FormData(form);
+            const data = Object.fromEntries(formData.entries());
+
+            data.column = data.column.toUpperCase();
+
+            const payload = {
+                column: data.column,
+                value: data.value,
+                description: data.description,
+                order: data.order,
+            };
+
+            //alert(JSON.stringify(payload))
+
+            try {
+                const response = await fetch(`/dropdown/dropdown`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${getCookie('access_token')}`
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                // clear all error spans
+                document.querySelectorAll('span').forEach(row => {
+                    if (row.id.startsWith('error-')) {
+                        row.textContent = "";
+                    }
+                });
+
+                if (response.ok) {
+                    window.location.href = '/dropdown/dropdown-page'; // Redirect to the asset page
+                    //form.reset(); // Clear the form
+                } else {
+                    //set all span errors
+                    const rdata = await response.json();
+                    for (const key in rdata.detail) {
+                        console.log(`${key}: ${rdata.detail[key]}`);
+                        const spanElement = document.getElementById(`error-${key}`);
+                        if (spanElement) {
+                            spanElement.textContent = `${rdata.detail[key]}`;
+                        }
+                    }
+                    alert(`Error dropdown UPDATE: ${response.status}:${response.statusText}`);
+                }
+
+            } catch (error) {
+                alert(`Error Dropdown UPDATE:#2 An error occurred. Please try again.`);
+            }
+        });
+    }
+
+    // Edit Dropdown JS --------------------------------------------------------------------
+    const editDropdownForm = document.getElementById('editDropdownForm');
+    if (editDropdownForm) {
+            editDropdownForm.addEventListener('submit', async function (event) {
+            event.preventDefault();
+
+            const form = event.target;
+            const formData = new FormData(form);
+            const data = Object.fromEntries(formData.entries());
+            var url = window.location.pathname;
+            const dropdownId = url.substring(url.lastIndexOf('/') + 1);
+
+            const payload = {
+                column: data.column,
+                value: data.value,
+                description: data.description,
+                order: data.order,
+            };
+
+            //alert(JSON.stringify(payload))
+
+            try {
+                const response = await fetch(`/dropdown/dropdown/${dropdownId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${getCookie('access_token')}`
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                // clear all error spans
+                document.querySelectorAll('span').forEach(row => {
+                    if (row.id.startsWith('error-')) {
+                        row.textContent = "";
+                    }
+                });
+
+                if (response.ok) {
+                    window.location.href = '/dropdown/dropdown-page'; // Redirect to the asset page
+                    //form.reset(); // Clear the form
+                } else {
+                    //set all span errors
+                    const rdata = await response.json();
+                    for (const key in rdata.detail) {
+                        console.log(`${key}: ${rdata.detail[key]}`);
+                        const spanElement = document.getElementById(`error-${key}`);
+                        if (spanElement) {
+                            spanElement.textContent = `${rdata.detail[key]}`;
+                        }
+                    }
+                    //alert(`Error dropdown UPDATE: ${response.status}:${response.statusText}`);
+                }
+            } catch (error) {
+                alert(`Error dropdown UPDATE:#2 An error occurred. Please try again.`);
+            }
+        });
+    }
+
+    // view dropdown JS  --------------------------------------------------------------------
+    const viewDropdownForm = document.getElementById('viewDropdownForm');
+    if (viewDropdownForm) {
+        viewDropdownForm.addEventListener('submit', async function (event) {  //for future delete button
+            event.preventDefault();
+            const form = event.target;
+            const formData = new FormData(form);
+            const data = Object.fromEntries(formData.entries());
+            var url = window.location.pathname;
+            const dropdownId = url.substring(url.lastIndexOf('/') + 1);
+
+            const payload = {
+                column: data.column,
+                value: data.value,
+                description: data.description,
+                order: data.order,
+            };
+
+            //alert(JSON.stringify(payload));
+
+            try {
+                const token = getCookie('access_token');
+                if (!token) {
+                    throw new Error('Authentication token not found');
+                }
+
+                if (!confirm("Delete Dropdown! Are you sure?")) {
+                    window.location.href = '/assets/asset-page'; // Redirect to the asset page
+                }
+
+                const response = await fetch(`/dropdown/dropdown/${dropdownId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (response.ok) {
+                    // Handle success
+                    window.location.href = '/dropdown/dropdown-page'; // Redirect to the dropdown page
+                } else {
+                    // Handle error
+                    const errorData = await response.json();
+                    alert(`Error dropdown DELETE: ${response.status}:${response.statusText}`);
+                }
+            } catch (error) {
+                alert(`Error dropdown UPDATE:#2 An error occurred. Please try again.`);
+            }
+        });
+    }
+
     // User ---------------------------------------------------------------------------------------------
     // Add User JS --------------------------------------------------------------------
     const addUserForm = document.getElementById('addUserForm');
@@ -489,6 +660,13 @@
                 //alert(assetId);
                 //alert(JSON.stringify(payload))
 
+                // clear all error spans
+                document.querySelectorAll('span').forEach(row => {
+                    if (row.id.startsWith('error-')) {
+                        row.textContent = "";
+                    }
+                });
+
                 if (response.ok) {
                     if (data.redirect == 'T')
                         window.location.href = '/todos/todo-page'; // Redirect to the todo page
@@ -496,9 +674,16 @@
                         window.location.href = `/assets/view-asset-page/${assetId}`; // Redirect to the view-asset page
                     //form.reset(); // Clear the form
                 } else {
-                    // Handle error
-                    const errorData = await response.json();
-                    alert(`#2 Error: ${errorData.detail}`);
+                    const rdata = await response.json();
+                    //set all span errors
+                    for (const key in rdata.detail) {
+                        console.log(`${key}: ${rdata.detail[key]}`);
+                        const spanElement = document.getElementById(`error-${key}`);
+                        if (spanElement) {
+                            spanElement.textContent = `${rdata.detail[key]}`;
+                        }
+                    }
+                    //alert(`Error password UPDATE: ${response.status}:${response.statusText}`);
                 }
             } catch (error) {
                 console.error('Error:', error);
@@ -554,6 +739,13 @@
 
                 //alert(JSON.stringify(payload));
 
+                // clear all error spans
+                document.querySelectorAll('span').forEach(row => {
+                    if (row.id.startsWith('error-')) {
+                        row.textContent = "";
+                    }
+                });
+
                 if (response.ok) {
                     if (data.redirect == 'T')
                         window.location.href = '/todos/todo-page'; // Redirect to the todo page
@@ -561,10 +753,16 @@
                         window.location.href = `/assets/view-asset-page/${data.assetId}`; // Redirect to the todo page
                     }
                 } else {
-                    // Handle error
-                    alert("call to todo-update failed");
-                    //const errorData = await response.json();
-                    //alert(`#2 Error: ${errorData.detail}`);
+                    const rdata = await response.json();
+                    //set all span errors
+                    for (const key in rdata.detail) {
+                        console.log(`${key}: ${rdata.detail[key]}`);
+                        const spanElement = document.getElementById(`error-${key}`);
+                        if (spanElement) {
+                            spanElement.textContent = `${rdata.detail[key]}`;
+                        }
+                    }
+                    //alert(`Error password UPDATE: ${response.status}:${response.statusText}`);
                 }
             } catch (error) {
                 alert('#3 An error occurred. Please try again.');
