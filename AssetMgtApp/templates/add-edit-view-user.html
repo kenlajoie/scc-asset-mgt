@@ -88,12 +88,14 @@
                         <input id="userRole" name="userRole" type="text"
                                 style="min-width: 125px; max-width: 125px;" class="form-control-sm"
                                 placeholder="Role" value="{{user.userRole}}" readonly>
-                    {% else %}  <!- assume ADD OR edit--!>
+                    {% else %}  <!- assume ADD OR EDIT--!>
                         <select id="userRole" name="userRole"
                             style="min-width: 125px; max-width: 125px;" class="form-control-sm">
-                            <option {% if user.userRole =="TECH" %} selected="selected" {% endif %}>TECH</option>
-                            <option {% if user.userRole =="ADMIN" %} selected="selected" {% endif %}>ADMIN</option>
-                            <option {% if user.userRole =="DBA" %} selected="selected" {% endif %}>DBA</option>
+                            {% for ddv in dropdown %}
+                              {% if ddv.column == "USERROLE" %}
+                                 <option value="{{ddv.value}}">{{ddv.value}}</option>
+                              {% endif %}
+                            {% endfor %}
                         </select>
                     {% endif %}
                 </div> <!--col -->
@@ -108,12 +110,14 @@
                         <input id="userStatus" name="userStatus" type="text"
                                 style="min-width: 125px; max-width: 125px;" class="form-control-sm"
                                 placeholder="Status" value="{{user.userStatus}}" readonly>
-                    {% else %}  <!- assume ADD OR edit--!>
+                    {% else %}  <!- assume ADD OR EDIT--!>
                         <select id="userStatus" name="userStatus"
                             style="min-width: 125px; max-width: 125px;" class="form-control-sm">
-                            <option {% if user.userStatus =="ACTIVE" %} selected="selected" {% endif %}>ACTIVE</option>
-                            <option {% if user.userStatus =="PAUSED" %} selected="selected" {% endif %}>PAUSED</option>
-                            <option {% if user.userStatus =="RESIGNED" %} selected="selected" {% endif %}>RESIGNED</option>
+                            {% for ddv in dropdown %}
+                              {% if ddv.column == "USERSTATUS" %}
+                                 <option value="{{ddv.value}}">{{ddv.value}}</option>
+                              {% endif %}
+                            {% endfor %}
                         </select>
                     {% endif %}
                 </div> <!--col -->

@@ -20,20 +20,24 @@
                         <th scope="col">
                             <div class="userRole">
                               <select class="userRole" onchange="userRoleChangeEventHandler(event);">
-                                <option data-area="ALL">ALL</option>
-                                <option data-area="ADMIN">ADMIN</option>
-                                <option data-area="TECH">TECH</option>
-                                <option data-area="DBA">DBA</option>
+                                <option value="ALL">ALL</option>
+                                {% for ddv in dropdown %}
+                                  {% if ddv.column == "USERROLE" %}
+                                     <option value="{{ddv.value}}">{{ddv.value}}</option>
+                                  {% endif %}
+                                {% endfor %}
                               </select>
                             </div>
                         </th>
                         <th scope="col">
                             <div class="userStatus">
                               <select class="userStatus" onchange="userStatusChangeEventHandler(event);">
-                                <option data-area="ALL">ALL</option>
-                                <option data-area="ACTIVE">ACTIVE</option>
-                                <option data-area="PAUSED">PAUSED</option>
-                                <option data-area="RESIGNED">RESIGNED</option>
+                                <option value="ALL">ALL</option>
+                                {% for ddv in dropdown %}
+                                  {% if ddv.column == "USERSTATUS" %}
+                                     <option value="{{ddv.value}}">{{ddv.value}}</option>
+                                  {% endif %}
+                                {% endfor %}
                               </select>
                             </div>
                         </th>
@@ -110,7 +114,7 @@
     options = document.querySelectorAll(".userRole option");
     if (filter) {
        for(const option of options) {
-           const area = option.dataset.area;
+           const area = option.value;
            if (area === filter) {
               option.setAttribute("selected", "");
               break;
@@ -123,7 +127,7 @@
     options = document.querySelectorAll(".userStatus option");
     if (filter) {
        for(const option of options) {
-           const area = option.dataset.area;
+           const area = option.value;
            if (area === filter) {
               option.setAttribute("selected", "");
               break;

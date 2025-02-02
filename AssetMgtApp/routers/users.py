@@ -8,7 +8,7 @@ from sqlalchemy.orm import Session
 from fastapi import APIRouter, Depends, HTTPException, Path, Request, status
 
 from starlette import status
-from ..models import Users
+from ..models import Users, Dropdown
 from ..database import SessionLocal
 from .auth import get_current_user
 from passlib.context import CryptContext
@@ -76,6 +76,10 @@ async def render_user_page(request: Request, db: db_dependency):
         userRoleFilter =request.cookies.get('userRoleFilter')
         userStatusFilter =request.cookies.get('userStatusFilter')
 
+        dropdownList= db.query(Dropdown).order_by(Dropdown.column,Dropdown.order).all()
+        if dropdownList is None:
+           return redirect_to_login()
+
         ##build dynamic query
         query = db.query(Users)
 
@@ -87,7 +91,8 @@ async def render_user_page(request: Request, db: db_dependency):
 
         userList = query.all()
 
-        return templates.TemplateResponse("user.html", {"request": request, "users": userList, "currentUser": loginUser})
+        return templates.TemplateResponse("user.html", {"request": request, "users": userList,
+                                          "currentUser": loginUser,"dropdown": dropdownList})
 
     except:
         return redirect_to_login()
@@ -101,6 +106,10 @@ async def render_user_page(request: Request):
         if loginUser is None:
             return redirect_to_login()
 
+        dropdownList= db.query(Dropdown).order_by(Dropdown.column,Dropdown.order).all()
+        if dropdownList is None:
+           return redirect_to_login()
+
         #default values
         user_default = Users(
             username="",
@@ -111,7 +120,8 @@ async def render_user_page(request: Request):
         )
 
         return templates.TemplateResponse("add-edit-view-user.html",
-                         {"request": request,"user": user_default, "currentUser": loginUser, "mode": "ADD"})
+                         {"request": request,"user": user_default,"dropdown": dropdownList,
+                          "currentUser": loginUser, "mode": "ADD"})
 
     except:
         return redirect_to_login()
@@ -125,12 +135,17 @@ async def render_user_edit_page(request: Request, user_id: int, db: db_dependenc
         if loginUser is None:
             return redirect_to_login()
 
+        dropdownList= db.query(Dropdown).order_by(Dropdown.column,Dropdown.order).all()
+        if dropdownList is None:
+           return redirect_to_login()
+
         user_model = db.query(Users).filter(Users.id == user_id).first()
         if user_model is None:
             raise HTTPException(status_code=404, detail='User not found.')
 
         return templates.TemplateResponse("add-edit-view-user.html",
-                        {"request": request, "user": user_model, "currentUser": loginUser, "mode": "EDIT"})
+                        {"request": request, "user": user_model,"dropdown": dropdownList,
+                         "currentUser": loginUser, "mode": "EDIT"})
 
     except:
         return redirect_to_login()

@@ -37,8 +37,8 @@ bcrypt_context = CryptContext(schemes=['bcrypt'], deprecated='auto')
 
 class DropdownRequest(BaseModel):
     column: str = Field(min_length=4, max_length=20)
-    value: str = Field(min_length=2, max_length=10)
-    description: str = Field(min_length=2, max_length=20)
+    value: str = Field(min_length=1, max_length=10)
+    description: str = Field(min_length=1, max_length=20)
     order: Optional[float] = None
 
 
@@ -57,6 +57,10 @@ async def render_dropdown_page(request: Request, db: db_dependency):
         if loginUser is None:
            return redirect_to_login()
 
+        distinctColumnList = db.query(Dropdown.column).distinct().all()
+        if distinctColumnList is None:
+            return redirect_to_login()
+
         ## Get saved filtering values
         dropdownColumnFilter =request.cookies.get('dropdownColumnFilter')
 
@@ -66,9 +70,12 @@ async def render_dropdown_page(request: Request, db: db_dependency):
         if dropdownColumnFilter is not None and dropdownColumnFilter != "ALL":
             query = query.filter(Dropdown.column == dropdownColumnFilter)
 
+        query = query.order_by(Dropdown.column,Dropdown.order)
+
         dropdownList = query.all()
 
-        return templates.TemplateResponse("dropdown.html", {"request": request, "dropdown": dropdownList, "currentUser": loginUser})
+        return templates.TemplateResponse("dropdown.html", {"request": request, "dropdown": dropdownList,
+                                          "distinctColumnList": distinctColumnList, "currentUser": loginUser})
 
     except:
         return redirect_to_login()

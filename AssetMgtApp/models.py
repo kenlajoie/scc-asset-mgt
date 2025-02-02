@@ -1,10 +1,5 @@
-import datetime
-
 from .database import Base
 from sqlalchemy import Column, Integer, String, Boolean, ForeignKey, Double, Table, DateTime, func
-from datetime import datetime
-
-from sqlalchemy.orm import declarative_base, relationship, Mapped
 
 
 class Users(Base):

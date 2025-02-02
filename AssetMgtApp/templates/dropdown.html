@@ -18,9 +18,10 @@
                         <th scope="col">
                             <div class="dropdownColumn-Filter">
                               <select id=dropdownColumn class="dropdownColumn" onchange="dropdownColumnChangeEventHandler(event);">
-                                <option data-area="ALL">ALL</option>
-                                <option data-area="MAJORAREA">MAJORAREA</option>
-                                <option data-area="MINORAREA">MINORAREA</option>
+                                <option value="ALL">ALL</option>
+                                {% for ddc in distinctColumnList %}
+                                    <option value={{ddc.column}}>{{ddc.column}}</option>
+                                {% endfor %}
                               </select>
                             </div>
                         </th>
@@ -48,12 +49,16 @@
                     </td>
                 </tr>
                 {% endfor %}
+
+                {% if currentUser.initials == 'DBA' %} <!-- only allow DBA to add new dropdown columns -->
                 <tr>
                     <td>
                         <button class="btn-sm btn-primary btn-thin-sm"
                              onclick="window.location.href='addx-dropdown-page'" type="button">Add</button>
                     </td>
                 </tr>
+                {% endif %}
+
                 </tbody>
             </table>
 
@@ -91,7 +96,7 @@
     options = document.querySelectorAll(".dropdownColumn option");
     if (filter) {
        for(const option of options) {
-           const area = option.dataset.area;
+           const area = option.value;
            if (area === filter) {
               option.setAttribute("selected", "");
               break;

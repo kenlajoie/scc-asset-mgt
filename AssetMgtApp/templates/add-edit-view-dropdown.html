@@ -42,11 +42,11 @@
                     <label for="value" class="form-label-sm">Value</label>
                </div>
                 <div class="col-sm-10">
-                    {% if mode == 'VIEW' %}
+                    {% if mode in ["VIEW", "EDIT"] %} <!--column is ready only once added -->
                         <input id=value" name=value type="text"
                                 style="min-width: 100px; max-width: 100px;" class="form-control-sm"
                                 placeholder="value" value="{{dropdown.value}}" readonly>
-                    {% else %} <!- assume ADD OR edit--!>
+                    {% else %} <!- assume ADD or ADDX--!>
                         <input id=value name="value" type="text" autocomplete="off"
                                 style="min-width: 100px; max-width: 100px;text-transform: uppercase;" class="form-control-sm"
                                 placeholder="value" value="{{dropdown.value}}" required
@@ -66,7 +66,7 @@
                         <input id="description" name="description" type="text"
                                 style="min-width: 150px; max-width: 200px;" class="form-control-sm"
                                 placeholder="Description" value="{{dropdown.description}}" readonly>
-                    {% else %}  <!- assume ADD OR edit--!>
+                    {% else %}  <!- assume ADD. ADDX OR edit--!>
                         <input id="description" name="description" type="text" autocomplete="off"
                                 style="min-width: 150px; max-width: 200px;" class="form-control-sm"
                                 placeholder="Description" value="{{dropdown.description}}" required>
@@ -84,7 +84,7 @@
                         <input id="order" name="order" type="text"
                                 style="min-width: 150px; max-width: 200px;" class="form-control-sm"
                                 placeholder="Order" value="{{dropdown.order}}" type="number" readonly>
-                    {% else %}  <!- assume ADD OR edit--!>
+                    {% else %}  <!- assume ADD, ADDX OR edit--!>
                         <input id="order" name="order" type="text" autocomplete="off"
                                 style="min-width: 150px; max-width: 200px;" class="form-control-sm"
                                 placeholder="Order" value="{{dropdown.order}}" type="number" required>
@@ -93,7 +93,7 @@
                 </div>
             </div> <!--row-->
 
-            {% if mode != "ADD"%}
+            {% if mode in ["VIEW", "EDIT"] %}
             <div class="row g-3 pt-1">
                 <div class="col-sm-8">
                     <b>&nbsp;Created On:</b> {{dropdown.createdDate}}   <b>By: </b>{{dropdown.createdBy}}

@@ -66,6 +66,7 @@ def authenticate_user(username: str, password: str, db):
         return False
     if not bcrypt_context.verify(password, user.hashedPassword):
         return False
+
     return user
 
 

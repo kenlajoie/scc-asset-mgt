@@ -18,7 +18,7 @@
                 order: data.order,
             };
 
-            //alert(JSON.stringify(payload))
+            alert(JSON.stringify(payload))
 
             try {
                 const response = await fetch(`/dropdown/dropdown`, {
