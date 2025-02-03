@@ -41,17 +41,17 @@ class UserVerification(BaseModel):
 
 
 class UserAddRequest(BaseModel):
-    username: str = Field(min_length=4, max_length=20)
+    username: str = Field(min_length=3, max_length=20)
     initials: str = Field(min_length=2, max_length=4)
-    name: str = Field(min_length=2, max_length=20)
+    name: str = Field(min_length=2, max_length=30)
     userRole: str = Field(min_length=3,max_length=10)
     userStatus: str = Field(min_length=3, max_length=10)
     password: str = Field(min_length=4, max_length=20)
 
 class UserEditRequest(BaseModel):
-    username: str = Field(min_length=4, max_length=20)
+    username: str = Field(min_length=3, max_length=20)
     initials: str = Field(min_length=2, max_length=4)
-    name: str = Field(min_length=2, max_length=20)
+    name: str = Field(min_length=2, max_length=30)
     userRole: str = Field(min_length=3,max_length=10)
     userStatus: str = Field(min_length=3, max_length=10)
 

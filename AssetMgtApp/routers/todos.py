@@ -8,7 +8,7 @@ from sqlalchemy.orm import Session
 from fastapi import APIRouter, Depends, HTTPException, Path, Request, status
 from sqlalchemy.testing.schema import mapped_column
 from starlette import status
-from ..models import Todos, Assets, Users
+from ..models import Todos, Assets, Users, Dropdown
 from ..database import SessionLocal
 from .auth import get_current_user
 from starlette.responses import RedirectResponse
@@ -50,6 +50,15 @@ async def render_todo_page(request: Request, db: db_dependency):
     try:
         user = await get_current_user(request.cookies.get('access_token'))
         if user is None:
+           return redirect_to_login()
+
+        #list of users for assignedTo select options
+        userList = db.query(Users).all()
+        if userList is None:
+            raise HTTPException(status_code=404, detail='UserList not found.')
+
+        dropdownList= db.query(Dropdown).order_by(Dropdown.column,Dropdown.order).all()
+        if dropdownList is None:
            return redirect_to_login()
 
         ## Get saved filtering values
@@ -98,7 +107,8 @@ async def render_todo_page(request: Request, db: db_dependency):
         todoList = query.all()
 
         return templates.TemplateResponse("todo.html", {"request": request,
-                                    "todos": todoList, "currentUser": user})
+                                    "todos": todoList, "currentUser": user,
+                                     "users": userList,"dropdown": dropdownList})
 
     except:
         return redirect_to_login()
@@ -109,6 +119,15 @@ async def render_todo_list(request: Request, todo_id: int, db: db_dependency):
     try:
         user = await get_current_user(request.cookies.get('access_token'))
         if user is None:
+           return redirect_to_login()
+
+        #list of users for assignedTo select options
+        userList = db.query(Users).all()
+        if userList is None:
+            raise HTTPException(status_code=404, detail='UserList not found.')
+
+        dropdownList= db.query(Dropdown).order_by(Dropdown.column,Dropdown.order).all()
+        if dropdownList is None:
            return redirect_to_login()
 
         ## Get saved filtering values
@@ -158,7 +177,8 @@ async def render_todo_list(request: Request, todo_id: int, db: db_dependency):
 
         #todo_id is passed to set the current row in the table
         return templates.TemplateResponse("todo.html", {"request": request,
-                                    "todos": todoList, "todo_id": todo_id, "currentUser": user})
+                                    "todos": todoList, "todo_id": todo_id, "currentUser": user,
+                                    "users": userList,"dropdown": dropdownList})
 
     except:
         return redirect_to_login()
@@ -172,12 +192,18 @@ async def render_todo_page(request: Request, asset_id: int,db: db_dependency):
         if user is None:
             return redirect_to_login()
 
+        #list of users for assignedTo select options
+        userList = db.query(Users).all()
+        if userList is None:
+            raise HTTPException(status_code=404, detail='UserList not found.')
+
+        dropdownList= db.query(Dropdown).order_by(Dropdown.column,Dropdown.order).all()
+        if dropdownList is None:
+           return redirect_to_login()
+
         login_user_model = db.query(Users).filter(Users.id == user.get('id')).first()
         if login_user_model is None:
             raise HTTPException(status_code=404, detail='login user Not found.')
-
-        #list of users for assignedTo select options
-        userList = db.query(Users).all()
 
         # get the current asset details to show on the form in ready-only
         asset_model = db.query(Assets).filter(Assets.id == asset_id).first()
@@ -196,7 +222,8 @@ async def render_todo_page(request: Request, asset_id: int,db: db_dependency):
 
         return templates.TemplateResponse("add-edit-view-todo.html", {"request": request,
                             "todo" : todo_default, "asset": asset_model, "todo_id" : 0,
-                              "currentUser": user, "users": userList, "redirect": "T","mode": "ADD"})
+                              "currentUser": user, "users": userList, "dropdown": dropdownList,
+                            "redirect": "T","mode": "ADD"})
     except:
         return redirect_to_login()
 
@@ -207,6 +234,15 @@ async def render_todo_page(request: Request, asset_id: int,db: db_dependency):
         user = await get_current_user(request.cookies.get('access_token'))
         if user is None:
             return redirect_to_login()
+
+        #list of users for assignedTo select options
+        userList = db.query(Users).all()
+        if userList is None:
+            raise HTTPException(status_code=404, detail='UserList not found.')
+
+        dropdownList= db.query(Dropdown).order_by(Dropdown.column,Dropdown.order).all()
+        if dropdownList is None:
+           return redirect_to_login()
 
         login_user_model = db.query(Users).filter(Users.id == user.get('id')).first()
         if login_user_model is None:
@@ -231,7 +267,8 @@ async def render_todo_page(request: Request, asset_id: int,db: db_dependency):
         )
         return templates.TemplateResponse("add-edit-view-todo.html", {"request": request,
                             "todo" : todo_default, "asset": asset_model, "todo_id" : 0,
-                            "currentUser": user, "users": userList,"redirect": "A","mode": "ADD"})
+                            "currentUser": user, "users": userList, "dropdown": dropdownList,
+                            "redirect": "A","mode": "ADD"})
 
     except:
         return redirect_to_login()
@@ -247,6 +284,12 @@ async def render_edit_todo_page(request: Request, todo_id: int, db: db_dependenc
 
         #list of users for assignedTo select options
         userList = db.query(Users).all()
+        if userList is None:
+            raise HTTPException(status_code=404, detail='UserList not found.')
+
+        dropdownList= db.query(Dropdown).order_by(Dropdown.column,Dropdown.order).all()
+        if dropdownList is None:
+           return redirect_to_login()
 
         # get the current todo details
         todo_model = db.query(Todos).filter(Todos.id == todo_id).first()
@@ -259,8 +302,9 @@ async def render_edit_todo_page(request: Request, todo_id: int, db: db_dependenc
             raise HTTPException(status_code=404, detail='Asset not found.')
 
         return templates.TemplateResponse("add-edit-view-todo.html", {"request": request, "todo": todo_model,
-                                     "asset": asset_model, "todo_id": todo_id, "users": userList,
-                                    "currentUser": user,"redirect": "T","mode": "EDIT"})
+                                     "asset": asset_model, "todo_id": todo_id, "currentUser": user,
+                                    "users": userList,"dropdown": dropdownList,
+                                    "redirect": "T","mode": "EDIT"})
 
     except:
         return redirect_to_login()
@@ -275,6 +319,12 @@ async def render_edit_todo_page(request: Request, todo_id: int, db: db_dependenc
 
         #list of users for assignedTo select options
         userList = db.query(Users).all()
+        if userList is None:
+            raise HTTPException(status_code=404, detail='UserList not found.')
+
+        dropdownList= db.query(Dropdown).order_by(Dropdown.column,Dropdown.order).all()
+        if dropdownList is None:
+           return redirect_to_login()
 
         # get the current todo details
         todo_model = db.query(Todos).filter(Todos.id == todo_id).first()
@@ -287,8 +337,9 @@ async def render_edit_todo_page(request: Request, todo_id: int, db: db_dependenc
             raise HTTPException(status_code=404, detail='Asset not found.')
 
         return templates.TemplateResponse("add-edit-view-todo.html", {"request": request, "todo": todo_model,
-                                     "asset": asset_model, "todo_id": todo_id, "users": userList,
-                                     "currentUser": user,"redirect": "A","mode": "EDIT"})
+                                     "asset": asset_model, "todo_id": todo_id, "currentUser": user,
+                                     "users": userList,"dropdown": dropdownList,
+                                     "redirect": "A","mode": "EDIT"})
     except:
         return redirect_to_login()
 

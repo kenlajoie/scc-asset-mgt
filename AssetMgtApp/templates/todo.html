@@ -22,67 +22,58 @@
                         <th scope="col">
                             <div class="assignedTo">
                               <select id=assignedToFilter class="assignedTo" onchange="assignedToChangeEventHandler(event);">
-                                <option data-area="ALL">ALL</option>
-                                <option data-area="KEL">KEL</option>
-                                <option data-area="ZAC">ZAC</option>
+                                <option value="ALL">ALL</option>
+                                {% for user in users %}
+                                   <option value={{user.initials}}>{{user.initials}}</option>
+                                {% endfor %}
                               </select>
                             </div>
                         </th>
                         <th scope="col">
                             <div class="todoStatus">
                               <select id=todoStatusFilter class="todoStatus" onchange="todoStatusChangeEventHandler(event);">
-                                <option data-area="ALL">ALL</option>
-                                <option data-area="OPEN">OPEN</option>
-                                <option data-area="CLOSED">CLOSED</option>
+                                <option value="ALL">ALL</option>
+                                {% for ddv in dropdown %}
+                                  {% if ddv.column == "TODOSTATUS" %}
+                                     <option value="{{ddv.value}}">{{ddv.value}}</option>
+                                  {% endif %}
+                                {% endfor %}
                               </select>
                             </div>
                         </th>
                         <th scope="col">
                             <div class="priority">
                               <select id=todoPriorityFilter class="priority" onchange="priorityChangeEventHandler(event);">
-                                <option data-area="ALL">ALL</option>
-                                <option data-area="HIGH">HIGH</option>
-                                <option data-area="MEDIUM">MEDIUM</option>
-                                <option data-area="LOW">LW</option>
+                                <option value="ALL">ALL</option>
+                                {% for ddv in dropdown %}
+                                  {% if ddv.column == "TODOPRIORITY" %}
+                                     <option value="{{ddv.value}}">{{ddv.value}}</option>
+                                  {% endif %}
+                                {% endfor %}
                               </select>
                             </div>
                         </th>
                         <th scope="col">
                             <div class="major-filter">
                               <select id=assetMajorFilter class="majorArea" onchange="majorChangeEventHandler(event);">
-                                <option data-area="ALL">ALL</option>
-                                <option data-area="01ST">01ST</option>
-                                <option data-area="02ND">02ND</option>
-                                <option data-area="03RD">03RD</option>
-                                <option data-area="04TH">04TH</option>
-                                <option data-area="05TH">05TH</option>
-                                <option data-area="06TH">06TH</option>
-                                <option data-area="07TH">07TH</option>
-                                <option data-area="08TH">08TH</option>
-                                <option data-area="09TH">09TH</option>
-                                <option data-area="10TH">10TH</option>
-                                <option data-area="11TH">11TH</option>
-                                <option data-area="12TH">12TH</option>
-                                <option data-area="13TH">13TH</option>
-                                <option data-area="14TH">14TH</option>
-                                <option data-area="15TH">15TH</option>
-                                <option data-area="16TH">16TH</option>
-                                <option data-area="17TH">17TH</option>
-                                <option data-area="18TH">18TH</option>
-                                <option data-area="PA">PA</option>
-                                <option data-area="RANGE">RANGE</option>
+                                <option value="ALL">ALL</option>
+                                {% for ddv in dropdown %}
+                                  {% if ddv.column == "MAJORAREA" %}
+                                     <option value="{{ddv.value}}">{{ddv.value}}</option>
+                                  {% endif %}
+                                {% endfor %}
                               </select>
                             </div>
                         </th>
                         <th scope="col">
                             <div class="minor-filter">
                               <select id=assetMinorFilter class="minorArea" onchange="minorChangeEventHandler(event);">
-                                <option data-area="ALL">ALL</option>
-                                <option data-area="TEE">TEE</option>
-                                <option data-area="FRWY">FRWY</option>
-                                <option data-area="ROUGH">ROUGH</option>
-                                <option data-area="GREEN">GREEN</option>
-                                <option data-area="FIELD">FIELD</option>
+                                <option value="ALL">ALL</option>
+                                {% for ddv in dropdown %}
+                                  {% if ddv.column == "MINORAREA" %}
+                                     <option value="{{ddv.value}}">{{ddv.value}}</option>
+                                  {% endif %}
+                                {% endfor %}
                               </select>
                             </div>
                         </th>
@@ -182,7 +173,7 @@
     options = document.querySelectorAll(".assignedTo option");
     if (filter) {
        for(const option of options) {
-           const area = option.dataset.area;
+           const area = option.value;
            if (area === filter) {
               option.setAttribute("selected", "");
               break;
@@ -195,7 +186,7 @@
     options = document.querySelectorAll(".todoStatus option");
     if (filter) {
        for(const option of options) {
-           const area = option.dataset.area;
+           const area = option.value;
            if (area === filter) {
               option.setAttribute("selected", "");
               break;
@@ -208,7 +199,7 @@
     options = document.querySelectorAll(".priority option");
     if (filter) {
        for(const option of options) {
-           const area = option.dataset.area;
+           const area = option.value;
            if (area === filter) {
               option.setAttribute("selected", "");
               break;
@@ -221,7 +212,7 @@
     options = document.querySelectorAll(".majorArea option");
     if (filter) {
        for(const option of options) {
-           const area = option.dataset.area;
+           const area = option.value;
            if (area === filter) {
               option.setAttribute("selected", "");
               break;
@@ -234,7 +225,7 @@
     options = document.querySelectorAll(".minorArea option");
     if (filter) {
        for(const option of options) {
-           const area = option.dataset.area;
+           const area = option.value;
            if (area === filter) {
               option.setAttribute("selected", "");
               break;
@@ -247,7 +238,7 @@
     options = document.querySelectorAll(".assetType option");
     if (filter) {
        for(const option of options) {
-           const area = option.dataset.area;
+           const area = option.value;
            if (area === filter) {
               option.setAttribute("selected", "");
               break;

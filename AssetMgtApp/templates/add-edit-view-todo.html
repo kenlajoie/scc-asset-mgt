@@ -95,14 +95,6 @@
                     {% endif %}
                 </div>
             </div> <!--row-->
-
-<!--
-                <div>
-                {% for x in users %}
-                    {{x.initials}}
-                {% endfor %}
-                </div>
--->
              <div class="row g-3 pt-1">
                 <div class="col-sm-3">
                     <label for="assignedTo"
@@ -115,7 +107,11 @@
                         <select id="assignedTo" name="assignedTo"
                             style="min-width: 100px; max-width: 100px;" class="form-control-sm">
                             {% for user in users %}
-                               <option{% if todo.assignedTo==user.initials %} selected="selected" {% endif %}>{{user.initials}}</option>
+                              {% if todo.assignedTo == user.initials %}
+                                 <option value="{{user.initials}}" selected>{{user.initials}}</option>
+                              {% else %}
+                                 <option value="{{user.initials}}">{{user.initials}}</option>
+                              {% endif %}
                             {% endfor %}
                         </select>
                     {% endif %}
@@ -131,9 +127,15 @@
                     {% else %}  <!- assume ADD OR edit--!>
                         <select id="priority" name="priority"
                             style="min-width: 125px; max-width: 125px;" class="form-control-sm">
-                            <option {% if todo.priority =="HIGH" %} selected="selected" {% endif %}>HIGH</option>
-                            <option {% if todo.priority =="MEDIUM" %} selected="selected" {% endif %}>MEDIUM</option>
-                            <option {% if todo.priority =="LOW" %} selected="selected" {% endif %}>LOW</option>
+                                {% for ddv in dropdown %}
+                                  {% if ddv.column == "TODOPRIORITY" %}
+                                      {% if ddv.value == todo.priority %}
+                                         <option value="{{ddv.value}}" selected>{{ddv.value}}</option>
+                                      {% else %}
+                                         <option value="{{ddv.value}}">{{ddv.value}}</option>
+                                      {% endif %}
+                                  {% endif %}
+                                {% endfor %}
                         </select>
                     {% endif %}
                 </div>
@@ -148,9 +150,15 @@
                     {% else %}  <!- assume ADD OR edit--!>
                         <select id="todoStatus" name="todoStatus"
                             style="min-width: 125px; max-width: 125px;" class="form-control-sm">
-                            <option {% if todo.todoStatus =="OPEN" %} selected="selected" {% endif %}>OPEN</option>
-                            <option {% if todo.todoStatus =="CLOSE" %} selected="selected" {% endif %}>CLOSE</option>
-                            <option {% if todo.todoStatus =="WIP" %} selected="selected" {% endif %}>WIP</option>
+                                {% for ddv in dropdown %}
+                                  {% if ddv.column == "TODOSTATUS" %}
+                                      {% if ddv.value == todo.status %}
+                                         <option value="{{ddv.value}}" selected>{{ddv.value}}</option>
+                                      {% else %}
+                                         <option value="{{ddv.value}}">{{ddv.value}}</option>
+                                      {% endif %}
+                                  {% endif %}
+                                {% endfor %}
                         </select>
                     {% endif %}
                 </div>

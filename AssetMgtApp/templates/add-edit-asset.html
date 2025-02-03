@@ -24,7 +24,11 @@
                         style="min-width: 125px; max-width: 125px;" class="form-control-sm mb-1">
                         {% for ddv in dropdown %}
                           {% if ddv.column == "MAJORAREA" %}
-                             <option value="{{ddv.value}}">{{ddv.value}}</option>
+                              {% if ddv.value == asset.majorArea %}
+                                 <option value="{{ddv.value}}" selected>{{ddv.value}}</option>
+                              {% else %}
+                                 <option value="{{ddv.value}}">{{ddv.value}}</option>
+                              {% endif %}
                           {% endif %}
                         {% endfor %}
                    </select>
@@ -36,7 +40,11 @@
                         style="min-width: 125px; max-width: 125px;" class="form-control-sm">
                         {% for ddv in dropdown %}
                           {% if ddv.column == "MINORAREA" %}
-                             <option value="{{ddv.value}}">{{ddv.value}}</option>
+                              {% if ddv.value == asset.minorArea %}
+                                 <option value="{{ddv.value}}" selected>{{ddv.value}}</option>
+                              {% else %}
+                                 <option value="{{ddv.value}}">{{ddv.value}}</option>
+                              {% endif %}
                           {% endif %}
                         {% endfor %}
                     </select>
@@ -48,7 +56,11 @@
                         style="min-width: 125px; max-width: 125px;" class="form-control-sm">
                         {% for ddv in dropdown %}
                           {% if ddv.column == "ASSETTYPE" %}
-                             <option value="{{ddv.value}}">{{ddv.value}}</option>
+                              {% if ddv.value == asset.assetType %}
+                                 <option value="{{ddv.value}}" selected>{{ddv.value}}</option>
+                              {% else %}
+                                 <option value="{{ddv.value}}">{{ddv.value}}</option>
+                              {% endif %}
                           {% endif %}
                         {% endfor %}
                     </select>
@@ -74,7 +86,11 @@
                         <option value="">Choose...</option>
                         {% for ddv in dropdown %}
                           {% if ddv.column == "MODEL" %}
-                             <option value="{{ddv.value}}">{{ddv.value}}</option>
+                              {% if ddv.value == asset.model %}
+                                 <option value="{{ddv.value}}" selected>{{ddv.value}}</option>
+                              {% else %}
+                                 <option value="{{ddv.value}}">{{ddv.value}}</option>
+                              {% endif %}
                           {% endif %}
                         {% endfor %}
                     </select>
@@ -84,7 +100,11 @@
                         style="min-width: 125px; max-width: 125px;" class="form-control-sm">
                         {% for ddv in dropdown %}
                           {% if ddv.column == "ASSETSTATE" %}
-                             <option value="{{ddv.value}}">{{ddv.value}}</option>
+                              {% if ddv.value == asset.assetState %}
+                                 <option value="{{ddv.value}}" selected>{{ddv.value}}</option>
+                              {% else %}
+                                 <option value="{{ddv.value}}">{{ddv.value}}</option>
+                              {% endif %}
                           {% endif %}
                         {% endfor %}
                     </select>
@@ -99,7 +119,11 @@
                         <option value="">Choose...</option>
                         {% for ddv in dropdown %}
                           {% if ddv.column == "SATELLITE" %}
-                             <option value="{{ddv.value}}">{{ddv.value}}</option>
+                              {% if ddv.value == asset.satellite %}
+                                 <option value="{{ddv.value}}" selected>{{ddv.value}}</option>
+                              {% else %}
+                                 <option value="{{ddv.value}}">{{ddv.value}}</option>
+                              {% endif %}
                           {% endif %}
                         {% endfor %}
                     </select>
