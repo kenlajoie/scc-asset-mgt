@@ -183,6 +183,24 @@ async def render_view_asset_page(request: Request, asset_id: int, db: db_depende
     except:
         return redirect_to_login()
 
+@router.get("/locate-asset-page/{asset_id}")
+async def render_locate_asset_page(request: Request, asset_id: int, db: db_dependency):
+    try:
+        user = await get_current_user(request.cookies.get('access_token'))
+
+        if user is None:
+            return redirect_to_login()
+
+        asset_model = db.query(Assets).filter(Assets.id == asset_id).first()
+        if asset_model is None:
+            raise HTTPException(status_code=404, detail='Asset not found.')
+
+        return templates.TemplateResponse("locate-asset.html", {"request": request, "asset": asset_model,
+                                                               "currentUser": user})
+
+    except:
+        return redirect_to_login()
+
 ### Endpoints ###
 @router.get("/", status_code=status.HTTP_200_OK)
 async def read_all(user: user_dependency, db: db_dependency):

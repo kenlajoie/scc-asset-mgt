@@ -3,10 +3,10 @@
 <div class="container">
   <div class="card">
     <div class="card-header">
-        <h5 class="card-title card-title-left">Asset</h5>
+        <h5 class="card-title card-title-left">Locate Asset</h5>
     </div>
     <div class="card-body">
-        <form id="viewAssetForm">
+        <form id="locatedAssetForm">
 
            <div class="row g-5 pt-0">
                 <div class="col-sm-3">
@@ -74,24 +74,48 @@
 
             <div class="row g-3 pt-1">
                 <div class="col-sm-10">
-                    <label for="gpslat" class="form-label-sm">Lat:</label>
+                    <label for="gpsLat" class="form-label-sm">Lat:</label>
                     <input name=gpsLat id=gpsLat type="number"
                         style="min-width: 110px; max-width: 110px;" class="form-control-sm"
                         placeholder="Latitude" value="{{asset.gpsLat}}" readonly>
 
-                    <label for="gpslng" class="form-label-sm">Long:</label>
+                    <label for="gpsLng" class="form-label-sm">Long:</label>
                     <input name=gpsLng id=gpsLng type="number"
                         style="min-width: 110px; max-width: 110px;" class="form-control-sm"
                         placeholder="longitude" value="{{asset.gpsLng}}" readonly>
 
                     {% if asset.gpsLat and asset.gpsLat %}
-                        <button class="btn-sm btn-primary btn-thin-sm"
-                                 onclick="window.location.href='/assets/locate-asset-page/{{asset.id}}'"
-                                type="button">Locate</button>
+                        <button name=locate id=locate class="btn-sm btn-primary btn-thin-sm"
+                            onclick="computeDistance()" type="button">Distance</button>
                     {% endif %}
                 </div> <!-- col -->
             </div> <!--row-->
 
+            <div class="card-header">
+                <h5 class="card-title card-title-left">Your Current Location</h5>
+            </div>
+
+            <div class="row g-3 pt-1">
+                <div class="col-sm-10">
+                   <div>
+                    <label for="currentGpsLat" class="form-label-sm">Lat:</label>
+                    <input name=currentGpsLat id=currentGpsLat type="number"
+                        style="min-width: 110px; max-width: 110px;" class="form-control-sm"
+                        placeholder="Current Latitude" value="" readonly>
+                    </div>
+                    <div>
+                    <label for="currentGpsLng" class="form-label-sm">Lng:</label>
+                    <input name=currentGpsLng id=currentGpsLng type="number"
+                        style="min-width: 110px; max-width: 110px;" class="form-control-sm"
+                        placeholder="Current Longitude" value="" readonly>
+                    </div>
+                     <label for="currentDistance" class="form-label-sm">Distance:</label>
+                    <input name=currentDistance id=currentDistance type="number"
+                        style="min-width: 110px; max-width: 110px;" class="form-control-sm"
+                        placeholder="Current Distance" value="" readonly>
+                    </div>
+                </div> <!-- col -->
+            </div> <!--row-->
 
             <div class="row g-3 pt-1">
                 <div class="col-sm-8">
@@ -101,60 +125,75 @@
                 </div> <!-- col -->
             </div> <!--row-->
 
-            <div class="card-header">
-                <h5 class="card-title card-title-left">Asset Todo List</h5>
-            </div>
 
 
-            <div class="row g-3 pt-0">
-                <div class="col-sm-10">
-                    <div class="todos-list">
-                        <table class="table-sm table-hover table-striped">
-                            <thead class="padding: 1px;">
-                                <tr>
-                                    <th scope="col">Status</th>
-                                    <th scope="col">Priority</th>
-                                    <th scope="col">Title</th>
-                                </tr>
-                            </thead>
-
-                            <tbody>
-                                {% for todo in todo_list %}
-                                <tr class="pointer">
-                                    <td>{{todo.todoStatus}}</td>
-                                    <td>{{todo.priority}}</td>
-                                    <td class="td200">{{todo.title}}</td>
-                                    <td>
-                                            <button class="btn-sm btn-primary btn-thin-sm"
-                                                    onclick="window.location.href='/todos/view-todo-asset-page/{{todo.id}}'"
-                                                    type="button">View</button>
-                                            <button class="btn-sm btn-primary btn-thin-sm"
-                                                    onclick="window.location.href='/todos/edit-todo-asset-page/{{todo.id}}'"
-                                                    type="button">Edit</button>
-                                     </td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                     </div> <!-- todo_list -->
-                </div> <!-- col -->
-            </div> <!-- row -->
-
-            <div class="row g-3 pt-2">
-             <div class="col-sm-10">
-                     <div class="todos-actions">
-                        {% if currentUser.userRole == 'ADMIN' %}
-                            <button id="submitBtn" type="submit" class="btn-sm btn-primary btn-thin-sm">DELETE Asset</button>
-                         {% endif %}
-                            <button onclick="window.location.href='/todos/add-todo-asset-page/{{asset.id}}'"
-                               type="button" class="btn-sm btn-primary btn-thin-sm">Add a NEW Todo</button>
-                            <button onclick="window.location.href='/assets/asset-page'"
-                               type="button" class="btn-sm btn-primary btn-thin-sm">Back</button>
-                </div>
-             </div> <!-- col -->
-            </div> <!-- row -->
-      </form>
+        </form>
     </div> <!-- card body -->
   </div> <!-- card -->
 </div> <!-- container -->
 
+<script>
+    function computeDistance() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(showPosition, showError);
+        } else {
+            document.getElementById("location").innerHTML = "Geolocation is not supported by this browser.";
+        }
+    }
+
+    function showPosition(position) {
+        currentGpsLat = position.coords.latitude;
+        currentGpsLng = position.coords.longitude;
+
+        document.getElementById('currentGpsLat').value = currentGpsLat;
+        document.getElementById('currentGpsLng').value = currentGpsLng;
+
+        assetGpsLat = document.getElementById('gpsLat').value;
+        assetGpsLng = document.getElementById('gpsLng').value;
+
+
+        distanceK =  haversine(currentGpsLat, currentGpsLng, assetGpsLat, assetGpsLng);
+        distanceYards =  Math.floor(distanceK * 1093.613298);
+        document.getElementById('currentDistance').value = distanceYards;
+
+    }
+
+    function showError(error) {
+        switch (error.code) {
+            case error.PERMISSION_DENIED:
+                document.getElementById("l`ocation").innerHTML = "User denied the request for Geolocation.";
+                break;
+            case error.POSITION_UNAVAILABLE:
+                document.getElementById("location").innerHTML = "Location information is unavailable.";
+                break;
+            case error.TIMEOUT:
+                document.getElementById("location").innerHTML = "The request to get user location timed out.";
+                break;
+            case error.UNKNOWN_ERROR:
+                document.getElementById("location").innerHTML = "An unknown error occurred.";
+                break;
+        }
+    }
+
+    function haversine(lat1, lon1, lat2, lon2) {
+        // Radius of the Earth in kilometers
+        const R = 6371;
+
+        // Convert latitude and longitude from degrees to radians
+        const phi1 = lat1 * Math.PI / 180;
+        const phi2 = lat2 * Math.PI / 180;
+        const deltaPhi = (lat2 - lat1) * Math.PI / 180;
+        const deltaLambda = (lon2 - lon1) * Math.PI / 180;
+
+        // Haversine formula
+        const a = Math.sin(deltaPhi / 2) * Math.sin(deltaPhi / 2) +
+                  Math.cos(phi1) * Math.cos(phi2) *
+                  Math.sin(deltaLambda / 2) * Math.sin(deltaLambda / 2);
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+        // Distance in kilometers
+        const distance = R * c;
+
+        return distance;
+    }
+</script>
