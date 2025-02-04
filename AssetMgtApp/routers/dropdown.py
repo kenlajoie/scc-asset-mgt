@@ -1,3 +1,4 @@
+from functools import lru_cache
 from typing import Annotated, Optional
 
 from click import confirm
@@ -47,6 +48,15 @@ def redirect_to_login():
     redirect_response = RedirectResponse(url="/auth/login-page", status_code=status.HTTP_302_FOUND)
     redirect_response.delete_cookie(key="access_token")
     return redirect_response
+
+
+@lru_cache(maxsize=None) #result is always the same, no eviction.  need to clear cache on table update!
+def get_dropdown_list(db):
+    dropdownList = db.query(Dropdown).order_by(Dropdown.column, Dropdown.order).all()
+    if dropdownList is None:
+        return redirect_to_login()
+    return dropdownList
+
 
 @router.get("/dropdown-page")
 async def render_dropdown_page(request: Request, db: db_dependency):
@@ -198,6 +208,9 @@ async def create_dropdown(user: user_dependency, db: db_dependency,
         db.add(create_dropdown_model)
         db.commit()
 
+        #clear the dropdown_list cache
+        get_dropdown_list.cache_clear()
+
         return {"message": "Dropdown created successfully"}
 
     except IntegrityError as e:
@@ -236,6 +249,10 @@ async def create_dropdown_value(user: user_dependency, db: db_dependency,
 
         db.add(dropdown_model)
         db.commit()
+
+        #clear the dropdown_list cache
+        get_dropdown_list.cache_clear()
+
         return {"message": "Dropdown updated successfully"}
 
     except IntegrityError as e:
@@ -260,5 +277,8 @@ async def delete_user(user: user_dependency, db: db_dependency,
 
     db.query(Dropdown).filter(Dropdown.id == dropdown_id).delete()
     db.commit()
+
+    # clear the dropdown_list cache
+    get_dropdown_list.cache_clear()
 
 

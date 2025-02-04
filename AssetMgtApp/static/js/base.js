@@ -419,6 +419,14 @@
             const formData = new FormData(form);
             const data = Object.fromEntries(formData.entries());
 
+            data.gpsLat = document.getElementById('gpslat').value;
+            if (!data.gpsLat.trim())
+                data.gpsLat = null;
+
+            data.gpsLng = document.getElementById('gpslng').value;
+            if (!data.gpsLng.trim())
+                data.gpsLng = null;
+
             const payload = {
                 majorArea: data.majorArea,
                 minorArea: data.minorArea,
@@ -488,6 +496,14 @@
             var url = window.location.pathname;
             const assetId = url.substring(url.lastIndexOf('/') + 1);
 
+            data.gpsLat = document.getElementById('gpslat').value;
+            if (!data.gpsLat.trim())
+                data.gpsLat = null;
+
+            data.gpsLng = document.getElementById('gpslng').value;
+            if (!data.gpsLng.trim())
+                data.gpsLng = null;
+
             const payload = {
                 majorArea: data.majorArea,
                 minorArea: data.minorArea,
@@ -513,6 +529,9 @@
                 //alert(data.majorArea);
                 //alert(data.minorArea);
                 //alert(data.microArea);
+
+                alert(JSON.stringify(payload));
+
 
                 const response = await fetch(`/assets/asset/${assetId}`, {
                     method: 'PUT',

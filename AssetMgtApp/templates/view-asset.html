@@ -85,8 +85,8 @@
                         placeholder="longitude" value="{{asset.gpsLng}}" readonly>
 
                     {% if asset.gpsLat and asset.gpsLat %}
-                        <button name=capture id=capture class="btn-sm btn-primary btn-thin-sm"
-                            onclick="locate()" type="button">Locate</button>
+                        <button name=locate id=locate class="btn-sm btn-primary btn-thin-sm"
+                            onclick="findLocation()" type="button">Locate</button>
                     {% endif %}
                 </div> <!-- col -->
             </div> <!--row-->
@@ -156,3 +156,17 @@
     </div> <!-- card body -->
   </div> <!-- card -->
 </div> <!-- container -->
+
+<script>
+    function findLocation() {
+        gpsLat = document.getElementById('gpsLat').value;
+        gpsLng = document.getElementById('gpsLng').value;
+        if ( !gpsLat.trim() || !gpsLng.trim() ) {
+            document.getElementById("location").innerHTML = "GPS location not valid.";
+        }
+        else {
+            window.open(`https://www.google.com/maps?q=42.401028, -71.732879`,"_blank");
+            /* window.open(`https://www.google.com/maps?q=${gpsLat},${gpsLng}`,"_blank"); */
+        }
+    }
+</script>

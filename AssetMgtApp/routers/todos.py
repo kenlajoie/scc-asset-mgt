@@ -13,6 +13,8 @@ from ..database import SessionLocal
 from .auth import get_current_user
 from starlette.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
+from .dropdown import get_dropdown_list
+from .users import get_user_dropdown_list
 
 templates = Jinja2Templates(directory="AssetMgtApp/templates")
 
@@ -53,11 +55,13 @@ async def render_todo_page(request: Request, db: db_dependency):
            return redirect_to_login()
 
         #list of users for assignedTo select options
-        userList = db.query(Users).all()
+        userList = get_user_dropdown_list(db)
+        #userList = db.query(Users).all()
         if userList is None:
-            raise HTTPException(status_code=404, detail='UserList not found.')
+            raise HTTPException(status_code=404, detail='Dropdown User List not found.')
 
-        dropdownList= db.query(Dropdown).order_by(Dropdown.column,Dropdown.order).all()
+        dropdownList= get_dropdown_list(db)
+        #dropdownList= db.query(Dropdown).order_by(Dropdown.column,Dropdown.order).all()
         if dropdownList is None:
            return redirect_to_login()
 
@@ -122,11 +126,13 @@ async def render_todo_list(request: Request, todo_id: int, db: db_dependency):
            return redirect_to_login()
 
         #list of users for assignedTo select options
-        userList = db.query(Users).all()
+        userList = get_user_dropdown_list(db)
+        #userList = db.query(Users).all()
         if userList is None:
-            raise HTTPException(status_code=404, detail='UserList not found.')
+            raise HTTPException(status_code=404, detail='Dropdown User List not found.')
 
-        dropdownList= db.query(Dropdown).order_by(Dropdown.column,Dropdown.order).all()
+        dropdownList= get_dropdown_list(db)
+        #dropdownList= db.query(Dropdown).order_by(Dropdown.column,Dropdown.order).all()
         if dropdownList is None:
            return redirect_to_login()
 
@@ -193,11 +199,13 @@ async def render_todo_page(request: Request, asset_id: int,db: db_dependency):
             return redirect_to_login()
 
         #list of users for assignedTo select options
-        userList = db.query(Users).all()
+        userList = get_user_dropdown_list(db)
+        #userList = db.query(Users).all()
         if userList is None:
-            raise HTTPException(status_code=404, detail='UserList not found.')
+            raise HTTPException(status_code=404, detail='Dropdown User List not found.')
 
-        dropdownList= db.query(Dropdown).order_by(Dropdown.column,Dropdown.order).all()
+        dropdownList= get_dropdown_list(db)
+        #dropdownList= db.query(Dropdown).order_by(Dropdown.column,Dropdown.order).all()
         if dropdownList is None:
            return redirect_to_login()
 
@@ -236,11 +244,13 @@ async def render_todo_page(request: Request, asset_id: int,db: db_dependency):
             return redirect_to_login()
 
         #list of users for assignedTo select options
-        userList = db.query(Users).all()
+        userList = get_user_dropdown_list(db)
+        #userList = db.query(Users).all()
         if userList is None:
-            raise HTTPException(status_code=404, detail='UserList not found.')
+            raise HTTPException(status_code=404, detail='Dropdown User List not found.')
 
-        dropdownList= db.query(Dropdown).order_by(Dropdown.column,Dropdown.order).all()
+        dropdownList= get_dropdown_list(db)
+        #dropdownList= db.query(Dropdown).order_by(Dropdown.column,Dropdown.order).all()
         if dropdownList is None:
            return redirect_to_login()
 
@@ -249,7 +259,10 @@ async def render_todo_page(request: Request, asset_id: int,db: db_dependency):
             raise HTTPException(status_code=404, detail='login user Not found.')
 
         #list of users for assignedTo select options
-        userList = db.query(Users).all()
+        userList = get_user_dropdown_list(db)
+        #userList = db.query(Users).all()
+        if userList is None:
+            raise HTTPException(status_code=404, detail='Dropdown User List not found.')
 
         # get the current asset details to show on the form in ready-only
         asset_model = db.query(Assets).filter(Assets.id == asset_id).first()
@@ -283,11 +296,13 @@ async def render_edit_todo_page(request: Request, todo_id: int, db: db_dependenc
             return redirect_to_login()
 
         #list of users for assignedTo select options
-        userList = db.query(Users).all()
+        userList = get_user_dropdown_list(db)
+        #userList = db.query(Users).all()
         if userList is None:
-            raise HTTPException(status_code=404, detail='UserList not found.')
+            raise HTTPException(status_code=404, detail='Dropdown User List not found.')
 
-        dropdownList= db.query(Dropdown).order_by(Dropdown.column,Dropdown.order).all()
+        dropdownList= get_dropdown_list(db)
+        #dropdownList= db.query(Dropdown).order_by(Dropdown.column,Dropdown.order).all()
         if dropdownList is None:
            return redirect_to_login()
 
@@ -318,11 +333,13 @@ async def render_edit_todo_page(request: Request, todo_id: int, db: db_dependenc
             return redirect_to_login()
 
         #list of users for assignedTo select options
-        userList = db.query(Users).all()
+        userList = get_user_dropdown_list(db)
+        #userList = db.query(Users).all()
         if userList is None:
-            raise HTTPException(status_code=404, detail='UserList not found.')
+            raise HTTPException(status_code=404, detail='Dropdown User List not found.')
 
-        dropdownList= db.query(Dropdown).order_by(Dropdown.column,Dropdown.order).all()
+        dropdownList= get_dropdown_list(db)
+        #dropdownList= db.query(Dropdown).order_by(Dropdown.column,Dropdown.order).all()
         if dropdownList is None:
            return redirect_to_login()
 

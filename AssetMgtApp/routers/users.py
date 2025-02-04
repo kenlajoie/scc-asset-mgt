@@ -1,3 +1,4 @@
+from functools import lru_cache
 from typing import Annotated
 
 from click import confirm
@@ -14,6 +15,7 @@ from .auth import get_current_user
 from passlib.context import CryptContext
 from starlette.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
+from .dropdown import get_dropdown_list
 
 templates = Jinja2Templates(directory="AssetMgtApp/templates")
 
@@ -64,6 +66,14 @@ def redirect_to_login():
     redirect_response.delete_cookie(key="access_token")
     return redirect_response
 
+@lru_cache(maxsize=None) #result is always the same, no eviction.  need to clear cache on table update!
+def get_user_dropdown_list(db):
+    userList = db.query(Users).filter(Users.initials != 'DBA').order_by(Users.initials).all()
+    if userList is None:
+        return redirect_to_login()
+    return userList
+
+
 @router.get("/user-page")
 async def render_user_page(request: Request, db: db_dependency):
     try:
@@ -76,7 +86,8 @@ async def render_user_page(request: Request, db: db_dependency):
         userRoleFilter =request.cookies.get('userRoleFilter')
         userStatusFilter =request.cookies.get('userStatusFilter')
 
-        dropdownList= db.query(Dropdown).order_by(Dropdown.column,Dropdown.order).all()
+        dropdownList= get_dropdown_list(db)
+        #dropdownList= db.query(Dropdown).order_by(Dropdown.column,Dropdown.order).all()
         if dropdownList is None:
            return redirect_to_login()
 
@@ -106,7 +117,8 @@ async def render_user_page(request: Request, db: db_dependency):
         if loginUser is None:
             return redirect_to_login()
 
-        dropdownList= db.query(Dropdown).order_by(Dropdown.column,Dropdown.order).all()
+        dropdownList= get_dropdown_list(db)
+        #dropdownList= db.query(Dropdown).order_by(Dropdown.column,Dropdown.order).all()
         if dropdownList is None:
            return redirect_to_login()
 
@@ -135,7 +147,8 @@ async def render_user_edit_page(request: Request, user_id: int, db: db_dependenc
         if loginUser is None:
             return redirect_to_login()
 
-        dropdownList= db.query(Dropdown).order_by(Dropdown.column,Dropdown.order).all()
+        dropdownList= get_dropdown_list(db)
+        #dropdownList= db.query(Dropdown).order_by(Dropdown.column,Dropdown.order).all()
         if dropdownList is None:
            return redirect_to_login()
 

@@ -13,6 +13,7 @@ from ..database import SessionLocal
 from .auth import get_current_user
 from starlette.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
+from .dropdown import get_dropdown_list
 
 templates = Jinja2Templates(directory="AssetMgtApp/templates")
 
@@ -58,7 +59,8 @@ async def render_asset_page(request: Request, db: db_dependency):
         if user is None:
            return redirect_to_login()
 
-        dropdownList= db.query(Dropdown).order_by(Dropdown.column,Dropdown.order).all()
+        dropdownList= get_dropdown_list(db)
+        #dropdownList= db.query(Dropdown).order_by(Dropdown.column,Dropdown.order).all()
         if dropdownList is None:
            return redirect_to_login()
 
@@ -97,14 +99,15 @@ async def render_asset_page(request: Request, db: db_dependency):
 
 
 @router.get('/add-asset-page')
-async def render_asset_page(request: Request):
+async def render_asset_page(request: Request, db: db_dependency):
     try:
         user = await get_current_user(request.cookies.get('access_token'))
 
         if user is None:
             return redirect_to_login()
 
-        dropdownList= db.query(Dropdown).order_by(Dropdown.column,Dropdown.order).all()
+        dropdownList= get_dropdown_list(db)
+        #dropdownList= db.query(Dropdown).order_by(Dropdown.column,Dropdown.order).all()
         if dropdownList is None:
            return redirect_to_login()
 
@@ -133,11 +136,11 @@ async def render_asset_page(request: Request):
 async def render_edit_asset_page(request: Request, asset_id: int, db: db_dependency):
     try:
         user = await get_current_user(request.cookies.get('access_token'))
-
         if user is None:
             return redirect_to_login()
 
-        dropdownList= db.query(Dropdown).order_by(Dropdown.column,Dropdown.order).all()
+        dropdownList= get_dropdown_list(db)
+        #dropdownList= db.query(Dropdown).order_by(Dropdown.column,Dropdown.order).all()
         if dropdownList is None:
            return redirect_to_login()
 
