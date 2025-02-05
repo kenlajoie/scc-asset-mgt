@@ -11,14 +11,24 @@
 
             data.column = data.column.toUpperCase();
 
+            data.gpsLat = document.getElementById('gpslat').value;
+            if (!data.gpsLat.trim())
+                data.gpsLat = null;
+
+            data.gpsLng = document.getElementById('gpslng').value;
+            if (!data.gpsLng.trim())
+                data.gpsLng = null;
+
             const payload = {
                 column: data.column,
                 value: data.value,
                 description: data.description,
                 order: data.order,
+                gpsLat: data.gpsLat,
+                gpsLng: data.gpsLng
             };
 
-            //alert(JSON.stringify(payload))
+            alert(JSON.stringify(payload))
 
             try {
                 const response = await fetch(`/dropdown/dropdown`, {
@@ -71,11 +81,21 @@
             var url = window.location.pathname;
             const dropdownId = url.substring(url.lastIndexOf('/') + 1);
 
+            data.gpsLat = document.getElementById('gpslat').value;
+            if (!data.gpsLat.trim())
+                data.gpsLat = null;
+
+            data.gpsLng = document.getElementById('gpslng').value;
+            if (!data.gpsLng.trim())
+                data.gpsLng = null;
+
             const payload = {
                 column: data.column,
                 value: data.value,
                 description: data.description,
                 order: data.order,
+                gpsLat: data.gpsLat,
+                gpsLng: data.gpsLng
             };
 
             //alert(JSON.stringify(payload))

@@ -41,6 +41,9 @@ class DropdownRequest(BaseModel):
     value: str = Field(min_length=1, max_length=10)
     description: str = Field(min_length=1, max_length=20)
     order: Optional[float] = None
+    gpsLat: Optional[float] = None
+    gpsLng: Optional[float] = None
+
 
 
 ##this should be a shared function
@@ -104,7 +107,9 @@ async def render_dropdown_page(request: Request):
             column="",
             value="",
             description="",
-            order=""
+            order="",
+            gpsLat="",
+            gpsLng=""
         )
 
         return templates.TemplateResponse("add-edit-view-dropdown.html",
@@ -132,8 +137,17 @@ async def render_dropdown_value_page(request: Request, dropdown_id: int, db: db_
             column=dropdown_model.column,
             value="",
             description="",
-            order=""
+            order="",
+            gpsLat = "",
+            gpsLng = ""
         )
+
+        #force None to ""
+        if dropdown_model.gpsLat is None:
+            dropdowb_model.gpsLat = ""
+
+        if dropdown_model.gpsLng is None:
+            dropdown_model.gpsLng = ""
 
         return templates.TemplateResponse("add-edit-view-dropdown.html",
                         {"request": request, "dropdown": dropdown_default, "currentUser": loginUser, "mode": "ADD"})
@@ -201,6 +215,8 @@ async def create_dropdown(user: user_dependency, db: db_dependency,
             value=dropdown_request.value.upper(),
             description=dropdown_request.description,
             order=dropdown_request.order,
+            gpsLat=dropdown_request.gpsLat,
+            gpsLng=dropdown_request.gpsLng,
             createdBy=login_user_model.initials,
         )
         create_dropdown_model.createdDate = func.now()
@@ -244,6 +260,8 @@ async def create_dropdown_value(user: user_dependency, db: db_dependency,
         dropdown_model.value = dropdown_request.value.upper()
         dropdown_model.description = dropdown_request.description
         dropdown_model.order = dropdown_request.order
+        dropdown_model.gpsLat = dropdown_request.gpsLat
+        dropdown_model.gpsLng = dropdown_request.gpsLng
         dropdown_model.updatedDate = func.now()
         dropdown_model.updatedBy= login_user_model.initials
 

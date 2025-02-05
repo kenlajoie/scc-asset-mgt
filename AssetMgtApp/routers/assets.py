@@ -41,6 +41,7 @@ class AssetRequest(BaseModel):
     model: str = Field(max_length=20)
     satellite: str = Field(max_length=20)
     station: str = Field(max_length=20)
+    distance: Optional[int] = None
     gpsLat: Optional[float] = None
     gpsLng: Optional[float] = None
 
@@ -121,6 +122,7 @@ async def render_asset_page(request: Request, db: db_dependency):
             model="",
             satellite = "",
             station = "",
+            distance="",
             gpsLat = "",
             gpsLng = ""
         )
@@ -149,6 +151,9 @@ async def render_edit_asset_page(request: Request, asset_id: int, db: db_depende
             raise HTTPException(status_code=404, detail='Asset not found.')
 
         #force None to ""
+        if asset_model.distance is None:
+            asset_model.distance = ""
+
         if asset_model.gpsLat is None:
             asset_model.gpsLat = ""
 
@@ -240,6 +245,7 @@ async def create_asset(user: user_dependency, db: db_dependency,
         model=asset_request.model,
         satellite = asset_request.satellite,
         station = asset_request.station,
+        distance=asset_request.distance,
         gpsLat=asset_request.gpsLat,
         gpsLng=asset_request.gpsLng,
         createdBy = login_user_model.initials,
@@ -277,6 +283,7 @@ async def update_asset(user: user_dependency, db: db_dependency,
         asset_model.model = asset_request.model
         asset_model.satellite = asset_request.satellite
         asset_model.station = asset_request.station
+        asset_model.distance = asset_request.distance
         asset_model.gpsLat = asset_request.gpsLat
         asset_model.gpsLng = asset_request.gpsLng
         asset_model.updatedDate = func.now()
