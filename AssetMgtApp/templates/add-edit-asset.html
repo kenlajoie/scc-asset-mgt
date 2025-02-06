@@ -139,13 +139,13 @@
                 <div class="col-sm-10">
                     <label for="gpsLat" class="form-label-sm">Lat:</label>
                     <input name=gpsLat id=gpsLat type="number" step="0.0000001"
-                        style="min-width: 110px; max-width: 110px;" class="form-control-sm"
+                        style="min-width: 105px; max-width: 105px;" class="form-control-sm"
                         placeholder="Latitude" value="{{asset.gpsLat}}" readonly>
                     <span id="error-gpsLat" class="error"></span>
 
                     <label for="gpsLng" class="form-label-sm">Lng:</label>
                     <input name=gpsLng id=gpsLng type="number" step="0.0000001"
-                        style="min-width: 110px; max-width: 110px;" class="form-control-sm"
+                        style="min-width: 105px; max-width: 105px;" class="form-control-sm"
                         placeholder="longitude" value="{{asset.gpsLng}}" readonly>
                     <span id="error-gpsLng" class="error"></span>
 
@@ -159,9 +159,9 @@
 
             <div class="row g-3 pt-1">
                 <div class="col-sm-10">
-                    <label for="distance" class="form-label-sm">Major Area Distance</label>
+                    <label for="distance" class="form-label-sm">Distance to Major Area</label>
                     <input name=distance id=distance type="number"
-                        style="min-width: 110px; max-width: 110px;" class="form-control-sm"
+                        style="min-width: 100px; max-width: 100px;" class="form-control-sm"
                         placeholder="Distance" value="{{asset.distance}}">
                     <span id="error-distance" class="error"></span>
 
@@ -209,9 +209,18 @@
 
 
 <script>
+    const majorAreaPosition = {
+    {% for ddv in dropdown %}
+      {% if ddv.column == "MAJORAREA" %}
+          "{{ddv.value}}" : { gpsLat:{% if ddv.gpsLat is none %}null{% else %}{{ddv.gpsLat}}{% endif %},
+                    gpsLng: {% if ddv.gpsLng is none %}null{% else %}{{ddv.gpsLng}}{% endif %} },
+      {% endif %}
+    {% endfor %}
+    };
+
     function clearLocation() {
-        document.getElementById('gpslat').value = null;
-        document.getElementById('gpslng').value = null;
+        document.getElementById('gpsLat').value = null;
+        document.getElementById('gpsLng').value = null;
     }
 
     function captureLocation() {
@@ -223,19 +232,41 @@
     }
 
     function computeDistance() {
-        if (!document.getElementById('gpsLat').value) {
-           document.getElementById("location").innerHTML = "The asset does not have a GPS Latitude.";
+
+        let assetGpsLat=document.getElementById('gpsLat').value;
+        if (!assetGpsLat) {
+           document.getElementById("location").innerHTML = "GPS Latitude missing.";
            return;
         }
-        if (!document.getElementById('gpsLng').value) {
-           document.getElementById("location").innerHTML = "The asset does not have a GPS Longitude.";
+
+        let assetGpsLng=document.getElementById('gpsLng').value;
+        if (!assetGpsLng) {
+           document.getElementById("location").innerHTML = "GPS Longitude missing.";
            return;
         }
+
+        let majorArea=document.getElementById('majorArea').value;
+        let majorAreaGpsLat = majorAreaPosition[majorArea].gpsLat;
+        let majorAreaGpsLng = majorAreaPosition[majorArea].gpsLng;
+
+        if (!majorAreaGpsLat) {
+           document.getElementById("location").innerHTML = "MajorArea GPS Latitude missing.";
+           return;
+        }
+
+        if (!majorAreaGpsLng) {
+           document.getElementById("location").innerHTML = "MajorArea GPS Longitude missing.";
+           return;
+        }
+
+        distanceK =  haversine(majorAreaGpsLat, majorAreaGpsLng, assetGpsLat, assetGpsLng);
+        distanceYards =  Math.floor(distanceK * 1093.613298);
+        document.getElementById('distance').value = distanceYards;
     }
 
     function showPosition(position) {
-        document.getElementById('gpslat').value = position.coords.latitude;;
-        document.getElementById('gpslng').value = position.coords.longitude;
+        document.getElementById('gpsLat').value = position.coords.latitude;
+        document.getElementById('gpsLng').value = position.coords.longitude;
     }
 
     function showError(error) {
@@ -253,5 +284,27 @@
                 document.getElementById("location").innerHTML = "An unknown error occurred.";
                 break;
         }
+    }
+
+    function haversine(lat1, lon1, lat2, lon2) {
+        // Radius of the Earth in kilometers
+        const R = 6371;
+
+        // Convert latitude and longitude from degrees to radians
+        const phi1 = lat1 * Math.PI / 180;
+        const phi2 = lat2 * Math.PI / 180;
+        const deltaPhi = (lat2 - lat1) * Math.PI / 180;
+        const deltaLambda = (lon2 - lon1) * Math.PI / 180;
+
+        // Haversine formula
+        const a = Math.sin(deltaPhi / 2) * Math.sin(deltaPhi / 2) +
+                  Math.cos(phi1) * Math.cos(phi2) *
+                  Math.sin(deltaLambda / 2) * Math.sin(deltaLambda / 2);
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+        // Distance in kilometers
+        const distance = R * c;
+
+        return distance;
     }
 </script>

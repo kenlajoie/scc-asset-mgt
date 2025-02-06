@@ -76,12 +76,12 @@
                 <div class="col-sm-10">
                     <label for="gpslat" class="form-label-sm">Lat:</label>
                     <input name=gpsLat id=gpsLat type="number"
-                        style="min-width: 110px; max-width: 110px;" class="form-control-sm"
+                        style="min-width: 105px; max-width: 105px;" class="form-control-sm"
                         placeholder="Latitude" value="{{asset.gpsLat}}" readonly>
 
                     <label for="gpslng" class="form-label-sm">Long:</label>
                     <input name=gpsLng id=gpsLng type="number"
-                        style="min-width: 110px; max-width: 110px;" class="form-control-sm"
+                        style="min-width: 105px; max-width: 105px;" class="form-control-sm"
                         placeholder="longitude" value="{{asset.gpsLng}}" readonly>
 
                     {% if asset.gpsLat and asset.gpsLng %}
@@ -94,9 +94,9 @@
 
             <div class="row g-3 pt-1">
                 <div class="col-sm-10">
-                    <label for="distance" class="form-label-sm">Major Area Distance</label>
+                    <label for="distance" class="form-label-sm">Distance to Major Area</label>
                     <input name=distance id=distance type="number"
-                        style="min-width: 110px; max-width: 110px;" class="form-control-sm"
+                        style="min-width: 10px; max-width: 100px;" class="form-control-sm"
                         placeholder="Distance" value="{{asset.distance}}" readonly>
                     <span id="error-distance" class="error"></span>
                 </div>  <!-- col -->

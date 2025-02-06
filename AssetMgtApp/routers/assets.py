@@ -122,9 +122,9 @@ async def render_asset_page(request: Request, db: db_dependency):
             model="",
             satellite = "",
             station = "",
-            distance="",
             gpsLat = "",
-            gpsLng = ""
+            gpsLng = "",
+            distance = ""
         )
 
         return templates.TemplateResponse("add-edit-asset.html", {"request": request,
@@ -151,14 +151,14 @@ async def render_edit_asset_page(request: Request, asset_id: int, db: db_depende
             raise HTTPException(status_code=404, detail='Asset not found.')
 
         #force None to ""
-        if asset_model.distance is None:
-            asset_model.distance = ""
-
         if asset_model.gpsLat is None:
             asset_model.gpsLat = ""
 
         if asset_model.gpsLng is None:
             asset_model.gpsLng = ""
+
+        if asset_model.distance is None:
+            asset_model.distance = ""
 
         return templates.TemplateResponse("add-edit-asset.html", {"request": request,
                                     "asset": asset_model, "currentUser": user,
@@ -192,16 +192,20 @@ async def render_view_asset_page(request: Request, asset_id: int, db: db_depende
 async def render_locate_asset_page(request: Request, asset_id: int, db: db_dependency):
     try:
         user = await get_current_user(request.cookies.get('access_token'))
-
         if user is None:
             return redirect_to_login()
+
+        dropdownList= get_dropdown_list(db)
+        #dropdownList= db.query(Dropdown).order_by(Dropdown.column,Dropdown.order).all()
+        if dropdownList is None:
+           return redirect_to_login()
 
         asset_model = db.query(Assets).filter(Assets.id == asset_id).first()
         if asset_model is None:
             raise HTTPException(status_code=404, detail='Asset not found.')
 
         return templates.TemplateResponse("locate-asset.html", {"request": request, "asset": asset_model,
-                                                               "currentUser": user})
+                                                               "currentUser": user,"dropdown": dropdownList})
 
     except:
         return redirect_to_login()
@@ -245,9 +249,9 @@ async def create_asset(user: user_dependency, db: db_dependency,
         model=asset_request.model,
         satellite = asset_request.satellite,
         station = asset_request.station,
-        distance=asset_request.distance,
         gpsLat=asset_request.gpsLat,
         gpsLng=asset_request.gpsLng,
+        distance=asset_request.distance,
         createdBy = login_user_model.initials,
     )
 
@@ -269,9 +273,9 @@ async def update_asset(user: user_dependency, db: db_dependency,
         raise HTTPException(status_code=404, detail='login user Not found.')
 
     asset_model = db.query(Assets).filter(Assets.id == asset_id).first()
-
     if asset_model is None:
         raise HTTPException(status_code=404, detail='Asset not found.')
+
 
     errors = {}
     try:
@@ -283,9 +287,9 @@ async def update_asset(user: user_dependency, db: db_dependency,
         asset_model.model = asset_request.model
         asset_model.satellite = asset_request.satellite
         asset_model.station = asset_request.station
-        asset_model.distance = asset_request.distance
         asset_model.gpsLat = asset_request.gpsLat
         asset_model.gpsLng = asset_request.gpsLng
+        asset_model.distance = asset_request.distance
         asset_model.updatedDate = func.now()
         asset_model.updatedBy= login_user_model.initials
 

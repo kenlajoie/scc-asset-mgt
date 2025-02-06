@@ -28,7 +28,7 @@
                 gpsLng: data.gpsLng
             };
 
-            alert(JSON.stringify(payload))
+            //alert(JSON.stringify(payload))
 
             try {
                 const response = await fetch(`/dropdown/dropdown`, {
@@ -439,11 +439,18 @@
             const formData = new FormData(form);
             const data = Object.fromEntries(formData.entries());
 
-            data.gpsLat = document.getElementById('gpslat').value;
+            // try to recompute the distance from the MajorArea
+            computeDistance();
+
+            data.distance = document.getElementById('distance').value;
+            if (!data.distance.trim())
+                data.distance = null;
+
+           data.gpsLat = document.getElementById('gpsLat').value;
             if (!data.gpsLat.trim())
                 data.gpsLat = null;
 
-            data.gpsLng = document.getElementById('gpslng').value;
+            data.gpsLng = document.getElementById('gpsLng').value;
             if (!data.gpsLng.trim())
                 data.gpsLng = null;
 
@@ -457,7 +464,8 @@
                 satellite: data.satellite,
                 station: data.station,
                 gpsLat: data.gpsLat,
-                gpsLng: data.gpsLng
+                gpsLng: data.gpsLng,
+                distance: data.distance
             };
 
             //alert(JSON.stringify(payload));
@@ -516,11 +524,18 @@
             var url = window.location.pathname;
             const assetId = url.substring(url.lastIndexOf('/') + 1);
 
-            data.gpsLat = document.getElementById('gpslat').value;
+            // try to recompute the distance from the MajorArea
+            computeDistance();
+
+            data.distance = document.getElementById('distance').value;
+            if (!data.distance.trim())
+                data.distance = null;
+
+            data.gpsLat = document.getElementById('gpsLat').value;
             if (!data.gpsLat.trim())
                 data.gpsLat = null;
 
-            data.gpsLng = document.getElementById('gpslng').value;
+            data.gpsLng = document.getElementById('gpsLng').value;
             if (!data.gpsLng.trim())
                 data.gpsLng = null;
 
@@ -534,7 +549,8 @@
                 satellite: data.satellite,
                 station: data.station,
                 gpsLat: data.gpsLat,
-                gpsLng: data.gpsLng
+                gpsLng: data.gpsLng,
+                distance: data.distance
             };
 
             try {
@@ -550,7 +566,7 @@
                 //alert(data.minorArea);
                 //alert(data.microArea);
 
-                alert(JSON.stringify(payload));
+                //alert(JSON.stringify(payload));
 
 
                 const response = await fetch(`/assets/asset/${assetId}`, {

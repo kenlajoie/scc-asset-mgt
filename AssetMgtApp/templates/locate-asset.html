@@ -76,15 +76,23 @@
                 <div class="col-sm-10">
                     <label for="gpsLat" class="form-label-sm">Lat:</label>
                     <input name=gpsLat id=gpsLat type="number"
-                        style="min-width: 110px; max-width: 110px;" class="form-control-sm"
+                        style="min-width: 100px; max-width: 100px;" class="form-control-sm"
                         placeholder="Latitude" value="{{asset.gpsLat}}" readonly>
 
                     <label for="gpsLng" class="form-label-sm">Long:</label>
                     <input name=gpsLng id=gpsLng type="number"
-                        style="min-width: 110px; max-width: 110px;" class="form-control-sm"
+                        style="min-width: 100px; max-width: 100px;" class="form-control-sm"
                         placeholder="longitude" value="{{asset.gpsLng}}" readonly>
-
                 </div> <!-- col -->
+            </div> <!--row-->
+            <div class="row g-3 pt-1">
+                <div class="col-sm-10">
+                    <label for="distance" class="form-label-sm">Distance to Major Area</label>
+                    <input name=distance id=distance type="number"
+                        style="min-width: 100px; max-width: 100px;" class="form-control-sm"
+                        placeholder="Distance" value="{{asset.distance}}" readonly>
+                    <span id="error-distance" class="error"></span>
+                </div>  <!-- col -->
             </div> <!--row-->
 
             <div class="card-header pt-2">
@@ -92,7 +100,7 @@
                     Your Position
                     {% if asset.gpsLat and asset.gpsLat %}
                         <button name=locate id=locate class="btn-sm btn-primary btn-thin-sm"
-                            onclick="computeDistance()" type="button">Compute Distance</button>
+                            onclick="computeDistance()" type="button">Compute Distance Away</button>
                     {% endif %}
                 </h5>
             </div>
@@ -104,9 +112,10 @@
                             <thead class="padding: 1px;">
                                 <tr>
                                     <th scope="col">Time</th>
-                                    <th scope="col">Lat:</th>
-                                    <th scope="col">Long:</th>
-                                    <th scope="col">Distance:</th>
+                                    <th scope="col">Lat</th>
+                                    <th scope="col">Long</th>
+                                    <th scope="col">Asset</th>
+                                    <th scope="col">Major Area</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -140,6 +149,15 @@
 </div> <!-- container -->
 
 <script>
+    const majorAreaPosition = {
+    {% for ddv in dropdown %}
+      {% if ddv.column == "MAJORAREA" %}
+          "{{ddv.value}}" : { gpsLat:{% if ddv.gpsLat is none %}null{% else %}{{ddv.gpsLat}}{% endif %},
+                    gpsLng: {% if ddv.gpsLng is none %}null{% else %}{{ddv.gpsLng}}{% endif %} },
+      {% endif %}
+    {% endfor %}
+    };
+
     function computeDistance() {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(showPosition, showError);
@@ -166,17 +184,32 @@
         distanceK =  haversine(currentGpsLat, currentGpsLng, assetGpsLat, assetGpsLng);
         distanceYards =  Math.floor(distanceK * 1093.613298);
 
+        let majorArea=document.getElementById('majorArea').value;
+        let majorAreaGpsLat = majorAreaPosition[majorArea].gpsLat;
+        let majorAreaGpsLng = majorAreaPosition[majorArea].gpsLng;
+
+        if (majorAreaGpsLat && majorAreaGpsLng) {
+            majorAreaDistanceK =  haversine(currentGpsLat, currentGpsLng, assetGpsLat, assetGpsLng);
+            majorAreaDistanceYards =  Math.floor(majorAreaDistanceK * 1093.613298);
+        }
+
         let table = document.getElementById('historyTable').getElementsByTagName('tbody')[0];
         let newRow = table.insertRow(0);
         let cell0 = newRow.insertCell(0);
         let cell1 = newRow.insertCell(1);
         let cell2 = newRow.insertCell(2);
         let cell3 = newRow.insertCell(3);
+        let cell4 = newRow.insertCell(4);
 
         cell0.innerHTML = time;
         cell1.innerHTML = currentGpsLat;
         cell2.innerHTML = currentGpsLng;
         cell3.innerHTML = distanceYards;
+        if (majorAreaGpsLat && majorAreaGpsLng)
+            cell4.innerHTML = majorAreaDistanceYards;
+        else
+            cell4.innerHTML = "NA";
+
     }
 
     function showError(error) {
