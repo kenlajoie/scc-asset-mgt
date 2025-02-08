@@ -118,6 +118,70 @@ async def render_todo_page(request: Request, db: db_dependency):
         return redirect_to_login()
 
 
+@router.get("/todo-report-page")
+async def render_todo_report_page(request: Request, db: db_dependency):
+    try:
+        user = await get_current_user(request.cookies.get('access_token'))
+        if user is None:
+           return redirect_to_login()
+
+        ## Get saved filtering values
+        assignedToFilter =request.cookies.get('assignedToFilter')
+        todoStatusFilter =request.cookies.get('todoStatusFilter')
+        priorityFilter =request.cookies.get('priorityFilter')
+        todoMajorAreaFilter =request.cookies.get('todoMajorAreaFilter')
+        todoMinorAreaFilter =request.cookies.get('todoMinorAreaFilter')
+        todoAssetTypeFilter =request.cookies.get('todoAssetTypeFilter')
+
+        query = db.query(
+            Todos.id,
+            Todos.todoStatus,
+            Todos.priority,
+            Todos.title,
+            Todos.description.label('note'),
+            Todos.assignedTo,
+            Todos.assetId,
+            Assets.majorArea,
+            Assets.minorArea,
+            Assets.description,
+            Assets.assetType,
+            Assets.model,
+            Assets.assetState,
+            Assets.satellite,
+            Assets.station,
+            Assets.distance
+        ).join(Assets, Todos.assetId == Assets.id)
+
+#       todoList = query.all()
+
+#       build dynamic query
+        if assignedToFilter is not None and assignedToFilter != "ALL":
+            query = query.filter(Todos.assignedTo == assignedToFilter)
+
+        if todoStatusFilter is not None and todoStatusFilter != "ALL":
+            query = query.filter(Todos.todoStatus == todoStatusFilter)
+
+        if priorityFilter is not None and priorityFilter != "ALL":
+            query = query.filter(Todos.priority == priorityFilter)
+
+        if todoMajorAreaFilter is not None and todoMajorAreaFilter != "ALL":
+            query = query.filter(Assets.majorArea == todoMajorAreaFilter)
+
+        if todoMinorAreaFilter is not None and todoMinorAreaFilter != "ALL":
+            query = query.filter(Assets.minorArea == todoMinorAreaFilter)
+
+        if todoAssetTypeFilter is not None and todoAssetTypeFilter != "ALL":
+            query = query.filter(Assets.assetType == todoAssetTypeFilter)
+
+        todoList = query.all()
+
+        return templates.TemplateResponse("todo-report.html", {"request": request,
+                                    "todos": todoList, "currentUser": user})
+
+    except:
+        return redirect_to_login()
+
+
 @router.get("/todo-list/{todo_id}")
 async def render_todo_list(request: Request, todo_id: int, db: db_dependency):
     try:

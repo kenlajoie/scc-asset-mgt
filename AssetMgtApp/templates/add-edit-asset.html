@@ -166,7 +166,7 @@
                     <span id="error-distance" class="error"></span>
 
                     <button name=compute id=compute class="btn-sm btn-primary btn-thin-sm"
-                        onclick="computeDistance()" type="button">Compute</button>
+                        onclick="computeDistance(true)" type="button">Compute</button>
 
                 </div>  <!-- col -->
             </div> <!--row-->
@@ -231,17 +231,19 @@
         }
     }
 
-    function computeDistance() {
+    function computeDistance(showErrors) {
 
         let assetGpsLat=document.getElementById('gpsLat').value;
         if (!assetGpsLat) {
-           document.getElementById("location").innerHTML = "GPS Latitude missing.";
+           if (showErrors)
+                document.getElementById("location").innerHTML = "GPS Latitude missing.";
            return;
         }
 
         let assetGpsLng=document.getElementById('gpsLng').value;
         if (!assetGpsLng) {
-           document.getElementById("location").innerHTML = "GPS Longitude missing.";
+           if (showErrors)
+              document.getElementById("location").innerHTML = "GPS Longitude missing.";
            return;
         }
 
@@ -250,12 +252,14 @@
         let majorAreaGpsLng = majorAreaPosition[majorArea].gpsLng;
 
         if (!majorAreaGpsLat) {
-           document.getElementById("location").innerHTML = "MajorArea GPS Latitude missing.";
+           if (showErrors)
+               document.getElementById("location").innerHTML = "MajorArea GPS Latitude missing.";
            return;
         }
 
         if (!majorAreaGpsLng) {
-           document.getElementById("location").innerHTML = "MajorArea GPS Longitude missing.";
+           if (showErrors)
+               document.getElementById("location").innerHTML = "MajorArea GPS Longitude missing.";
            return;
         }
 

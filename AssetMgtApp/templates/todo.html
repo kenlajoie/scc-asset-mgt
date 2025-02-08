@@ -2,9 +2,12 @@
 
 <div class="container">
     <div class="card text-center">
-       <div class="card-header p-2">
+        <div class="card-header p-2">
             <h5 class="card-title d-flex justify-content-between align-items-center">
                 Todos
+
+                <button class="btn btn-sm btn-primary btn-thin-sm"
+                     onclick="window.location.href='/todos/todo-report-page'" type="button">Report</button>
             </h5>
         </div>
         <div class="card-body">
@@ -17,6 +20,7 @@
                         <th scope="col">Priority</th>
                         <th scope="col">Major</th>
                         <th scope="col">Minor</th>
+                        <th scope="col">Type</th>
                     </tr>
                     <tr>
                         <th scope="col">
@@ -77,6 +81,18 @@
                               </select>
                             </div>
                         </th>
+                        <th scope="col">
+                            <div class="minor-filter">
+                              <select id=assetTypeFilter class="assetType" onchange="typeChangeEventHandler(event);">
+                                <option value="ALL">ALL</option>
+                                {% for ddv in dropdown %}
+                                  {% if ddv.column == "ASSETTYPE" %}
+                                     <option value="{{ddv.value}}">{{ddv.value}}</option>
+                                  {% endif %}
+                                {% endfor %}
+                              </select>
+                            </div>
+                        </th>
                     </tr>
                 </thead>
                 <tbody>
@@ -87,9 +103,10 @@
                     <td>{{todo.priority}}</td>
                     <td>{{todo.majorArea}}</td>
                     <td>{{todo.minorArea}}</td>
+                    <td>{{todo.assetType}}</td>
                 </tr>
                 <tr data-id="{{todo.id}}" class="group-{{todo.id}} bottom-border">
-                    <td colspan="4"><b>Title:</b> {{todo.title}}</td>
+                    <td colspan="5"><b>Title:</b> {{todo.title}}</td>
                      <td>
                          <!-- why is a full path and not a relative path required -->
                         <button class="btn-sm btn-primary btn-thin-sm btn-tight"
@@ -141,7 +158,7 @@
                     }
                   }
                   function typeChangeEventHandler(event) {
-                    if (getCookie("assetTypeFilter") != event.target.value) {
+                    if (getCookie("todoAssetTypeFilter") != event.target.value) {
                         document.cookie = `todoAssetTypeFilter=${event.target.value}; path=/`;
                         window.location.href=window.location.href;
                     }

@@ -22,6 +22,23 @@ body {
       text-align: left;
 }
 
+.card {
+  background: #f0f0f0;
+  padding: 5px;
+  margin-bottom: 10px; /* Adds space between vertically stacked cards */
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.auto-grow {
+  width: 100%;
+  min-height: 50px; /* Minimum height */
+  padding: 2px;
+  font-size: 14px;
+  overflow: hidden; /* Hide overflow initially */
+  resize: none; /* Disable manual resizing */
+}
+
 .btn-thin-sm {
       padding: 0px 0px; /* Custom padding for thinner appearance */
 }
@@ -93,6 +110,16 @@ input[readonly] {
   color:  #6c757d;           /* Dimmed text color */
   border: 1px solid #ccc;   /* Optional: Gray border */
   pointer-events: none;     /* Prevent interaction (optional) */
+}
+
+.icon-link img {
+  width: 25px; /* Set the size of the icon */
+  height: 25px; /* Set the size of the icon */
+  transition: transform 0.3s; /* Add a smooth hover effect */
+}
+
+.icon-link:hover img {
+  transform: scale(1.1); /* Slightly enlarge the icon on hover */
 }
 
 /* ----------------------------------------------- */

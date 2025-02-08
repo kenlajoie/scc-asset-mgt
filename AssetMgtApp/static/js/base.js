@@ -440,7 +440,7 @@
             const data = Object.fromEntries(formData.entries());
 
             // try to recompute the distance from the MajorArea
-            computeDistance();
+            computeDistance(false);  //don't show errors
 
             data.distance = document.getElementById('distance').value;
             if (!data.distance.trim())
@@ -525,7 +525,7 @@
             const assetId = url.substring(url.lastIndexOf('/') + 1);
 
             // try to recompute the distance from the MajorArea
-            computeDistance();
+            computeDistance(false);  //don't show errors
 
             data.distance = document.getElementById('distance').value;
             if (!data.distance.trim())
