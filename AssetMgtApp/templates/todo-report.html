@@ -36,7 +36,15 @@
               <div class="col-sm-8">
                 <textarea name="note" class="auto-grow form-control" readonly>{{todo.note}}</textarea>
               </div> <!--col-->
-           </div> <!--row-->
+            </div> <!--row-->
+            <div class="row g-1 pt-1">
+                <div class="col-sm-5">
+                    Created: {{todo.createdDate}} By: {{todo.createdBy}}
+                </div>
+                <div class="col-sm-5">
+                    Updated: {{todo.updatedDate}} By: {{todo.updatedBy}}
+                </div>
+            </div> <!--row-->
 
            <div class="row g-1 pt-1">
               <div class="col-sm-12">
