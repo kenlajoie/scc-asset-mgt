@@ -1,58 +1,30 @@
-{% include 'layout.html' %}
+ <style>
+    /* Optional: Style your section */
+    #todoReport {
+      background-color: #f9f9f9;
+      padding: 20px;
+      border: 1px solid #ccc;
+    }
+  </style>
 
-<div class="container mt-4">
+ {% include 'layout.html' %}
+
+<div id=todoReport class="container mt-4">
+  <div class="card border-dark border-3 pb-2 text-center">
+        <h5 class="card-title d-flex justify-content-between">
+            ToDo Report
+            <p id="todaysDate"></p>
+            <button id=printButton class="btn btn-sm btn-primary btn-thin-sm"
+                 onclick="printReport()" type="button">Print</button>
+        </h5>
+  </div>
+
   <div class="row" id="card-list">
     {% for todo in todos %}
-      <div class="col-sm-10">
+      <div class="col-md-12">
         <div class="card border-dark border-3 pb-2">
-          <div class="card-body">
-           <div class="row g-1 pt-1">
-              <div class="col-sm-8">
-                <b>Title: {{ todo.title }}</b>
-              </div> <!--col-->
-              <div class="col-sm-3">
-                Status: {{ todo.todoStatus }}
-              </div> <!--col-->
-              <div class="col-sm-1">
-                    <a onclick="removeCard(this)" class="icon-link">
-                        <img src="/static/img/remove_icon.png" alt="Remove">
-                    </a>
-              </div> <!--col-->
-           </div> <!--row-->
-
-           <div class="row g-1 pt-1">
-              <div class="col-sm-4">
-                Assigned To: {{todo.assignedTo}}
-              </div> <!--col-->
-              <div class="col-sm-4">
-                Priority: {{todo.priority}}
-              </div> <!--col-->
-           </div> <!--row-->
-
-           <div class="row g-1 pt-1">
-              <div class="col-sm-2">
-                Note:
-              </div> <!--col-->
-              <div class="col-sm-8">
-                <textarea name="note" class="auto-grow form-control" readonly>{{todo.note}}</textarea>
-              </div> <!--col-->
-            </div> <!--row-->
-            <div class="row g-1 pt-1">
-                <div class="col-sm-5">
-                    Created: {{todo.createdDate}} By: {{todo.createdBy}}
-                </div>
-                <div class="col-sm-5">
-                    Updated: {{todo.updatedDate}} By: {{todo.updatedBy}}
-                </div>
-            </div> <!--row-->
-
-           <div class="row g-1 pt-1">
-              <div class="col-sm-12">
-                <hr style="border: 1px solid #333;  margin: 5px 0;">
-              </div> <!--col-->
-           </div> <!--row-->
-
-           <div class="row g-1 pt-1">
+         <div class="card-body">
+          <div class="row g-1 pt-1">
               <div class="col-sm-4">
                 Major Area: {{todo.majorArea}}
               </div> <!--col-->
@@ -87,19 +59,86 @@
                 Distance: {{todo.distance}}
               </div> <!--col-->
            </div> <!--row-->
-          </div> <!-- card-body -->
+           <div class="row g-1 pt-1">
+              <div class="col-sm-12">
+                <hr style="border: 1px solid #333;  margin: 5px 0;">
+              </div> <!--col-->
+           </div> <!--row-->
+          <div class="row g-1 pt-1">
+              <div class="col-sm-8">
+                <b>Title: {{ todo.title }}</b>
+              </div> <!--col-->
+              <div class="col-sm-3">
+                <b>Status: {{ todo.todoStatus }}</b>
+              </div> <!--col-->
+              <div class="col-sm-1">
+                    <a onclick="removeCard(this)" class="icon-link">
+                        <img src="/static/img/remove_icon.png" alt="Remove">
+                    </a>
+              </div> <!--col-->
+           </div> <!--row-->
+           <div class="row g-1 pt-1">
+              <div class="col-sm-12">
+                <hr style="border: 1px solid #333;  margin: 5px 0;">
+              </div> <!--col-->
+           </div> <!--row-->
+
+           <div class="row g-1 pt-1">
+              <div class="col-sm-4">
+                Assigned To: {{todo.assignedTo}}
+              </div> <!--col-->
+              <div class="col-sm-4">
+                Priority: {{todo.priority}}
+              </div> <!--col-->
+           </div> <!--row-->
+
+           <div class="row g-1 pt-1">
+              <div class="col-sm-2">
+                Note:
+              </div> <!--col-->
+              <div class="col-sm-8">
+                <textarea name="note" class="auto-grow form-control" readonly>{{todo.note}}</textarea>
+              </div> <!--col-->
+            </div> <!--row-->
+            <div class="row g-1 pt-1">
+                <div class="col-sm-5">
+                    Created: {{todo.createdDate}} By: {{todo.createdBy}}
+                </div>
+                <div class="col-sm-5">
+                    Updated: {{todo.updatedDate}} By: {{todo.updatedBy}}
+                </div>
+            </div> <!--row-->
+         </div> <!-- card-body -->
         </div> <!-- card -->
-      </div> <!-- "col-md-4" -->
+      </div> <!-- "col-md-12" -->
     {% endfor %}
-  </div>
-</div>
+  </div> <!-- card-list -->
+</div> <!-- container -->
 
 <script>
+
+  const today = new Date();
+  const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+  const formattedDate = today.toLocaleDateString('en-US', options);
+  document.getElementById("todaysDate").textContent = formattedDate;
+
   function removeCard(button) {
     // Remove the card by accessing its parent node (the card's col-sm-10 div)
     const card = button.closest('.col-sm-10');
     card.remove();
   }
+
+ function printReport() {
+
+      var printContent = document.getElementById('todoReport').innerHTML;
+      var originalContent = document.body.innerHTML;
+
+      document.body.innerHTML = printContent;  // Replace the content with the print section
+
+      window.print();  // Trigger the print dialog
+
+      document.body.innerHTML = originalContent;  // Restore the original content
+    }
 </script>
 
 

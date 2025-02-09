@@ -161,6 +161,12 @@
 
     function computeDistance() {
         if (navigator.geolocation) {
+            const options = {
+                enableHighAccuracy: true,  // Use high accuracy if available
+                timeout: 5000,             // Timeout of 5 seconds for the request
+                maximumAge: 0              // Do not allow cached positions
+            };
+
             navigator.geolocation.getCurrentPosition(showPosition, showError);
         } else {
             document.getElementById("location").innerHTML = "Geolocation is not supported by this browser.";
