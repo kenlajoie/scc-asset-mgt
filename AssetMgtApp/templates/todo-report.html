@@ -9,14 +9,13 @@
 
  {% include 'layout.html' %}
 
-<div id=todoReport class="container mt-4">
-  <div class="card border-dark border-3 pb-2 text-center">
-        <h5 class="card-title d-flex justify-content-between">
-            ToDo Report
-            <p id="todaysDate"></p>
-            <button id=printButton class="btn btn-sm btn-primary btn-thin-sm"
-                 onclick="printReport()" type="button">Print</button>
-        </h5>
+ <div class="text-center">
+    <button id=printButton class="btn btn-sm btn-primary btn-thin-sm"
+         onclick="printReport()" type="button">----- Print -----</button>
+</div>
+<div id=todoReport class="container mt-2">
+  <div class="card border-dark border-3 pt-1 text-center">
+        <h5 class="card-title d-flex justify-content-between mt-1 mb-0">ToDo Report <p id="todaysDate"></p></h5>
   </div>
 
   <div class="row" id="card-list">
@@ -124,7 +123,7 @@
 
   function removeCard(button) {
     // Remove the card by accessing its parent node (the card's col-sm-10 div)
-    const card = button.closest('.col-sm-10');
+    const card = button.closest('.col-md-12');
     card.remove();
   }
 
