@@ -42,8 +42,8 @@ class Todos(Base):
     __tablename__ = 'todos'
 
     id = Column(Integer, primary_key=True, index=True)
-    title = Column(String)
-    description = Column(String)
+    task = Column(String)
+    note = Column(String)
     priority = Column(String)
     todoStatus = Column(String)
     assetId = Column(Integer, ForeignKey("assets.id"))

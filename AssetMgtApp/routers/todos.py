@@ -34,8 +34,8 @@ db_dependency = Annotated[Session, Depends(get_db)]
 user_dependency = Annotated[dict, Depends(get_current_user)]
 
 class TodoRequest(BaseModel):
-    title: str = Field(min_length=3, max_length=40)
-    description: str
+    task: str = Field(min_length=3, max_length=40)
+    note: str
     priority: str = Field(min_length=3, max_length=10)
     todoStatus: str = Field(min_length=3, max_length=10)
     assignedTo: str= Field(min_length=3, max_length=10)
@@ -78,7 +78,7 @@ async def render_todo_page(request: Request, db: db_dependency):
             Todos.id,
             Todos.todoStatus,
             Todos.priority,
-            Todos.title,
+            Todos.task,
             Todos.assignedTo,
             Todos.assetId,
             Assets.majorArea,
@@ -137,8 +137,8 @@ async def render_todo_report_page(request: Request, db: db_dependency):
             Todos.id,
             Todos.todoStatus,
             Todos.priority,
-            Todos.title,
-            Todos.description.label('note'),
+            Todos.task,
+            Todos.note,
             Todos.assignedTo,
             Todos.assetId,
             func.strftime('%m/%d/%Y', Todos.createdDate).label('createdDate'),
@@ -217,7 +217,7 @@ async def render_todo_list(request: Request, todo_id: int, db: db_dependency):
             Todos.id,
             Todos.todoStatus,
             Todos.priority,
-            Todos.title,
+            Todos.task,
             Todos.assignedTo,
             Todos.assetId,
             Assets.majorArea,
@@ -288,8 +288,8 @@ async def render_todo_page(request: Request, asset_id: int,db: db_dependency):
 
         #default values
         todo_default = Todos(
-            title="",
-            description="",
+            task="",
+            note="",
             todoStatus="",
             priority="",
             assignedTo=login_user_model.initials, # current user should be default assignedTo
@@ -339,8 +339,8 @@ async def render_todo_page(request: Request, asset_id: int,db: db_dependency):
 
         #default values
         todo_default = Todos(
-            title="",
-            description="",
+            task="",
+            note="",
             todoStatus="",
             priority="",
             assignedTo=login_user_model.initials,
@@ -509,8 +509,8 @@ async def create_todo(user: user_dependency, db: db_dependency,
         raise HTTPException(status_code=404, detail='login user Not found.')
 
     create_todo_model = Todos(
-       title=todo_request.title,
-       description=todo_request.description,
+       task=todo_request.task,
+       note=todo_request.note,
        todoStatus=todo_request.todoStatus,
        priority=todo_request.priority,
        assignedTo =todo_request.assignedTo,
@@ -541,8 +541,8 @@ async def update_todo(user: user_dependency, db: db_dependency,
         raise HTTPException(status_code=404, detail='Todo not found.')
 
     #update the columns with form data
-    todo_model.title = todo_request.title
-    todo_model.description = todo_request.description
+    todo_model.task = todo_request.task
+    todo_model.note= todo_request.note
     todo_model.priority = todo_request.priority
     todo_model.todoStatus = todo_request.todoStatus
     todo_model.assignedTo = todo_request.assignedTo

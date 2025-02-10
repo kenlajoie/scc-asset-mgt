@@ -1,9 +1,8 @@
 
 {% include 'layout.html' %}
-
 <div class="container">
-  <div class="card">
-    <div class="card-header">
+  <div class="card mt-5">
+    <div class="card-header p-1">
         <h5 class="card-title card-title-left">Todo</h5>
     </div>
     <div class="card-body">
@@ -39,7 +38,7 @@
                         class="form-label-sm">Minor Area</label>
                     <input id=minorArea name="MinorArea" type="text"
                             style="min-width: 90px; max-width: 150px;" class="form-control-sm"
-                            placeholder="Asset Description" value="{{asset.minorArea}}" readonly>
+                            placeholder="Minor Area" value="{{asset.minorArea}}" readonly>
                 </div>
 
                 <div class="col-sm-3">
@@ -81,16 +80,16 @@
 
             <div class="row g-3 pt-2">
                 <div class="col-sm-8">
-                    <label for="title" class="form-label-sm">Todo Title</label>
+                    <label for="task" class="form-label-sm">Todo Task</label>
                     {% if mode == "VIEW"%}
-                        <input id=title name="title" type="text"
+                        <input id=task name="task" type="text"
                                 style="min-width: 300px; max-width: 400px;" class="form-control-sm"
-                                placeholder="Todo Title" value="{{todo.title}}" readonly>
+                                placeholder="Todo Task" value="{{todo.task}}" readonly>
                     {% else %}  <!- assume ADD OR edit--!>
-                        <input id=title name="title" type="text"
+                        <input id=task name="task" type="text"
                                 style="min-width: 300px; max-width: 400px;" class="form-control-sm"
-                                placeholder="Todo Title" value="{{todo.title}}" required>
-                        <div><span id="error-title" class="error"></span></div>
+                                placeholder="Todo Task" value="{{todo.task}}" required>
+                        <div><span id="error-task" class="error"></span></div>
 
                     {% endif %}
                 </div>
@@ -166,11 +165,11 @@
 
             <div class="row g-3 pt-2">
                 <div class="col-sm-8">
-                    <label for="description" class="form-label-sm">Notes</label>
+                    <label for="note" class="form-label-sm">Notes</label>
                     {% if mode == "VIEW"%}
-                        <textarea name="description" class="form-control" rows="3" readonly>{{todo.description}}</textarea>
+                        <textarea name="note" class="form-control" rows="3" readonly>{{todo.note}}</textarea>
                     {% else %}  <!- assume ADD OR edit--!>
-                        <textarea name="description" class="form-control" rows="3">{{todo.description}}</textarea>
+                        <textarea name="note" class="form-control" rows="3">{{todo.note}}</textarea>
                     {% endif %}
                 </div>
             </div> <!--row-->

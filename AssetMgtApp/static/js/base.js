@@ -685,8 +685,8 @@
             const assetId = url.substring(url.lastIndexOf('/') + 1);
 
             const payload = {
-                title: data.title,
-                description: data.description,
+                task: data.task,
+                note: data.note,
                 priority: data.priority,
                 todoStatus: data.todoStatus,
                 assignedTo: data.assignedTo
@@ -759,8 +759,8 @@
             const todoId = url.substring(url.lastIndexOf('/') + 1);
 
             const payload = {
-                title: data.title,
-                description: data.description,
+                task: data.task,
+                note: data.note,
                 priority: data.priority,
                 todoStatus: data.todoStatus,
                 assignedTo: data.assignedTo
@@ -772,8 +772,8 @@
                 //alert(data.redirect);
                 //alert(data.mode);
                 //alert(JSON.stringify(payload));
-                //alert(data.title);
-                //alert(data.description);
+                //alert(data.task);
+                //alert(data.note);
                 //alert(data.priority);
                 //alert(data.todoStatus);
 
@@ -838,8 +838,8 @@
             const todoId = url.substring(url.lastIndexOf('/') + 1);
 
             const payload = {
-                title: data.title,
-                description: data.description,
+                task: data.task,
+                note: data.note,
                 priority: data.priority,
                 todoStatus: data.todoStatus,
                 assignedTo: data.assignedTo

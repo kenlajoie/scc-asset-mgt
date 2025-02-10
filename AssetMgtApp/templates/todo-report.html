@@ -9,14 +9,14 @@
 
  {% include 'layout.html' %}
 
- <div class="text-center">
+ <div class="MT-5 text-center">
     <button id=printButton class="btn btn-sm btn-primary btn-thin-sm"
        onclick="printReport()" type="button">Print</button>
      &nbsp;&nbsp;
     <button class="btn btn-sm btn-primary btn-thin-sm"
         onclick=window.location.href='/todos/todo-page' type="button">Back</button>
 </div>
-<div id=todoReport class="container mt-2">
+<div id=todoReport class="container">
   <div class="card border-dark border-3 pt-1 text-center">
         <h5 class="card-title d-flex justify-content-between mt-1 mb-0"><p id="reportFor"></p><p id="todaysDate"></p></h5>
   </div>
@@ -73,7 +73,7 @@
            </div> <!--row-->
           <div class="row g-1 pt-1">
               <div class="col-sm-8">
-                <b>Task: {{ todo.title }}</b>
+                <b>Task: {{ todo.task }}</b>
               </div> <!--col-->
               <div class="col-sm-3">
                 <b>Status: {{ todo.todoStatus }}</b>
