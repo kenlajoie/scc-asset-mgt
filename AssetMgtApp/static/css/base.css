@@ -1,16 +1,14 @@
-
 /* ----------------------------------------------- */
 /* overrides */
 
 body {
-
     background: linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)), url('Sprinklers.jpg');
     background-size: cover;         /* Makes the image cover the entire viewport */
     background-position: center;    /* Centers the image */
     background-attachment: fixed;   /* Keeps the background fixed while scrolling */
     height: 100vh;                  /* Ensures the body takes the full height of the viewport */
     margin: 0;                      /* Ensures no margin is around the body */
-    padding-top: 100px;              /* Adjust the value based on the navbar height */
+    padding-top: 30px;              /* Adjust the value based on the navbar height */
 /*
   background: #fafafa;
   color: #33333a;
@@ -121,6 +119,16 @@ input[readonly] {
 .icon-link:hover img {
   transform: scale(1.1); /* Slightly enlarge the icon on hover */
 }
+
+
+textarea {
+      width: 100%;
+      height: 1.5em;  /* Set height equal to a single line of text */
+      overflow-y: hidden;
+      padding: 10px;
+      font-size: 14px;
+      resize: vertical;
+ }
 
 /* ----------------------------------------------- */
 
