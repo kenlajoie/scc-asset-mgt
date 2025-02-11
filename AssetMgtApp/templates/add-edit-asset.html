@@ -269,9 +269,11 @@
                document.getElementById("location").innerHTML = "MajorArea GPS Longitude missing.";
            return;
         }
-
+        //alert(`${assetGpsLat} : ${assetGpsLng} -- ${majorAreaGpsLat} : ${majorAreaGpsLng}`);
         distanceK =  haversine(majorAreaGpsLat, majorAreaGpsLng, assetGpsLat, assetGpsLng);
         distanceYards =  Math.floor(distanceK * 1093.613298);
+        distanceFt =  Math.floor(distanceK * 3280.84);
+        //alert(`distanceK ${distanceK} -- distanceYards ${distanceYards} distance Ft ${distanceFt}`);
         document.getElementById('distance').value = distanceYards;
     }
 

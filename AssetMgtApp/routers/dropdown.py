@@ -240,7 +240,7 @@ async def create_dropdown(user: user_dependency, db: db_dependency,
 
 
 @router.put("/dropdown/{dropdown_id}", status_code=status.HTTP_204_NO_CONTENT)
-async def create_dropdown_value(user: user_dependency, db: db_dependency,
+async def update_dropdown(user: user_dependency, db: db_dependency,
                       dropdown_request: DropdownRequest,
                       dropdown_id: int = Path(gt=0)):
     if user is None:
@@ -283,7 +283,7 @@ async def create_dropdown_value(user: user_dependency, db: db_dependency,
 
 
 @router.delete("/dropdown/{dropdown_id}", status_code=status.HTTP_204_NO_CONTENT)
-async def delete_user(user: user_dependency, db: db_dependency,
+async def delete_dropdown(user: user_dependency, db: db_dependency,
                       dropdown_id: int = Path(gt=0)):
 
     if user is None or user.get('userRole') != 'ADMIN' :
