@@ -1,26 +1,6 @@
 {% include 'layout.html' %}
 
 <style>
-/*
-  body {
-    font-family: Arial, sans-serif;
-    display: flex;
-    padding-left: 0px;
-    background-color: #f7f7f7;
-  }
-*/
-  .xmyfixed-top {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    background-color:  rgb(255, 99, 71); /* Tomato color */
-    color: black;
-    padding: 1px;
-    text-align: center;
-    z-index: 1000; /* Ensures it's above other content */
-  }
-
   .filter-header {
     width: 100%;
     background-color:  rgb(255, 99, 71); /* Tomato color */
@@ -40,6 +20,7 @@
   }
 
   .filter-content {
+    background-color: #d9dee0;
     width: 100%;
     padding-top: 3px;
     padding-left: 3px;
@@ -47,7 +28,7 @@
 
  .container {
     text-align: left;
-  }
+ }
 
   .container-list {
     display: flex;
@@ -60,7 +41,7 @@
     min-width: 375px; /* Minimum width */
     width: 100%;      /* Width will scale to 100% of the parent element */
     border: 4px solid black; /*Border color and thickness */
-    background-color: #fff;
+    background-color: #d9dee0;  /* light gray */
     padding: 2px 14px 2px;  /* top, left/right, bottom */
     border-radius: 5px;
     display: flex;
@@ -157,6 +138,7 @@ function typeChangeEventHandler(event) {
           </select>
       </div> <!--col-->
 
+
       <div class="col filterdropdown">Status
           <select id=todoStatusFilter class="todoStatus" onchange="todoStatusChangeEventHandler(event);">
             <option value="ALL">ALL</option>
@@ -180,7 +162,7 @@ function typeChangeEventHandler(event) {
       </div> <!--col-->
     </div> <!--row-->
 
-    <div class="row p-1"></div> <!-- separate the dropdown rows for better phone usage -->
+    <div class="row p-2"></div> <!-- separate the dropdown rows for better phone usage -->
 
     <div class="row gx-0">
       <div class="col filterdropdown">Major

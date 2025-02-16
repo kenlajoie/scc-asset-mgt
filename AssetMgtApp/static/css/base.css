@@ -19,6 +19,7 @@ body {
 .navbar {
   font-size: small;
 }
+
 .navbar-brand {
   font-size: medium;
   font-weight: bold; /* Make the brand name bold */
@@ -87,7 +88,12 @@ table tr.bottom-border th {
 }
 
 .card-body {
-   padding: 1px 10px; /* Adjust the values to reduce or customize padding */
+   padding: 1px 5px; /* Adjust the values to reduce or customize padding */
+}
+
+.container { /* override and default container padding */
+  padding-left: 0;
+  padding-right: 0;
 }
 
 .card-header {
