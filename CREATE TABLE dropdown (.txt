@@ -1,0 +1,35 @@
+CREATE TABLE dropdown (
+        id INTEGER NOT NULL,
+        "column" VARCHAR,
+        "value" VARCHAR,
+        "description" VARCHAR,
+        "order" DOUBLE,
+        "createdBy" VARCHAR,
+        "createdDate" DATETIME DEFAULT (CURRENT_TIMESTAMP),
+        "updatedBy" VARCHAR,
+        "updatedDate" DATETIME,
+        PRIMARY KEY (id),
+        FOREIGN KEY("createdBy") REFERENCES users (initials),
+        FOREIGN KEY("updatedBy") REFERENCES users (initials)
+);
+CREATE INDEX ix_dropdown_id ON dropdown (id);
+
+
+[INSERT INTO dropdown ("column", value, description, "order", "createdBy", "createdDate", "updatedBy", "updatedDate") VALUES (
+?,
+?,
+?,
+?,
+?,
+CURRENT_TIMESTAMP,
+?,
+?) 
+RETURNING id, "createdDate"]
+[parameters: (<built-in method upper of str object at 0x000001F5E5CF76F0>, 
+'AS',
+ 'asa',
+ 6.0,
+ 'KEL',
+ None,
+ None)]
+(Background on this error at: https://sqlalche.me/e/20/f405) [y/N]:

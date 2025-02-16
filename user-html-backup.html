@@ -1,0 +1,144 @@
+{% include 'layout.html' %}
+
+<div class="container">
+    <div class="card mt-5 text-center">
+        <div class="card-header p-2">
+            <h5 class="card-title card-title-left">User</h5>
+        </div>
+        <div class="card-body">
+            <table class="table-sm table-hover">
+                <thead>
+                    <tr>
+                        <th scope="col">Username</th>
+                        <th scope="col">Id</th>
+                        <th scope="col">Role</th>
+                        <th scope="col">Status</th>
+                    </tr>
+                    <tr>
+                        <th scope="col">&nbsp;</th>
+                        <th scope="col">&nbsp;</th>
+                        <th scope="col">
+                            <div class="userRole">
+                              <select class="userRole" onchange="userRoleChangeEventHandler(event);">
+                                <option value="ALL">ALL</option>
+                                {% for ddv in dropdown %}
+                                  {% if ddv.column == "USERROLE" %}
+                                     <option value="{{ddv.value}}">{{ddv.value}}</option>
+                                  {% endif %}
+                                {% endfor %}
+                              </select>
+                            </div>
+                        </th>
+                        <th scope="col">
+                            <div class="userStatus">
+                              <select class="userStatus" onchange="userStatusChangeEventHandler(event);">
+                                <option value="ALL">ALL</option>
+                                {% for ddv in dropdown %}
+                                  {% if ddv.column == "USERSTATUS" %}
+                                     <option value="{{ddv.value}}">{{ddv.value}}</option>
+                                  {% endif %}
+                                {% endfor %}
+                              </select>
+                            </div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for user in users %}
+                <tr class="pointer">
+                    <td>{{user.username}}</td>
+                    <td>{{user.initials}}</td>
+                    <td>{{user.userRole}}</td>
+                    <td>{{user.userStatus}}</td>
+                    <td>
+                        <button class="btn-sm btn-primary btn-thin-sm"
+                                onclick="window.location.href='view-user-page/{{user.id}}'"
+                                type="button">View</button>
+
+                        <button class="btn-sm btn-primary btn-thin-sm"
+                                onclick="window.location.href='edit-user-page/{{user.id}}'"
+                                type="button">Edit</button>
+
+                        <button class="btn-sm btn-primary btn-thin-sm"
+                                onclick="window.location.href='password-user-page/{{user.id}}'"
+                                type="button">Pass</button>
+                    </td>
+                </tr>
+                {% endfor %}
+                <tr>
+                    <td>
+                        <button class="btn-sm btn-primary btn-thin-sm"
+                             onclick="window.location.href='add-user-page'" type="button">Add</button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+             <script type="text/javascript">
+                  function userRoleChangeEventHandler(event) {
+                    if (getCookie("userRoleFilter") != event.target.value) {
+                        document.cookie = `userRoleFilter=${event.target.value}; path=/`;
+                        window.location.href=window.location.href;
+                    }
+                  }
+                  function userStatusChangeEventHandler(event) {
+                    if (getCookie("userStatusFilter") != event.target.value) {
+                        document.cookie = `userStatusFilter=${event.target.value}; path=/`;
+                        window.location.href=window.location.href;
+                    }
+                  }
+            </script>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    function getCookie(cname) {
+      let name = cname + "=";
+      let decodedCookie = decodeURIComponent(document.cookie);
+      let ca = decodedCookie.split(';');
+      for(let i = 0; i <ca.length; i++) {
+        let c = ca[i];
+        while (c.charAt(0) == ' ') {
+          c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+          return c.substring(name.length, c.length);
+        }
+      }
+      return "";
+    }
+    // role
+    filter = getCookie("userRoleFilter")
+    select = document.querySelector(".userRole");
+    options = document.querySelectorAll(".userRole option");
+    if (filter) {
+       for(const option of options) {
+           const area = option.value;
+           if (area === filter) {
+              option.setAttribute("selected", "");
+              break;
+           }
+       }
+    }
+    //userStatus
+    filter = getCookie("userStatusFilter")
+    select = document.querySelector(".userStatus");
+    options = document.querySelectorAll(".userStatus option");
+    if (filter) {
+       for(const option of options) {
+           const area = option.value;
+           if (area === filter) {
+              option.setAttribute("selected", "");
+              break;
+           }
+       }
+    }
+
+</script>
+
+
+
+
+
+

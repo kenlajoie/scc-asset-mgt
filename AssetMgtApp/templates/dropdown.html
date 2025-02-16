@@ -1,113 +1,212 @@
 {% include 'layout.html' %}
 
-<div class="container">
-    <div class="card mt-5 text-center">
-        <div class="card-header p-2">
-            <h5 class="card-title card-title-left">Dropdown</h5>
-        </div>
-        <div class="card-body">
-            <table class="table-sm table-hover">
-                <thead>
-                    <tr>
-                        <th scope="col">Column</th>
-                        <th scope="col">Value</th>
-                        <th scope="col">Descrip</th>
-                        <th scope="col">Order</th>
-                    </tr>
-                    <tr>
-                        <th scope="col">
-                            <div class="dropdownColumn-Filter">
-                              <select id=dropdownColumn class="dropdownColumn" onchange="dropdownColumnChangeEventHandler(event);">
-                                <option value="ALL">ALL</option>
-                                {% for ddc in distinctColumnList %}
-                                    <option value={{ddc.column}}>{{ddc.column}}</option>
-                                {% endfor %}
-                              </select>
-                            </div>
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                {% for dd in dropdown %}
-                <tr class="pointer">
-                    <td>{{dd.column}}</td>
-                    <td>{{dd.value}}</td>
-                    <td>{{dd.description}}</td>
-                    <td>{{dd.order}}</td>
-                    <td>
-                        <button class="btn-sm btn-primary btn-thin-sm"
-                                onclick="window.location.href='view-dropdown-page/{{dd.id}}'"
-                                type="button">View</button>
+<style>
+  .filter-header {
+    width: 100%;
+    background-color:  rgb(255, 99, 71); /* Tomato color */
+    color: black;
+    text-align: center;
+    padding-top: 8px;
+    padding-bottom: 3px;
+  }
 
-                        <button class="btn-sm btn-primary btn-thin-sm"
-                                onclick="window.location.href='edit-dropdown-page/{{dd.id}}'"
-                                type="button">Edit</button>
+  .filter-footer {
+    width: 100%;
+    background-color:  rgb(255, 99, 71); /* Tomato color */
+    color: black;
+    text-align: center;
+    padding-top: 8px;
+    padding-bottom: 3px;
+  }
 
-                        <button class="btn-sm btn-primary btn-thin-sm"
-                                onclick="window.location.href='add-dropdown-page/{{dd.id}}'"
-                                type="button">Add</button>
-                    </td>
-                </tr>
-                {% endfor %}
+  .filter-content {
+    width: 100%;
+    padding-top: 3px;
+    padding-left: 3px;
+  }
 
-                {% if currentUser.initials == 'DBA' %} <!-- only allow DBA to add new dropdown columns -->
-                <tr>
-                    <td>
-                        <button class="btn-sm btn-primary btn-thin-sm"
-                             onclick="window.location.href='addx-dropdown-page'" type="button">Add</button>
-                    </td>
-                </tr>
-                {% endif %}
+ .container {
+    text-align: left;
+  }
 
-                </tbody>
-            </table>
+  .container-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 3px;
+    margin-bottom: 3px;
+  }
 
-             <script type="text/javascript">
-                  function dropdownColumnChangeEventHandler(event) {
-                    if (getCookie("dropdownColumnFilter") != event.target.value) {
-                        document.cookie = `dropdownColumnFilter=${event.target.value}; path=/`;
-                        window.location.href=window.location.href;
-                    }
-                  }
-            </script>
-        </div>
-    </div>
-</div>
+  .container-item {
+    min-width: 375px; /* Minimum width */
+    width: 100%;      /* Width will scale to 100% of the parent element */
+    border: 4px solid black; /*Border color and thickness */
+    background-color: #fff;
+    padding: 2px 14px 2px;  /* top, left/right, bottom */
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    margin-top: 2px;
+  }
+
+  .pagetitle {
+    font-size: medium;
+    font-weight: bold;
+  }
+
+  .filterdropdown {
+    font-size: x-small;
+  }
+
+  .dataheader {
+    font-size: small
+  }
+
+  .datafield {
+    border: 2px solid black; /* Border color and thickness */
+    border-radius: 1px;
+    margin: 3px;              /* Margin outside the border */
+    padding-left: 2px;
+    font-size: small
+  }
+
+  .databutton {
+    padding: 0px 3px; /* Custom padding for thinner appearance */
+    margin: 0px 3px;
+    font-size: x-small;
+    background-color: #007bff;
+    color: white;
+  }
+</style>
+
+<script>
+function dropdownColumnChangeEventHandler(event) {
+    if (getCookie("dropdownColumnFilter") != event.target.value) {
+        document.cookie = `dropdownColumnFilter=${event.target.value}; path=/`;
+        window.location.href=window.location.href;
+    }
+}
+</script>
+  <div class="filter-header">
+   <div class="row mx-0 pb-1 gx-0">
+      <div class="col pagetitle d-flex justify-content-start">Dropdown Filters</div>
+   </div> <!--row-->
+
+    <div class="row gx-0">
+
+      <div class="col filterdropdown">Column
+          <select id=dropdownColumnFilter class="dropdownColumn" onchange="dropdownColumnChangeEventHandler(event);">
+            <option value="ALL">ALL</option>
+            {% for ddc in distinctColumnList %}
+                <option value={{ddc.column}}>{{ddc.column}}</option>
+            {% endfor %}
+          </select>
+      </div> <!--col-->
+
+    </div> <!--row-->
+  </div> <!-- filter-header -->
+
+  <!-- Scrollable content goes here -->
+  <div class="filter-content">
+      <div id="container-list" class="container-list"></div>
+  </div> <!--filter-content-->
+
+  <!-- navigation buttons -->
+  <div class="filter-footer">
+   <div class="row mx-0 pb-1 gx-0">
+      <div class="col d-flex justify-content-end">
+        {% if currentUser.initials == 'DBA' %} <!-- only allow DBA to add new dropdown columns -->
+            <button class="databutton" id="addUserButton" type="button"
+                    onclick="window.location.href='addx-dropdown-page'" type="button">Add</button>
+        {% endif %}
+      </div> <!--col-->
+   </div> <!--row-->
+  </div> <!--filter-footer-->
 
 <script type="text/javascript">
-    function getCookie(cname) {
-      let name = cname + "=";
-      let decodedCookie = decodeURIComponent(document.cookie);
-      let ca = decodedCookie.split(';');
-      for(let i = 0; i <ca.length; i++) {
-        let c = ca[i];
-        while (c.charAt(0) == ' ') {
-          c = c.substring(1);
-        }
-        if (c.indexOf(name) == 0) {
-          return c.substring(name.length, c.length);
-        }
-      }
-      return "";
+
+//----------------------------------------------------------------------------
+// create the list
+const containerList = document.getElementById("container-list");
+const addContainerButton = document.getElementById("add-container");
+// Array to store the dynamic containers' data
+let containersData = [];
+
+{% for dd in dropdown %}
+    newContainer = {
+     id: {{dd.id}}
+   };
+
+   containersData.push(newContainer); // Add new container to the data array
+
+  // Create a new container element and append it directly
+  newContainerElement = document.createElement("div");
+  newContainerElement.classList.add("container-item");
+
+  newContainerElement.innerHTML = `
+    <div class="row">
+      <div class="col dataheader">Column</div>
+      <div class="col dataheader">Value</div>
+    </div>
+    <div class="row">
+      <div class="col datafield">{{dd.column}}</div>
+      <div class="col datafield">{{dd.value}}</div>
+    </div>
+
+    <div class="row">
+      <div class="col col-2 text-end dataheader">Description</div>
+      <div class="col datafield">{{dd.description}}</div>
+    </div>
+
+    <div class="row">
+      <div class="col-12 d-flex justify-content-end">
+           <button class="databutton"
+                    onclick="window.location.href='view-dropdown-page/{{dd.id}}'"
+                    type="button">View</button>
+           <button class="databutton"
+                    onclick="window.location.href='edit-dropdown-page/{{dd.id}}'"
+                    type="button">Edit</button>
+            <button class="databutton"
+                    onclick="window.location.href='add-dropdown-page/{{dd.id}}'"
+                    type="button">Add</button>
+      </div> <!--col-->
+    </div> <!--row--->
+  `;
+
+   // Append the new container element to the container list
+   containerList.appendChild(newContainerElement);
+
+{% endfor %}
+
+//----------------------------------------------------------------------------
+// select setting functions
+
+function getCookie(cname) {
+  let name = cname + "=";
+  let decodedCookie = decodeURIComponent(document.cookie);
+  let ca = decodedCookie.split(';');
+  for(let i = 0; i <ca.length; i++) {
+    let c = ca[i];
+    while (c.charAt(0) == ' ') {
+      c = c.substring(1);
     }
-    // dropdownColumn
-    filter = getCookie("dropdownColumnFilter")
-    select = document.querySelector(".dropdownColumn");
-    options = document.querySelectorAll(".dropdownColumn option");
-    if (filter) {
-       for(const option of options) {
-           const area = option.value;
-           if (area === filter) {
-              option.setAttribute("selected", "");
-              break;
-           }
+    if (c.indexOf(name) == 0) {
+      return c.substring(name.length, c.length);
+    }
+  }
+  return "";
+}
+
+// dropdownColumn
+filter = getCookie("dropdownColumnFilter")
+select = document.querySelector(".dropdownColumn");
+options = document.querySelectorAll(".dropdownColumn option");
+if (filter) {
+   for(const option of options) {
+       const area = option.value;
+       if (area === filter) {
+          option.setAttribute("selected", "");
+          break;
        }
-    }
-
+   }
+}
 </script>
-
-
-
-
-
-

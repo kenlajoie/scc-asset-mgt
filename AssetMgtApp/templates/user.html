@@ -1,144 +1,248 @@
 {% include 'layout.html' %}
+<style>
+  .filter-header {
+    width: 100%;
+    background-color:  rgb(255, 99, 71); /* Tomato color */
+    color: black;
+    text-align: center;
+    padding-top: 8px;
+    padding-bottom: 3px;
+  }
 
-<div class="container">
-    <div class="card mt-5 text-center">
-        <div class="card-header p-2">
-            <h5 class="card-title card-title-left">User</h5>
-        </div>
-        <div class="card-body">
-            <table class="table-sm table-hover">
-                <thead>
-                    <tr>
-                        <th scope="col">Username</th>
-                        <th scope="col">Id</th>
-                        <th scope="col">Role</th>
-                        <th scope="col">Status</th>
-                    </tr>
-                    <tr>
-                        <th scope="col">&nbsp;</th>
-                        <th scope="col">&nbsp;</th>
-                        <th scope="col">
-                            <div class="userRole">
-                              <select class="userRole" onchange="userRoleChangeEventHandler(event);">
-                                <option value="ALL">ALL</option>
-                                {% for ddv in dropdown %}
-                                  {% if ddv.column == "USERROLE" %}
-                                     <option value="{{ddv.value}}">{{ddv.value}}</option>
-                                  {% endif %}
-                                {% endfor %}
-                              </select>
-                            </div>
-                        </th>
-                        <th scope="col">
-                            <div class="userStatus">
-                              <select class="userStatus" onchange="userStatusChangeEventHandler(event);">
-                                <option value="ALL">ALL</option>
-                                {% for ddv in dropdown %}
-                                  {% if ddv.column == "USERSTATUS" %}
-                                     <option value="{{ddv.value}}">{{ddv.value}}</option>
-                                  {% endif %}
-                                {% endfor %}
-                              </select>
-                            </div>
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                {% for user in users %}
-                <tr class="pointer">
-                    <td>{{user.username}}</td>
-                    <td>{{user.initials}}</td>
-                    <td>{{user.userRole}}</td>
-                    <td>{{user.userStatus}}</td>
-                    <td>
-                        <button class="btn-sm btn-primary btn-thin-sm"
-                                onclick="window.location.href='view-user-page/{{user.id}}'"
-                                type="button">View</button>
+  .filter-footer {
+    width: 100%;
+    background-color:  rgb(255, 99, 71); /* Tomato color */
+    color: black;
+    text-align: center;
+    padding-top: 8px;
+    padding-bottom: 3px;
+  }
 
-                        <button class="btn-sm btn-primary btn-thin-sm"
-                                onclick="window.location.href='edit-user-page/{{user.id}}'"
-                                type="button">Edit</button>
+  .filter-content {
+    width: 100%;
+    padding-top: 3px;
+    padding-left: 3px;
+  }
 
-                        <button class="btn-sm btn-primary btn-thin-sm"
-                                onclick="window.location.href='password-user-page/{{user.id}}'"
-                                type="button">Pass</button>
-                    </td>
-                </tr>
-                {% endfor %}
-                <tr>
-                    <td>
-                        <button class="btn-sm btn-primary btn-thin-sm"
-                             onclick="window.location.href='add-user-page'" type="button">Add</button>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
+ .container {
+    text-align: left;
+  }
 
-             <script type="text/javascript">
-                  function userRoleChangeEventHandler(event) {
-                    if (getCookie("userRoleFilter") != event.target.value) {
-                        document.cookie = `userRoleFilter=${event.target.value}; path=/`;
-                        window.location.href=window.location.href;
-                    }
-                  }
-                  function userStatusChangeEventHandler(event) {
-                    if (getCookie("userStatusFilter") != event.target.value) {
-                        document.cookie = `userStatusFilter=${event.target.value}; path=/`;
-                        window.location.href=window.location.href;
-                    }
-                  }
-            </script>
-        </div>
-    </div>
-</div>
+  .container-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 3px;
+    margin-bottom: 3px;
+  }
+
+  .container-item {
+    min-width: 375px; /* Minimum width */
+    width: 100%;      /* Width will scale to 100% of the parent element */
+    border: 4px solid black; /*Border color and thickness */
+    background-color: #fff;
+    padding: 2px 14px 2px;  /* top, left/right, bottom */
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    margin-top: 2px;
+  }
+
+  .pagetitle {
+    font-size: medium;
+    font-weight: bold;
+  }
+
+  .filterdropdown {
+    font-size: x-small;
+  }
+
+  .dataheader {
+    font-size: small
+  }
+
+  .datafield {
+    border: 2px solid black; /* Border color and thickness */
+    border-radius: 1px;
+    margin: 3px;              /* Margin outside the border */
+    padding-left: 2px;
+    font-size: small
+  }
+
+  .databutton {
+    padding: 0px 3px; /* Custom padding for thinner appearance */
+    margin: 0px 3px;
+    font-size: x-small;
+    background-color: #007bff;
+    color: white;
+  }
+</style>
+
+<script>
+function userRoleChangeEventHandler(event) {
+    if (getCookie("userRoleFilter") != event.target.value) {
+        document.cookie = `userRoleFilter=${event.target.value}; path=/`;
+        window.location.href=window.location.href;
+}
+}
+function userStatusChangeEventHandler(event) {
+    if (getCookie("userStatusFilter") != event.target.value) {
+        document.cookie = `userStatusFilter=${event.target.value}; path=/`;
+        window.location.href=window.location.href;
+    }
+}
+</script>
+  <div class="filter-header">
+   <div class="row mx-0 pb-1 gx-0">
+      <div class="col pagetitle d-flex justify-content-start">User Filters</div>
+   </div> <!--row-->
+
+    <div class="row gx-0">
+
+      <div class="col filterdropdown">Role
+          <select id=userRoleFilter class="userRole" onchange="userRoleChangeEventHandler(event);">
+            <option value="ALL">ALL</option>
+            {% for ddv in dropdown %}
+              {% if ddv.column == "USERROLE" %}
+                 <option value="{{ddv.value}}">{{ddv.value}}</option>
+              {% endif %}
+            {% endfor %}
+          </select>
+      </div> <!--col-->
+
+      <div class="col filterdropdown">Status
+          <select id=userStatusFilter class="userStatus" onchange="userStatusChangeEventHandler(event);">
+            <option value="ALL">ALL</option>
+            {% for ddv in dropdown %}
+              {% if ddv.column == "USERSTATUS" %}
+                 <option value="{{ddv.value}}">{{ddv.value}}</option>
+              {% endif %}
+            {% endfor %}
+          </select>
+      </div> <!--col-->
+
+    </div> <!--row-->
+  </div> <!-- filter-header -->
+
+  <!-- Scrollable content goes here -->
+  <div class="filter-content">
+      <div id="container-list" class="container-list"></div>
+  </div> <!--filter-content-->
+
+
+  <!-- navigation buttons -->
+  <div class="filter-footer">
+   <div class="row mx-0 pb-1 gx-0">
+      <div class="col d-flex justify-content-end">
+        <button class="databutton" id="addUserButton" type="button"
+             onclick="window.location.href='add-user-page'" type="button">Add</button>
+      </div>
+   </div> <!--row-->
+  </div> <!--filter-footer-->
 
 <script type="text/javascript">
-    function getCookie(cname) {
-      let name = cname + "=";
-      let decodedCookie = decodeURIComponent(document.cookie);
-      let ca = decodedCookie.split(';');
-      for(let i = 0; i <ca.length; i++) {
-        let c = ca[i];
-        while (c.charAt(0) == ' ') {
-          c = c.substring(1);
-        }
-        if (c.indexOf(name) == 0) {
-          return c.substring(name.length, c.length);
-        }
-      }
-      return "";
+
+//----------------------------------------------------------------------------
+// create the list
+const containerList = document.getElementById("container-list");
+const addContainerButton = document.getElementById("add-container");
+// Array to store the dynamic containers' data
+let containersData = [];
+
+{% for user in users %}
+    newContainer = {
+     id: {{user.id}}
+   };
+
+   containersData.push(newContainer); // Add new container to the data array
+
+  // Create a new container element and append it directly
+  newContainerElement = document.createElement("div");
+  newContainerElement.classList.add("container-item");
+
+  newContainerElement.innerHTML = `
+    <div class="row">
+      <div class="col dataheader">Username</div>
+      <div class="col dataheader">Initials</div>
+      <div class="col dataheader">Role</div>
+      <div class="col dataheader">Status</div>
+    </div>
+    <div class="row">
+      <div class="col datafield">{{user.username}}</div>
+      <div class="col datafield">{{user.initials}}</div>
+      <div class="col datafield">{{user.userRole}}</div>
+      <div class="col datafield">{{user.userStatus}}</div>
+    </div>
+
+    <div class="row">
+      <div class="col col-2 text-end dataheader">Name</div>
+      <div class="col datafield">{{user.name}}</div>
+    </div>
+
+    <div class="row">
+      <div class="col-12 d-flex justify-content-end">
+           <button class="databutton"
+                    onclick="window.location.href='view-user-page/{{user.id}}'"
+                    type="button">View</button>
+           <button class="databutton"
+                    onclick="window.location.href='edit-user-page/{{user.id}}'"
+                    type="button">Edit</button>
+            <button class="databutton"
+                    onclick="window.location.href='password-user-page/{{user.id}}'"
+                    type="button">Pass</button>
+      </div> <!--col-->
+    </div> <!--row--->
+  `;
+
+   // Append the new container element to the container list
+   containerList.appendChild(newContainerElement);
+
+{% endfor %}
+
+//----------------------------------------------------------------------------
+// select setting functions
+
+function getCookie(cname) {
+  let name = cname + "=";
+  let decodedCookie = decodeURIComponent(document.cookie);
+  let ca = decodedCookie.split(';');
+  for(let i = 0; i <ca.length; i++) {
+    let c = ca[i];
+    while (c.charAt(0) == ' ') {
+      c = c.substring(1);
     }
-    // role
-    filter = getCookie("userRoleFilter")
-    select = document.querySelector(".userRole");
-    options = document.querySelectorAll(".userRole option");
-    if (filter) {
-       for(const option of options) {
-           const area = option.value;
-           if (area === filter) {
-              option.setAttribute("selected", "");
-              break;
-           }
+    if (c.indexOf(name) == 0) {
+      return c.substring(name.length, c.length);
+    }
+  }
+  return "";
+}
+
+// role
+filter = getCookie("userRoleFilter")
+select = document.querySelector(".userRole");
+options = document.querySelectorAll(".userRole option");
+if (filter) {
+   for(const option of options) {
+       const area = option.value;
+       if (area === filter) {
+          option.setAttribute("selected", "");
+          break;
        }
-    }
-    //userStatus
-    filter = getCookie("userStatusFilter")
-    select = document.querySelector(".userStatus");
-    options = document.querySelectorAll(".userStatus option");
-    if (filter) {
-       for(const option of options) {
-           const area = option.value;
-           if (area === filter) {
-              option.setAttribute("selected", "");
-              break;
-           }
+   }
+}
+//userStatus
+filter = getCookie("userStatusFilter")
+select = document.querySelector(".userStatus");
+options = document.querySelectorAll(".userStatus option");
+if (filter) {
+   for(const option of options) {
+       const area = option.value;
+       if (area === filter) {
+          option.setAttribute("selected", "");
+          break;
        }
-    }
+   }
+}
 
 </script>
-
-
-
-
-
 
