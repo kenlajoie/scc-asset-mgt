@@ -1,14 +1,14 @@
 
 <div>
-  <nav class="navbar navbar-expand-sm navbar-dark main-color fixed-top ">
+  <nav class="navbar navbar-expand-sm navbar-dark main-color fixed-top p-0">
     <a class="navbar-brand" href="#">Asset Mgt App</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
             aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
+    <div class="collapse navbar-collapse pl-5" id="navbarNav">
       <ul class="navbar-nav">
-        {% if currentUser %}
+   {% if currentUser %}
         <li class="nav-item active">
           <a class="nav-link" href="/assets/asset-page">Assets</a>
         </li>
@@ -16,26 +16,18 @@
           <!-- pass 0 to clear the active row -->
           <a class="nav-link" href="/todos/todo-list/0">Todos</a>
         </li>
-            {% if currentUser.userRole == 'ADMIN' %}
-              <li class="nav-item active">
-                <a class="nav-link" href="/users/user-page">Users</a>
-              </li>
-              <li class="nav-item active">
-                <a class="nav-link" href="/dropdown/dropdown-page">Dropdown</a>
-              </li>
-            {% endif %}
-        {% endif %}
-      </ul>
-
-      <ul class="navbar-nav ml-auto">
-        {% if currentUser %}
-        <li class="nav-item m-1">
-          {{currentUser.username}} {{currentUser.id}} {{currentUser.userRole}} &nbsp; &nbsp; &nbsp;
+     {% if currentUser.userRole == 'ADMIN' %}
+        <li class="nav-item active">
+          <a class="nav-link" href="/users/user-page">Users</a>
         </li>
-        <li class="nav-item m-2">
-          <a type="button" class="btn btn-outline-light text-white" onclick="logout()">Logout</a>
+        <li class="nav-item active">
+          <a class="nav-link" href="/dropdown/dropdown-page">Dropdown</a>
         </li>
-        {% endif %}
+        <li class="nav-item active">
+          <a class="nav-link" onclick="logout()">Logout</a>
+        </li>
+     {% endif %} <!-- is ADMIN -->
+   {% endif %} <!--currentUser -->
       </ul>
     </div>
   </nav>

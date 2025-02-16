@@ -1,241 +1,308 @@
 {% include 'layout.html' %}
+<style>
+  .filter-header {
+    width: 100%;
+    background-color:  rgb(255, 99, 71); /* Tomato color */
+    color: black;
+    text-align: center;
+    padding-top: 8px;
+    padding-bottom: 3px;
+  }
 
-<div class="container-sm">
-    <div class="card mt-5 text-center">
-        <div class="card-header p-2">
-            <h5 class="card-title d-flex justify-content-between align-items-center">
-                Assets
+  .filter-footer {
+    width: 100%;
+    background-color:  rgb(255, 99, 71); /* Tomato color */
+    color: black;
+    text-align: center;
+    padding-top: 8px;
+    padding-bottom: 3px;
+  }
 
-                <button class="btn btn-sm btn-primary btn-thin-sm"
-                     onclick="window.location.href='add-asset-page'" type="button">Add</button>
-            </h5>
-        </div>
-            <table class="table table-sm">
-                <thead>
-                    <tr>
-                        <th scope="col">Major</th>
-                        <th scope="col">Minor</th>
-                        <th scope="col">Type</th>
-                        <th scope="col">State</th>
-                    </tr>
-                    <tr class="bottom-border">
-                        <th scope="col">
-                            <div class="major-filter">
-                              <select id=majorFilter class="majorArea" onchange="majorChangeEventHandler(event);">
-                                {% for ddv in dropdown %}
-                                  {% if ddv.column == "MAJORAREA" %}
-                                     <option value="{{ddv.value}}">{{ddv.value}}</option>
-                                  {% endif %}
-                                {% endfor %}
-                                <option value="ALL">ALL</option>
-                              </select>
-                            </div>
-                        </th>
-                        <th scope="col">
-                            <div class="minor-filter">
-                              <select id=minorFilter class="minorArea" onchange="minorChangeEventHandler(event);">
-                                <option value="ALL">ALL</option>
-                                {% for ddv in dropdown %}
-                                  {% if ddv.column == "MINORAREA" %}
-                                     <option value="{{ddv.value}}">{{ddv.value}}</option>
-                                  {% endif %}
-                                {% endfor %}
-                              </select>
-                            </div>
-                        </th>
-                        <th scope="col">
-                            <div class="type-filter">
-                              <select id=typeFilter class="assetType" onchange="typeChangeEventHandler(event);">
-                                <option value="ALL">ALL</option>
-                                {% for ddv in dropdown %}
-                                  {% if ddv.column == "ASSETTYPE" %}
-                                     <option value="{{ddv.value}}">{{ddv.value}}</option>
-                                  {% endif %}
-                                {% endfor %}
-                              </select>
-                            </div>
-                        </th>
-                        <th scope="col">
-                            <div class="stateFilter">
-                              <select id=stateFilter class="assetState" onchange="stateChangeEventHandler(event);">
-                                <option value="ALL">ALL</option>
-                                {% for ddv in dropdown %}
-                                  {% if ddv.column == "ASSETSTATE" %}
-                                     <option value="{{ddv.value}}">{{ddv.value}}</option>
-                                  {% endif %}
-                                {% endfor %}
-                              </select>
-                            </div>
-                        </th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                {% for asset in assets %}
-                <tr data-id="{{asset.id}}" class="group-{{asset.id}}" >
-                    <td>{{asset.majorArea}}</td>
-                    <td>{{asset.minorArea}}</td>
-                    <td>{{asset.assetType}}</td>
-                    <td>{{asset.assetState}}</td>
-                </tr>
-                <tr data-id="{{asset.id}}" class="group-{{asset.id}} bottom-border">
-                    <td colspan="2" class="td150"><b>Desc:</b> {{asset.description}}</td>
-                    <td>{{asset.satellite}}/{{asset.station}}</td>
-                    <td>
-                        <button class="btn-sm btn-primary btn-thin-sm"
-                                 onclick="window.location.href='view-asset-page/{{asset.id}}'"
-                                type="button">View</button>
-                        <button class="btn-sm btn-primary btn-thin-sm"
-                                onclick="window.location.href='edit-asset-page/{{asset.id}}'"
-                                type="button">Edit</button>
+  .filter-content {
+    width: 100%;
+    padding-top: 3px;
+    padding-left: 3px;
+  }
 
-                    </td>
-                </tr>
-                {% endfor %}
-                <tr>
-                    <td>
-                        <button class="btn-sm btn-primary btn-thin-sm"
-                             onclick="window.location.href='add-asset-page'" type="button">Add</button>
-                    </td>
-                </tr>
-               </tbody>
-            </table>
+ .container {
+    text-align: left;
+  }
 
+  .container-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 3px;
+    margin-bottom: 3px;
+  }
 
-             <script type="text/javascript">
-                  function majorChangeEventHandler(event) {
-                    if (getCookie("majorAreaFilter") != event.target.value) {
-                        document.cookie = `majorAreaFilter=${event.target.value}; path=/`;
-                        window.location.href=window.location.href;
-                    }
-                  }
-                  function minorChangeEventHandler(event) {
-                    if (getCookie("minorAreaFilter") != event.target.value) {
-                        document.cookie = `minorAreaFilter=${event.target.value}; path=/`;
-                        window.location.href=window.location.href;
-                    }
-                  }
-                  function typeChangeEventHandler(event) {
-                    if (getCookie("assetTypeFilter") != event.target.value) {
-                        document.cookie = `assetTypeFilter=${event.target.value}; path=/`;
-                        window.location.href=window.location.href;
-                    }
-                  }
-                  function stateChangeEventHandler(event) {
-                    if (getCookie("assetStateFilter") != event.target.value) {
-                        document.cookie = `assetStateFilter=${event.target.value}; path=/`;
-                        window.location.href=window.location.href;
-                    }
-                  }
-            </script>
-        </div>
-    </div>
-</div>
+  .container-item {
+    min-width: 375px; /* Minimum width */
+    width: 100%;      /* Width will scale to 100% of the parent element */
+    border: 4px solid black; /*Border color and thickness */
+    background-color: #fff;
+    padding: 2px 14px 2px;  /* top, left/right, bottom */
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    margin-top: 2px;
+  }
 
-<script type="text/javascript">
-    function getCookie(cname) {
-      let name = cname + "=";
-      let decodedCookie = decodeURIComponent(document.cookie);
-      let ca = decodedCookie.split(';');
-      for(let i = 0; i <ca.length; i++) {
-        let c = ca[i];
-        while (c.charAt(0) == ' ') {
-          c = c.substring(1);
-        }
-        if (c.indexOf(name) == 0) {
-          return c.substring(name.length, c.length);
-        }
-      }
-      return "";
-    }
-    // majorArea
-    filter = getCookie("majorAreaFilter")
-    select = document.querySelector(".majorArea");
-    options = document.querySelectorAll(".majorArea option");
-    if (filter) {
-       for(const option of options) {
-           const area = option.value;
-           if (area === filter) {
-              option.setAttribute("selected", "");
-              break;
-           }
-       }
-    }
-    //minorArea
-    filter = getCookie("minorAreaFilter")
-    select = document.querySelector(".minorArea");
-    options = document.querySelectorAll(".minorArea option");
-    if (filter) {
-       for(const option of options) {
-           const area = option.value;
-           if (area === filter) {
-              option.setAttribute("selected", "");
-              break;
-           }
-       }
-    }
-    //assetType
-    filter = getCookie("assetTypeFilter")
-    select = document.querySelector(".assetType");
-    options = document.querySelectorAll(".assetType option");
-    if (filter) {
-       for(const option of options) {
-           const area = option.value;
-           if (area === filter) {
-              option.setAttribute("selected", "");
-              break;
-           }
-       }
-    }
+  .pagetitle {
+    font-size: medium;
+    font-weight: bold;
+  }
 
-    //assetState
-    filter = getCookie("assetStateFilter")
-    select = document.querySelector(".assetState");
-    options = document.querySelectorAll(".assetState option");
-    if (filter) {
-       for(const option of options) {
-           const area = option.value;
-           if (area === filter) {
-              option.setAttribute("selected", "");
-              break;
-           }
-       }
-    }
+  .filterdropdown {
+    font-size: x-small;
+  }
 
-    // Add hover effect for row groups
-    document.querySelectorAll('tr').forEach(row => {
-      row.addEventListener('mouseenter', () => {
-        const groupClass = Array.from(row.classList).find(cls => cls.startsWith('group-'));
-        if (groupClass) {
-          document.querySelectorAll(`.${groupClass}`).forEach(groupRow => {
-            groupRow.classList.add('hover-highlight');
-          });
-        }
-      });
+  .dataheader {
+    font-size: small
+  }
 
-      row.addEventListener('mouseleave', () => {
-        const groupClass = Array.from(row.classList).find(cls => cls.startsWith('group-'));
-        if (groupClass) {
-          document.querySelectorAll(`.${groupClass}`).forEach(groupRow => {
-            groupRow.classList.remove('hover-highlight');
-          });
-        }
-      });
+  .datafield {
+    border: 2px solid black; /* Border color and thickness */
+    border-radius: 1px;
+    margin: 3px;              /* Margin outside the border */
+    padding-left: 1px;
+    font-size: small
+  }
 
-    });
+  .databutton {
+    padding: 0px 3px; /* Custom padding for thinner appearance */
+    margin: 0px 3px;
+    font-size: x-small;
+    background-color: #007bff;
+    color: white;
+  }
+</style>
 
+<script>
+function majorChangeEventHandler(event) {
+  if (getCookie("majorAreaFilter") != event.target.value) {
+      document.cookie = `majorAreaFilter=${event.target.value}; path=/`;
+      window.location.href=window.location.href;
+  }
+}
+
+function minorChangeEventHandler(event) {
+  if (getCookie("minorAreaFilter") != event.target.value) {
+      document.cookie = `minorAreaFilter=${event.target.value}; path=/`;
+      window.location.href=window.location.href;
+  }
+}
+
+function typeChangeEventHandler(event) {
+  if (getCookie("assetTypeFilter") != event.target.value) {
+      document.cookie = `assetTypeFilter=${event.target.value}; path=/`;
+      window.location.href=window.location.href;
+  }
+}
+
+function stateChangeEventHandler(event) {
+  if (getCookie("assetStateFilter") != event.target.value) {
+      document.cookie = `assetStateFilter=${event.target.value}; path=/`;
+      window.location.href=window.location.href;
+  }
+}
 </script>
 
 
-<!--
-      const id = row.dataset.id;
-      if (id) {
-          row.addEventListener('click', () => {
-            //alert(`Asset ID: ${id}`);
-            window.location.href = `view-asset-page/${id}`;
-          });
-      }
--->
+  <div class="filter-header">
+   <div class="row mx-0 pb-1 gx-0">
+      <div class="col pagetitle d-flex justify-content-start">Asset Filters</div>
+   </div> <!--row-->
 
+    <div class="row gx-0">
+      <div class="col filterdropdown">Major
+          <select id=assetMajorFilter class="majorArea" onchange="majorChangeEventHandler(event);">
+            <option value="ALL">ALL</option>
+            {% for ddv in dropdown %}
+              {% if ddv.column == "MAJORAREA" %}
+                 <option value="{{ddv.value}}">{{ddv.value}}</option>
+              {% endif %}
+            {% endfor %}
+          </select>
+      </div> <!--col-->
 
+      <div class="col filterdropdown">Minor
+          <select id=assetMinorFilter class="minorArea" onchange="minorChangeEventHandler(event);">
+            <option value="ALL">ALL</option>
+            {% for ddv in dropdown %}
+              {% if ddv.column == "MINORAREA" %}
+                 <option value="{{ddv.value}}">{{ddv.value}}</option>
+              {% endif %}
+            {% endfor %}
+          </select>
+      </div> <!--col-->
 
+      <div class="col filterdropdown">Type
+          <select id=assetTypeFilter class="assetType" onchange="typeChangeEventHandler(event);">
+            <option value="ALL">ALL</option>
+            {% for ddv in dropdown %}
+              {% if ddv.column == "ASSETTYPE" %}
+                 <option value="{{ddv.value}}">{{ddv.value}}</option>
+              {% endif %}
+            {% endfor %}
+          </select>
+      </div> <!--col-->
+
+      <div class="col filterdropdown">State
+          <select id=assetStateFilter class="assetState" onchange="stateChangeEventHandler(event);">
+            <option value="ALL">ALL</option>
+            {% for ddv in dropdown %}
+              {% if ddv.column == "ASSETSTATE" %}
+                 <option value="{{ddv.value}}">{{ddv.value}}</option>
+              {% endif %}
+            {% endfor %}
+          </select>
+      </div> <!--col-->
+    </div> <!--row-->
+  </div> <!-- filter-header -->
+
+  <!-- Scrollable content goes here -->
+  <div class="filter-content">
+      <div id="container-list" class="container-list"></div>
+  </div> <!--filter-content-->
+
+  <!-- navigation buttons -->
+  <div class="filter-footer">
+   <div class="row mx-0 pb-1 gx-0">
+      <div class="col d-flex justify-content-end">
+        <button class="btn btn-sm btn-primary btn-thin-sm"
+             onclick="window.location.href='add-asset-page'" type="button">Add</button>
+      </div>
+   </div> <!--row-->
+  </div> <!--filter-footer-->
+
+<script type="text/javascript">
+
+//----------------------------------------------------------------------------
+// create the list
+const containerList = document.getElementById("container-list");
+const addContainerButton = document.getElementById("add-container");
+// Array to store the dynamic containers' data
+let containersData = [];
+
+{% for asset in assets %}
+    newContainer = {
+     id: {{asset.id}}
+   };
+
+   containersData.push(newContainer); // Add new container to the data array
+
+  // Create a new container element and append it directly
+  newContainerElement = document.createElement("div");
+  newContainerElement.classList.add("container-item");
+
+  newContainerElement.innerHTML = `
+    <div class="row">
+      <div class="col dataheader">Major</div>
+      <div class="col dataheader">Minor</div>
+      <div class="col dataheader">Type</div>
+      <div class="col dataheader">State</div>
+    </div>
+    <div class="row">
+      <div class="col datafield">{{asset.majorArea}}</div>
+      <div class="col datafield">{{asset.minorArea}}</div>
+      <div class="col datafield">{{asset.assetType}}</div>
+      <div class="col datafield">{{asset.assetState}}</div>
+    </div>
+
+    <div class="row">
+      <div class="col col-2 text-end dataheader">Asset:</div>
+      <div class="col datafield">{{asset.description}}</div>
+    </div>
+
+    <div class="row">
+      <div class="col-12 d-flex justify-content-end">
+           <button class="databutton"
+                    onclick="window.location.href='view-asset-page/{{asset.id}}'"
+                    type="button">View</button>
+            <button class="databutton"
+                    onclick="window.location.href='edit-asset-page/{{asset.id}}'"
+                    type="button">Edit</button>
+      </div> <!--col-->
+    </div> <!--row--->
+  `;
+
+   // Append the new container element to the container list
+   containerList.appendChild(newContainerElement);
+
+{% endfor %}
+
+//----------------------------------------------------------------------------
+// select setting functions
+
+function getCookie(cname) {
+  let name = cname + "=";
+  let decodedCookie = decodeURIComponent(document.cookie);
+  let ca = decodedCookie.split(';');
+  for(let i = 0; i <ca.length; i++) {
+    let c = ca[i];
+    while (c.charAt(0) == ' ') {
+      c = c.substring(1);
+    }
+    if (c.indexOf(name) == 0) {
+      return c.substring(name.length, c.length);
+    }
+  }
+  return "";
+}
+
+// majorArea
+filter = getCookie("majorAreaFilter")
+select = document.querySelector(".majorArea");
+options = document.querySelectorAll(".majorArea option");
+if (filter) {
+   for(const option of options) {
+       const area = option.value;
+       if (area === filter) {
+          option.setAttribute("selected", "");
+          break;
+       }
+   }
+}
+
+//minorArea
+filter = getCookie("minorAreaFilter")
+select = document.querySelector(".minorArea");
+options = document.querySelectorAll(".minorArea option");
+if (filter) {
+   for(const option of options) {
+       const area = option.value;
+       if (area === filter) {
+          option.setAttribute("selected", "");
+          break;
+       }
+   }
+}
+
+//assetType
+filter = getCookie("assetTypeFilter")
+select = document.querySelector(".assetType");
+options = document.querySelectorAll(".assetType option");
+if (filter) {
+   for(const option of options) {
+       const area = option.value;
+       if (area === filter) {
+          option.setAttribute("selected", "");
+          break;
+       }
+   }
+}
+
+//assetState
+filter = getCookie("assetStateFilter")
+select = document.querySelector(".assetState");
+options = document.querySelectorAll(".assetType option");
+if (filter) {
+   for(const option of options) {
+       const area = option.value;
+       if (area === filter) {
+          option.setAttribute("selected", "");
+          break;
+       }
+   }
+}
+</script>

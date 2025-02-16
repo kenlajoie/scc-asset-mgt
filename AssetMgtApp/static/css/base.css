@@ -16,6 +16,19 @@ body {
 */
 }
 
+.navbar {
+  font-size: small;
+}
+.navbar-brand {
+  font-size: medium;
+  font-weight: bold; /* Make the brand name bold */
+  color: #ff6347; /* Tomato color */
+}
+
+.navbar-brand:hover {
+  color: #ff4500; /* Change color when hovered */
+}
+
 .card-title-left {
       text-align: left;
 }

@@ -1,301 +1,416 @@
 {% include 'layout.html' %}
 
-<div class="container">
-    <div class="card mt-5 text-center">
-        <div class="card-header p-2">
-            <h5 class="card-title d-flex justify-content-between align-items-center">
-                Todos
+<style>
+/*
+  body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    padding-left: 0px;
+    background-color: #f7f7f7;
+  }
+*/
+  .xmyfixed-top {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color:  rgb(255, 99, 71); /* Tomato color */
+    color: black;
+    padding: 1px;
+    text-align: center;
+    z-index: 1000; /* Ensures it's above other content */
+  }
 
-                <button class="btn btn-sm btn-primary btn-thin-sm"
-                     onclick="window.location.href='/todos/todo-report-page'" type="button">Report</button>
-            </h5>
-        </div>
-        <div class="card-body">
-            <table class="table table-sm">
+  .filter-header {
+    width: 100%;
+    background-color:  rgb(255, 99, 71); /* Tomato color */
+    color: black;
+    text-align: center;
+    padding-top: 8px;
+    padding-bottom: 3px;
+  }
 
-                <thead>
-                    <tr>
-                        <th scope="col">Who</th>
-                        <th scope="col">Status</th>
-                        <th scope="col">Priority</th>
-                        <th scope="col">Major</th>
-                        <th scope="col">Minor</th>
-                        <th scope="col">Type</th>
-                    </tr>
-                    <tr>
-                        <th scope="col">
-                            <div class="assignedTo">
-                              <select id=assignedToFilter class="assignedTo" onchange="assignedToChangeEventHandler(event);">
-                                <option value="ALL">ALL</option>
-                                {% for user in users %}
-                                   <option value={{user.initials}}>{{user.initials}}</option>
-                                {% endfor %}
-                              </select>
-                            </div>
-                        </th>
-                        <th scope="col">
-                            <div class="todoStatus">
-                              <select id=todoStatusFilter class="todoStatus" onchange="todoStatusChangeEventHandler(event);">
-                                <option value="ALL">ALL</option>
-                                {% for ddv in dropdown %}
-                                  {% if ddv.column == "TODOSTATUS" %}
-                                     <option value="{{ddv.value}}">{{ddv.value}}</option>
-                                  {% endif %}
-                                {% endfor %}
-                              </select>
-                            </div>
-                        </th>
-                        <th scope="col">
-                            <div class="priority">
-                              <select id=todoPriorityFilter class="priority" onchange="priorityChangeEventHandler(event);">
-                                <option value="ALL">ALL</option>
-                                {% for ddv in dropdown %}
-                                  {% if ddv.column == "TODOPRIORITY" %}
-                                     <option value="{{ddv.value}}">{{ddv.value}}</option>
-                                  {% endif %}
-                                {% endfor %}
-                              </select>
-                            </div>
-                        </th>
-                        <th scope="col">
-                            <div class="major-filter">
-                              <select id=assetMajorFilter class="majorArea" onchange="majorChangeEventHandler(event);">
-                                <option value="ALL">ALL</option>
-                                {% for ddv in dropdown %}
-                                  {% if ddv.column == "MAJORAREA" %}
-                                     <option value="{{ddv.value}}">{{ddv.value}}</option>
-                                  {% endif %}
-                                {% endfor %}
-                              </select>
-                            </div>
-                        </th>
-                        <th scope="col">
-                            <div class="minor-filter">
-                              <select id=assetMinorFilter class="minorArea" onchange="minorChangeEventHandler(event);">
-                                <option value="ALL">ALL</option>
-                                {% for ddv in dropdown %}
-                                  {% if ddv.column == "MINORAREA" %}
-                                     <option value="{{ddv.value}}">{{ddv.value}}</option>
-                                  {% endif %}
-                                {% endfor %}
-                              </select>
-                            </div>
-                        </th>
-                        <th scope="col">
-                            <div class="minor-filter">
-                              <select id=assetTypeFilter class="assetType" onchange="typeChangeEventHandler(event);">
-                                <option value="ALL">ALL</option>
-                                {% for ddv in dropdown %}
-                                  {% if ddv.column == "ASSETTYPE" %}
-                                     <option value="{{ddv.value}}">{{ddv.value}}</option>
-                                  {% endif %}
-                                {% endfor %}
-                              </select>
-                            </div>
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                {% for todo in todos %}
-                <tr data-id="{{todo.id}}" id="group-{{todo.id}}" class="group-{{todo.id}}">
-                    <td>{{todo.assignedTo}}</td>
-                    <td>{{todo.todoStatus}}</td>
-                    <td>{{todo.priority}}</td>
-                    <td>{{todo.majorArea}}</td>
-                    <td>{{todo.minorArea}}</td>
-                    <td>{{todo.assetType}}</td>
-                </tr>
-                <tr data-id="{{todo.id}}" class="group-{{todo.id}} bottom-border">
-                    <td colspan="5"><b>Task: </b> {{todo.task}}</td>
-                     <td>
-                         <!-- why is a full path and not a relative path required -->
-                        <button class="btn-sm btn-primary btn-thin-sm btn-tight"
-                                onclick="window.location.href='/todos/view-todo-page/{{todo.id}}'"
-                                type="button">View</button>
-                        &nbsp;
-                        <button class="btn-sm btn-primary btn-thin-sm btn-tight"
-                                onclick="window.location.href='/todos/edit-todo-page/{{todo.id}}'"
-                                type="button">Edit</button>
-                        &nbsp;
-                        <button class="btn-sm btn-primary btn-thin-sm btn-tight"
-                                onclick="window.location.href='/todos/add-todo-page/{{todo.assetId}}'"
-                                type="button" >Add</button>
+  .filter-footer {
+    width: 100%;
+    background-color:  rgb(255, 99, 71); /* Tomato color */
+    color: black;
+    text-align: center;
+    padding-top: 8px;
+    padding-bottom: 3px;
+  }
 
-                    </td>
-               </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-             <script type="text/javascript">
-                  function assignedToChangeEventHandler(event) {
-                    if (getCookie("assignedToFilter") != event.target.value) {
-                        document.cookie = `assignedToFilter=${event.target.value}; path=/`;
-                        window.location.href=window.location.href;
-                    }
-                  }
-                  function todoStatusChangeEventHandler(event) {
-                    if (getCookie("todoStatusFilter") != event.target.value) {
-                        document.cookie = `todoStatusFilter=${event.target.value}; path=/`;
-                        window.location.href=window.location.href;
-                    }
-                  }
-                  function priorityChangeEventHandler(event) {
-                    if (getCookie("priorityFilter") != event.target.value) {
-                        document.cookie = `priorityFilter=${event.target.value}; path=/`;
-                        window.location.href=window.location.href;
-                    }
-                  }
-                  function majorChangeEventHandler(event) {
-                    if (getCookie("majorAreaFilter") != event.target.value) {
-                        document.cookie = `todoMajorAreaFilter=${event.target.value}; path=/`;
-                        window.location.href=window.location.href;
-                    }
-                  }
-                  function minorChangeEventHandler(event) {
-                    if (getCookie("minorAreaFilter") != event.target.value) {
-                        document.cookie = `todoMinorAreaFilter=${event.target.value}; path=/`;
-                        window.location.href=window.location.href;
-                    }
-                  }
-                  function typeChangeEventHandler(event) {
-                    if (getCookie("todoAssetTypeFilter") != event.target.value) {
-                        document.cookie = `todoAssetTypeFilter=${event.target.value}; path=/`;
-                        window.location.href=window.location.href;
-                    }
-                  }
-            </script>
-        </div>
-    </div>
-</div>
+  .filter-content {
+    width: 100%;
+    padding-top: 3px;
+    padding-left: 3px;
+  }
 
-<script type="text/javascript">
-    function getCookie(cname) {
-      let name = cname + "=";
-      let decodedCookie = decodeURIComponent(document.cookie);
-      let ca = decodedCookie.split(';');
-      for(let i = 0; i <ca.length; i++) {
-        let c = ca[i];
-        while (c.charAt(0) == ' ') {
-          c = c.substring(1);
-        }
-        if (c.indexOf(name) == 0) {
-          return c.substring(name.length, c.length);
-        }
-      }
-      return "";
-    }
-    // assignedTo
-    filter = getCookie("assignedToFilter")
-    select = document.querySelector(".assignedTo");
-    options = document.querySelectorAll(".assignedTo option");
-    if (filter) {
-       for(const option of options) {
-           const area = option.value;
-           if (area === filter) {
-              option.setAttribute("selected", "");
-              break;
-           }
-       }
-    }
-    // todoStatus
-    filter = getCookie("todoStatusFilter")
-    select = document.querySelector(".todoStatus");
-    options = document.querySelectorAll(".todoStatus option");
-    if (filter) {
-       for(const option of options) {
-           const area = option.value;
-           if (area === filter) {
-              option.setAttribute("selected", "");
-              break;
-           }
-       }
-    }
-    // priority
-    filter = getCookie("priorityFilter")
-    select = document.querySelector(".priority");
-    options = document.querySelectorAll(".priority option");
-    if (filter) {
-       for(const option of options) {
-           const area = option.value;
-           if (area === filter) {
-              option.setAttribute("selected", "");
-              break;
-           }
-       }
-    }
-    // majorArea
-    filter = getCookie("todoMajorAreaFilter")
-    select = document.querySelector(".majorArea");
-    options = document.querySelectorAll(".majorArea option");
-    if (filter) {
-       for(const option of options) {
-           const area = option.value;
-           if (area === filter) {
-              option.setAttribute("selected", "");
-              break;
-           }
-       }
-    }
-    //minorArea
-    filter = getCookie("todoMinorAreaFilter")
-    select = document.querySelector(".minorArea");
-    options = document.querySelectorAll(".minorArea option");
-    if (filter) {
-       for(const option of options) {
-           const area = option.value;
-           if (area === filter) {
-              option.setAttribute("selected", "");
-              break;
-           }
-       }
-    }
-    //assetType
-    filter = getCookie("todoAssetTypeFilter")
-    select = document.querySelector(".assetType");
-    options = document.querySelectorAll(".assetType option");
-    if (filter) {
-       for(const option of options) {
-           const area = option.value;
-           if (area === filter) {
-              option.setAttribute("selected", "");
-              break;
-           }
-       }
-    }
+ .container {
+    text-align: left;
+  }
 
-    // Add hover effect for row groups
-    document.querySelectorAll('tr').forEach(row => {
-      row.addEventListener('mouseenter', () => {
-        const groupClass = Array.from(row.classList).find(cls => cls.startsWith('group-'));
-        if (groupClass) {
-          document.querySelectorAll(`.${groupClass}`).forEach(groupRow => {
-            groupRow.classList.add('hover-highlight');
-          });
-        }
-      });
+  .container-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 3px;
+    margin-bottom: 3px;
+  }
 
-      row.addEventListener('mouseleave', () => {
-        const groupClass = Array.from(row.classList).find(cls => cls.startsWith('group-'));
-        if (groupClass) {
-          document.querySelectorAll(`.${groupClass}`).forEach(groupRow => {
-            groupRow.classList.remove('hover-highlight');
-          });
-        }
-      });
+  .container-item {
+    min-width: 375px; /* Minimum width */
+    width: 100%;      /* Width will scale to 100% of the parent element */
+    border: 4px solid black; /*Border color and thickness */
+    background-color: #fff;
+    padding: 2px 14px 2px;  /* top, left/right, bottom */
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    margin-top: 2px;
+  }
 
-    });
+  .pagetitle {
+    font-size: medium;
+    font-weight: bold;
+  }
 
+  .filterdropdown {
+    font-size: x-small;
+  }
+
+  .dataheader {
+    font-size: small
+  }
+
+  .datafield {
+    border: 2px solid black; /* Border color and thickness */
+    border-radius: 1px;
+    margin: 3px;              /* Margin outside the border */
+    padding-left: 1px;
+    font-size: small
+  }
+
+  .databutton {
+    padding: 0px 3px; /* Custom padding for thinner appearance */
+    margin: 0px 3px;
+    font-size: x-small;
+    background-color: #007bff;
+    color: white;
+  }
+</style>
+
+<script>
+// assign the selected values
+function assignedToChangeEventHandler(event) {
+  if (getCookie("assignedToFilter") != event.target.value) {
+      document.cookie = `assignedToFilter=${event.target.value}; path=/`;
+      window.location.href=window.location.href;
+  }
+}
+function todoStatusChangeEventHandler(event) {
+  if (getCookie("todoStatusFilter") != event.target.value) {
+      document.cookie = `todoStatusFilter=${event.target.value}; path=/`;
+      window.location.href=window.location.href;
+  }
+}
+
+function priorityChangeEventHandler(event) {
+  if (getCookie("priorityFilter") != event.target.value) {
+      document.cookie = `priorityFilter=${event.target.value}; path=/`;
+      window.location.href=window.location.href;
+  }
+}
+
+function majorChangeEventHandler(event) {
+  if (getCookie("majorAreaFilter") != event.target.value) {
+      document.cookie = `todoMajorAreaFilter=${event.target.value}; path=/`;
+      window.location.href=window.location.href;
+  }
+}
+
+function minorChangeEventHandler(event) {
+  if (getCookie("minorAreaFilter") != event.target.value) {
+      document.cookie = `todoMinorAreaFilter=${event.target.value}; path=/`;
+      window.location.href=window.location.href;
+  }
+}
+
+function typeChangeEventHandler(event) {
+  if (getCookie("todoAssetTypeFilter") != event.target.value) {
+      document.cookie = `todoAssetTypeFilter=${event.target.value}; path=/`;
+      window.location.href=window.location.href;
+  }
+}
 </script>
 
-<!--
-      const id = row.dataset.id;
-      if (id) {
-          row.addEventListener('click', () => {
-            window.location.href = `view-todo-page/${id}`;
-          });
-      }
+  <div class="filter-header">
+   <div class="row mx-0 pb-1 gx-0">
+      <div class="col pagetitle d-flex justify-content-start">Todo Filters</div>
+   </div> <!--row-->
 
--->
+   <div class="row gx-0">
+      <div class="col filterdropdown">Who
+          <select id=assignedToFilter class="assignedTo" onchange="assignedToChangeEventHandler(event);">
+            <option value="ALL">ALL</option>
+            {% for user in users %}
+               <option value={{user.initials}}>{{user.initials}}</option>
+            {% endfor %}
+          </select>
+      </div> <!--col-->
+
+      <div class="col filterdropdown">Status
+          <select id=todoStatusFilter class="todoStatus" onchange="todoStatusChangeEventHandler(event);">
+            <option value="ALL">ALL</option>
+            {% for ddv in dropdown %}
+              {% if ddv.column == "TODOSTATUS" %}
+                 <option value="{{ddv.value}}">{{ddv.value}}</option>
+              {% endif %}
+            {% endfor %}
+          </select>
+      </div> <!--col-->
+
+      <div class="col filterdropdown">Priority
+          <select id=todopriorityFilter class="todoPriority" onchange="todoPriorityChangeEventHandler(event);">
+            <option value="ALL">ALL</option>
+            {% for ddv in dropdown %}
+              {% if ddv.column == "TODOPRIORITY" %}
+                 <option value="{{ddv.value}}">{{ddv.value}}</option>
+              {% endif %}
+            {% endfor %}
+          </select>
+      </div> <!--col-->
+    </div> <!--row-->
+
+    <div class="row gx-0">
+      <div class="col filterdropdown">Major
+          <select id=assetMajorFilter class="majorArea" onchange="majorChangeEventHandler(event);">
+            <option value="ALL">ALL</option>
+            {% for ddv in dropdown %}
+              {% if ddv.column == "MAJORAREA" %}
+                 <option value="{{ddv.value}}">{{ddv.value}}</option>
+              {% endif %}
+            {% endfor %}
+          </select>
+      </div> <!--col-->
+
+      <div class="col filterdropdown">Minor
+          <select id=assetMinorFilter class="minorArea" onchange="minorChangeEventHandler(event);">
+            <option value="ALL">ALL</option>
+            {% for ddv in dropdown %}
+              {% if ddv.column == "MINORAREA" %}
+                 <option value="{{ddv.value}}">{{ddv.value}}</option>
+              {% endif %}
+            {% endfor %}
+          </select>
+      </div> <!--col-->
+
+      <div class="col filterdropdown">Type
+          <select id=assetTypeFilter class="assetType" onchange="typeChangeEventHandler(event);">
+            <option value="ALL">ALL</option>
+            {% for ddv in dropdown %}
+              {% if ddv.column == "ASSETTYPE" %}
+                 <option value="{{ddv.value}}">{{ddv.value}}</option>
+              {% endif %}
+            {% endfor %}
+          </select>
+      </div> <!--col-->
+    </div> <!--row-->
+  </div> <!-- filter-header -->
+
+  <!-- Scrollable content goes here -->
+  <div class="filter-content">
+      <div id="container-list" class="container-list"></div>
+  </div> <!--filter-content-->
+
+  <!-- navigation buttons -->
+  <div class="filter-footer">
+   <div class="row mx-0 pb-1 gx-0">
+      <div class="col d-flex justify-content-end">
+        <button class="databutton" id="reportbutton" type="button"
+             onclick="window.location.href='/todos/todo-report-page'">Report</button>
+      </div>
+   </div> <!--row-->
+  </div> <!--filter-footer-->
+
+
+<script type="text/javascript">
+
+//----------------------------------------------------------------------------
+// create the list
+const containerList = document.getElementById("container-list");
+const addContainerButton = document.getElementById("add-container");
+// Array to store the dynamic containers' data
+let containersData = [];
+
+{% for todo in todos %}
+    newContainer = {
+     id: {{todo.id}}
+   };
+
+   containersData.push(newContainer); // Add new container to the data array
+
+  // Create a new container element and append it directly
+  newContainerElement = document.createElement("div");
+  newContainerElement.classList.add("container-item");
+
+  newContainerElement.innerHTML = `
+    <div class="row">
+      <div class="col dataheader">AssignedTo</div>
+      <div class="col dataheader">Priority</div>
+      <div class="col dataheader">Status</div>
+    </div>
+    <div class="row">
+      <div class="col datafield">{{todo.assignedTo}}</div>
+      <div class="col datafield">{{todo.priority}}</div>
+      <div class="col datafield">{{todo.todoStatus}}</div>
+    </div>
+
+    <div class="row">
+      <div class="col col-2 text-end dataheader">Task:</div>
+      <div class="col datafield">{{todo.task}}</div>
+    </div>
+
+    <div style="border-top: 4px solid black; width: 98%; margin-top: 7px;"></div>
+
+    <div class="row">
+      <div class="col dataheader">Major</div>
+      <div class="col dataheader">Minor</div>
+      <div class="col dataheader">Type</div>
+    </div>
+    <div class="row">
+      <div class="col datafield">{{todo.majorArea}}</div>
+      <div class="col datafield">{{todo.minorArea}}</div>
+      <div class="col datafield">{{todo.assetType}}</div>
+    </div>
+
+    <div class="row">
+      <div class="col col-2 text-end dataheader">Asset:</div>
+      <div class="col datafield">{{todo.description}}</div>
+    </div>
+
+    <div class="row">
+      <div class="col-12 d-flex justify-content-end">
+        <button class="databutton"
+                onclick="window.location.href='/todos/view-todo-page/{{todo.id}}'"
+                type="button">View</button>
+        <button class="databutton"
+                onclick="window.location.href='/todos/edit-todo-page/{{todo.id}}'"
+                type="button">Edit</button>
+        <button class="databutton"
+                onclick="window.location.href='/todos/add-todo-page/{{todo.assetId}}'"
+                type="button" >Add</button>
+    </div> <!--row--->
+  `;
+
+   // Append the new container element to the container list
+   containerList.appendChild(newContainerElement);
+
+{% endfor %}
+
+
+//----------------------------------------------------------------------------
+// select setting functions
+
+function getCookie(cname) {
+  let name = cname + "=";
+  let decodedCookie = decodeURIComponent(document.cookie);
+  let ca = decodedCookie.split(';');
+  for(let i = 0; i <ca.length; i++) {
+    let c = ca[i];
+    while (c.charAt(0) == ' ') {
+      c = c.substring(1);
+    }
+    if (c.indexOf(name) == 0) {
+      return c.substring(name.length, c.length);
+    }
+  }
+  return "";
+}
+
+// assignedTo
+filter = getCookie("assignedToFilter")
+select = document.querySelector(".assignedTo");
+options = document.querySelectorAll(".assignedTo option");
+if (filter) {
+   for(const option of options) {
+       const area = option.value;
+       if (area === filter) {
+          option.setAttribute("selected", "");
+          break;
+       }
+   }
+}
+
+// todoStatus
+filter = getCookie("todoStatusFilter")
+select = document.querySelector(".todoStatus");
+options = document.querySelectorAll(".todoStatus option");
+if (filter) {
+   for(const option of options) {
+       const area = option.value;
+       if (area === filter) {
+          option.setAttribute("selected", "");
+          break;
+       }
+   }
+}
+
+// priority
+filter = getCookie("priorityFilter")
+select = document.querySelector(".priority");
+options = document.querySelectorAll(".priority option");
+if (filter) {
+   for(const option of options) {
+       const area = option.value;
+       if (area === filter) {
+          option.setAttribute("selected", "");
+          break;
+       }
+   }
+}
+
+// majorArea
+filter = getCookie("todoMajorAreaFilter")
+select = document.querySelector(".majorArea");
+options = document.querySelectorAll(".majorArea option");
+if (filter) {
+   for(const option of options) {
+       const area = option.value;
+       if (area === filter) {
+          option.setAttribute("selected", "");
+          break;
+       }
+   }
+}
+
+//minorArea
+filter = getCookie("todoMinorAreaFilter")
+select = document.querySelector(".minorArea");
+options = document.querySelectorAll(".minorArea option");
+if (filter) {
+   for(const option of options) {
+       const area = option.value;
+       if (area === filter) {
+          option.setAttribute("selected", "");
+          break;
+       }
+   }
+}
+
+//assetType
+filter = getCookie("todoAssetTypeFilter")
+select = document.querySelector(".assetType");
+options = document.querySelectorAll(".assetType option");
+if (filter) {
+   for(const option of options) {
+       const area = option.value;
+       if (area === filter) {
+          option.setAttribute("selected", "");
+          break;
+       }
+   }
+}
+</script>
+
 
 
 
