@@ -5,17 +5,36 @@
       padding: 20spx;
       border: 1px solid #ccc;
     }
+    .pagetitle {
+      font-size: medium;
+      font-weight: bold;
+    }
+   .databutton {
+     padding: 0px 3px; /* Custom padding for thinner appearance */
+     margin: 0px 3px;
+     font-size: x-small;
+     background-color: #007bff;
+     color: white;
+  }
+
   </style>
 
  {% include 'layout.html' %}
 
- <div class="MT-5 text-center">
-    <button id=printButton class="btn btn-sm btn-primary btn-thin-sm"
-       onclick="printReport()" type="button">Print</button>
-     &nbsp;&nbsp;
-    <button class="btn btn-sm btn-primary btn-thin-sm"
-        onclick=window.location.href='/todos/todo-page' type="button">Back</button>
-</div>
+<div class="container">
+  <div class="card mt-2">
+     <div class="card-header p-1">
+        <h5 class="card-title card-title-left pagetitle">Todo Report</h5>
+        <div class="col d-flex justify-content-end">
+            <button id=printButton class="dataButton"
+               onclick="printReport()" type="button">Print</button>
+             &nbsp;&nbsp;
+            <button class="dataButton"
+                onclick=window.location.href='/todos/todo-page' type="button">Back</button>
+        </div> <!--justify-->
+    </div> <!--card-header -->
+</div> <!--card-->
+
 <div id=todoReport class="container">
   <div class="card border-dark border-3 pt-1 text-center">
         <h5 class="card-title d-flex justify-content-between mt-1 mb-0"><p id="reportFor"></p><p id="todaysDate"></p></h5>
