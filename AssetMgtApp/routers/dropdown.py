@@ -144,10 +144,13 @@ async def render_dropdown_value_page(request: Request, dropdown_id: int, db: db_
 
         #force None to ""
         if dropdown_model.gpsLat is None:
-            dropdowb_model.gpsLat = ""
+            dropdown_model.gpsLat = ""
 
         if dropdown_model.gpsLng is None:
             dropdown_model.gpsLng = ""
+
+        if dropdown_model.order is None:
+            dropdown_model.order = ""
 
         return templates.TemplateResponse("add-edit-view-dropdown.html",
                         {"request": request, "dropdown": dropdown_default, "currentUser": loginUser, "mode": "ADD"})
@@ -168,6 +171,12 @@ async def render_dropdown_edit_page(request: Request, dropdown_id: int, db: db_d
             raise HTTPException(status_code=404, detail='dropdown not found.')
 
         #force None to ""
+        if dropdown_model.gpsLat is None:
+            dropdown_model.gpsLat = ""
+
+        if dropdown_model.gpsLng is None:
+            dropdown_model.gpsLng = ""
+
         if dropdown_model.order is None:
             dropdown_model.order = ""
 
