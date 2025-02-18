@@ -97,7 +97,7 @@
             {% if dropdown.column == "MAJORAREA"%}
             <div class="row g-3 pt-2">
                 <div class="col-sm-2">
-                    <label for="gpslat" class="form-label-sm">Latitude:</label>
+                    <label for="gpsLat" class="form-label-sm">Latitude:</label>
                 </div> <!-- col -->
                 <div class="col-sm-4">
                     {% if mode == "VIEW"%}
@@ -105,7 +105,7 @@
                             style="min-width: 120px; max-width: 120px;" class="form-control-sm"
                             placeholder="Latitude" value="{{dropdown.gpsLat}}" readonly>
                     {% else %}  <!- assume ADD OR edit--!>
-                            <input name=gpslat id=gpslat type="text"
+                            <input name=gpsLat id=gpsLat type="text"
                                 style="min-width: 120px; max-width: 120px;" class="form-control-sm"
                                 placeholder="Latitude" value="{{dropdown.gpsLat}}">
                             <span id="error-gpsLat" class="error"></span>
@@ -115,7 +115,7 @@
 
             <div class="row g-3 pt-2">
                 <div class="col-sm-2">
-                    <label for="gpslng" class="form-label-sm">Longitude:</label>
+                    <label for="gpsLng" class="form-label-sm">Longitude:</label>
                 </div> <!-- col -->
                 <div class="col-sm-4">
                     {% if mode == "VIEW"%}
@@ -123,7 +123,7 @@
                             style="min-width: 120px; max-width: 120px;" class="form-control-sm"
                             placeholder="longitude" value="{{dropdown.gpsLng}}" readonly>
                     {% else %} <!-- assume  ["ADD","EDIT" ] -->
-                        <input name=gpslng id=gpslng type="texts"
+                        <input name=gpsLng id=gpsLng type="texts"
                             style="min-width: 120px; max-width: 120px;" class="form-control-sm"
                             placeholder="Latitude" value="{{dropdown.gpsLng}}">
                          <span id="error-gpsLng" class="error"></span>
@@ -131,7 +131,7 @@
 
                     {% if mode in ["ADD","EDIT"] %}
                          <button name=capture id=capture class="btn-sm btn-primary btn-thin-sm"
-                            onclick="getLocation()" type="button">Capture</button>
+                                 onclick="captureLocation()" type="button">Capture</button>
 
                          <button name=locate id=locate class="btn-sm btn-primary btn-thin-sm"
                             onclick="clearLocation()" type="button">Clear</button>
@@ -184,22 +184,31 @@
 
 
 <script>
+
     function clearLocation() {
-        document.getElementById('gpslat').value = null;
-        document.getElementById('gpslng').value = null;
+        document.getElementById('gpsLat').value = null;
+        document.getElementById('gpsLng').value = null;
     }
 
-    function getLocation() {
+   function captureLocation() {
         if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition( showPosition, showError, {enableHighAccuracy: true,maximumAge: 0} );
+            const options = {
+                enableHighAccuracy: true,  // Use high accuracy if available
+                timeout: 5000,             // Timeout of 5 seconds for the request
+                maximumAge: 0              // Do not allow cached positions
+            };
+
+            navigator.geolocation.getCurrentPosition(showPosition, showError);
         } else {
             document.getElementById("location").innerHTML = "Geolocation is not supported by this browser.";
         }
     }
 
     function showPosition(position) {
-        document.getElementById('gpslat').value = position.coords.latitude;;
-        document.getElementById('gpslng').value = position.coords.longitude;
+        const accuracy = position.coords.accuracy;
+        alert(`A: ${position.coords.latitude} : ${position.coords.longitude} : Accuracy: ${accuracy}`);
+        document.getElementById('gpsLat').value = position.coords.latitude;;
+        document.getElementById('gpsLng').value = position.coords.longitude;
     }
 
     function showError(error) {
@@ -218,4 +227,5 @@
                 break;
         }
     }
+
 </script>
