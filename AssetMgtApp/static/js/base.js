@@ -11,11 +11,11 @@
 
             data.column = data.column.toUpperCase();
 
-            data.gpsLat = document.getElementById('gpslat').value;
+            data.gpsLat = document.getElementById('gpsLat').value;
             if (!data.gpsLat.trim())
                 data.gpsLat = null;
 
-            data.gpsLng = document.getElementById('gpslng').value;
+            data.gpsLng = document.getElementById('gpsLng').value;
             if (!data.gpsLng.trim())
                 data.gpsLng = null;
 
@@ -81,11 +81,11 @@
             var url = window.location.pathname;
             const dropdownId = url.substring(url.lastIndexOf('/') + 1);
 
-            data.gpsLat = document.getElementById('gpslat').value;
+            data.gpsLat = document.getElementById('gpsLat').value;
             if (!data.gpsLat.trim())
                 data.gpsLat = null;
 
-            data.gpsLng = document.getElementById('gpslng').value;
+            data.gpsLng = document.getElementById('gpsLng').value;
             if (!data.gpsLng.trim())
                 data.gpsLng = null;
 
