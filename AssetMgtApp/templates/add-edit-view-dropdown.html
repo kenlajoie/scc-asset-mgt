@@ -197,7 +197,6 @@
                 timeout: 5000,             // Timeout of 5 seconds for the request
                 maximumAge: 0              // Do not allow cached positions
             };
-
             navigator.geolocation.getCurrentPosition(showPosition, showError);
         } else {
             document.getElementById("location").innerHTML = "Geolocation is not supported by this browser.";
@@ -206,10 +205,15 @@
 
     function showPosition(position) {
         const accuracy = position.coords.accuracy;
-        alert(`A: ${position.coords.latitude} : ${position.coords.longitude} : Accuracy: ${accuracy}`);
-        document.getElementById('gpsLat').value = position.coords.latitude;;
-        document.getElementById('gpsLng').value = position.coords.longitude;
-    }
+        if (accuracy < 50 ) {
+            document.getElementById('gpsLat').value = position.coords.latitude;;
+            document.getElementById('gpsLng').value = position.coords.longitude;
+        }
+       else {
+            alert(`GPS accuracy is poor.. Not saving values : Accuracy = ${accuracy}`);
+            document.getElementById("location").innerHTML = `GPS accuracy is poor.. Not saving values : Accuracy = ${Math.ceil(accuracy)}`;
+       }
+}
 
     function showError(error) {
         switch (error.code) {

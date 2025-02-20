@@ -272,13 +272,21 @@
         distanceK =  haversine(majorAreaGpsLat, majorAreaGpsLng, assetGpsLat, assetGpsLng);
         distanceYards =  Math.floor(distanceK * 1093.613298);
         distanceFt =  Math.floor(distanceK * 3280.84);
-        alert(`A: ${assetGpsLat} : ${assetGpsLng} M:${majorAreaGpsLat} : ${majorAreaGpsLng} D:${distanceYards}`);
+        //alert(`A: ${assetGpsLat} : ${assetGpsLng} M:${majorAreaGpsLat} : ${majorAreaGpsLng} D:${distanceYards}`);
         document.getElementById('distance').value = distanceYards;
     }
 
     function showPosition(position) {
-        document.getElementById('gpsLat').value = position.coords.latitude;
-        document.getElementById('gpsLng').value = position.coords.longitude;
+        const accuracy = position.coords.accuracy;
+        if (accuracy < 50 ) {
+            document.getElementById('gpsLat').value = position.coords.latitude;;
+            document.getElementById('gpsLng').value = position.coords.longitude;
+        }
+       else {
+            //alert(`GPS accuracy is poor.. Not saving values : Accuracy = ${accuracy}`);
+            document.getElementById("location").innerHTML = `GPS accuracy is poor.. Not saving values : Accuracy = ${Math.ceil(accuracy)}`;
+       }
+
     }
 
     function showError(error) {
