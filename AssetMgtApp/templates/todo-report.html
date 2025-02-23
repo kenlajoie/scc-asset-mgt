@@ -37,7 +37,7 @@
 
 <div id=todoReport class="container">
   <div class="card border-dark border-3 pt-1 text-center">
-        <h5 class="card-title d-flex justify-content-between mt-1 mb-0"><p id="reportFor"></p><p id="todaysDate"></p></h5>
+        <h5 class="card-title d-flex justify-content-between mt-1 mb-0"><p id="reportFor"></p><div></div><p id="todaysDate"></p></h5></div?>
   </div>
   <div class="row g-1 pb-2 pt-1">
       <div class="col-sm-12">
@@ -52,10 +52,10 @@
          <div class="card-body">
           <div class="row g-1 pt-1">
               <div class="col-sm-4">
-                Major Area: {{todo.majorArea}}
+                Major: {{todo.majorArea}}
               </div> <!--col-->
               <div class="col-sm-4">
-                Minor Area: {{todo.minorArea}}
+                Minor {{todo.minorArea}}
               </div> <!--col-->
               <div class="col-sm-4">
                 Type: {{todo.assetType}}
@@ -97,11 +97,6 @@
               <div class="col-sm-3">
                 <b>Status: {{ todo.todoStatus }}</b>
               </div> <!--col-->
-              <div class="col-sm-1">
-                    <a onclick="removeCard(this)" class="icon-link">
-                        <img src="/static/img/remove_icon.png" alt="Remove">
-                    </a>
-              </div> <!--col-->
            </div> <!--row-->
            <div class="row g-1 pt-1">
               <div class="col-sm-12">
@@ -130,9 +125,17 @@
                 <div class="col-sm-5">
                     Created: {{todo.createdDate}} By: {{todo.createdBy}}
                 </div>
-                <div class="col-sm-5">
+                <div class="col-sm-3">
                     Updated: {{todo.updatedDate}} By: {{todo.updatedBy}}
                 </div>
+               </div> <!--col-->
+            </div> <!--row-->
+            <div class="row g-1 pt-1">
+                <div class="col-sm-5">
+                    <a onclick="removeCard(this)" class="icon-link">
+                        <img src="/static/img/remove_icon.png" alt="Remove">
+                    </a>
+               </div> <!--col-->
             </div> <!--row-->
          </div> <!-- card-body -->
         </div> <!-- card -->

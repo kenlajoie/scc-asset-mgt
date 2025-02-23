@@ -15,7 +15,8 @@ class Users(Base):
     createdBy = Column(String, ForeignKey("users.initials"))
     createdDate = Column(DateTime, server_default=func.now())
     updatedBy = Column(String, ForeignKey("users.initials"))
-    updatedDate = Column(DateTime)
+    updatedDate = Column(DateTime, server_default=func.now())
+
 
 class Assets(Base):
     __tablename__ = 'assets'
@@ -35,7 +36,7 @@ class Assets(Base):
     createdBy = Column(String, ForeignKey("users.initials"))
     createdDate = Column(DateTime, server_default=func.now())
     updatedBy = Column(String, ForeignKey("users.initials"))
-    updatedDate = Column(DateTime)
+    updatedDate = Column(DateTime, server_default=func.now())
 
 
 class Todos(Base):
@@ -53,7 +54,7 @@ class Todos(Base):
     createdBy = Column(String, ForeignKey("users.initials"))
     createdDate = Column(DateTime, server_default=func.now())
     updatedBy = Column(String, ForeignKey("users.initials"))
-    updatedDate = Column(DateTime)
+    updatedDate = Column(DateTime, server_default=func.now())
 
 
 class Dropdown(Base):
@@ -69,4 +70,4 @@ class Dropdown(Base):
     createdBy = Column(String, ForeignKey("users.initials"))
     createdDate = Column(DateTime, server_default=func.now())
     updatedBy = Column(String, ForeignKey("users.initials"))
-    updatedDate = Column(DateTime)
+    updatedDate = Column(DateTime, server_default=func.now())

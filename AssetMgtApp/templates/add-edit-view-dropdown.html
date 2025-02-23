@@ -208,6 +208,7 @@
         if (accuracy < 50 ) {
             document.getElementById('gpsLat').value = position.coords.latitude;;
             document.getElementById('gpsLng').value = position.coords.longitude;
+            document.getElementById("location").innerHTML = `GPS accuracy = ${Math.ceil(accuracy)}`;
         }
        else {
             alert(`GPS accuracy is poor.. Not saving values : Accuracy = ${accuracy}`);

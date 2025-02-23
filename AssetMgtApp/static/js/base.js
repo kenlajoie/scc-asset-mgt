@@ -587,7 +587,7 @@
                 });
 
                 if (response.ok) {
-                    window.location.href = '/assets/asset-page'; // Redirect to the asset page
+                   window.location.href = `/assets/view-asset-page/${assetId}`; // Redirect to the asset view page
                 } else {
                     const rdata = await response.json();
                     //set all span errors

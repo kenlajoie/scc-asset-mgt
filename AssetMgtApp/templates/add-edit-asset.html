@@ -197,8 +197,14 @@
             <div class="row g-3 pt-1">
                 <div class="col-sm-3">
                     <button type="submit" class="btn-sm btn-primary btn-thin-sm">Save</button>
-                    <button class="btn-sm btn-primary btn-thin-sm"
-                            onclick=window.location.href='/assets/asset-page' type="button">Back</button>
+                    {% if mode == "ADD"%}
+                        <button class="btn-sm btn-primary btn-thin-sm" type="button"
+                            onclick=window.location.href='/assets/asset-page'>Back</button>
+                    {% endif %}
+                    {% if mode == "EDIT"%}
+                        <button class="btn-sm btn-primary btn-thin-sm" type="button"
+                           onclick=window.location.href='/assets/view-asset-page/{{asset.id}}'>Back</button>
+                    {% endif %}
                 </div> <!-- col -->
             </div> <!--row-->
         </form>
@@ -279,6 +285,7 @@
     function showPosition(position) {
         const accuracy = position.coords.accuracy;
         if (accuracy < 50 ) {
+            document.getElementById("location").innerHTML = `GPS accuracy = ${Math.ceil(accuracy)}`;
             document.getElementById('gpsLat').value = position.coords.latitude;;
             document.getElementById('gpsLng').value = position.coords.longitude;
         }

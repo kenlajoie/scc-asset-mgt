@@ -375,12 +375,43 @@ async def render_edit_todo_page(request: Request, todo_id: int, db: db_dependenc
            return redirect_to_login()
 
         # get the current todo details
-        todo_model = db.query(Todos).filter(Todos.id == todo_id).first()
+        query = db.query(
+            Todos.id,
+            Todos.todoStatus,
+            Todos.priority,
+            Todos.task,
+            Todos.note,
+            Todos.assignedTo,
+            Todos.assetId,
+            func.strftime('%m/%d/%Y', Todos.createdDate).label('createdDate'),
+            Todos.createdBy,
+            func.strftime('%m/%d/%Y', Todos.updatedDate).label('updatedDate'),
+            Todos.updatedBy
+        )
+        todo_model = query.filter(Todos.id == todo_id).first()
+        #todo_model = db.query(Todos).filter(Todos.id == todo_id).first()
         if todo_model is None:
             raise HTTPException(status_code=404, detail='Todo not found.')
 
         # get the current asset details to show on the form in ready-only
-        asset_model = db.query(Assets).filter(Assets.id == todo_model.assetId).first()
+        query = db.query(
+            Assets.id,
+            Assets.majorArea,
+            Assets.minorArea,
+            Assets.description,
+            Assets.assetType,
+            Assets.model,
+            Assets.assetState,
+            Assets.satellite,
+            Assets.station,
+            Assets.distance,
+            func.strftime('%m/%d/%Y', Assets.createdDate).label('createdDate'),
+            Assets.createdBy,
+            func.strftime('%m/%d/%Y', Assets.updatedDate).label('updatedDate'),
+            Assets.updatedBy
+        )
+        asset_model = query.filter(Assets.id == todo_model.assetId).first()
+        #asset_model = db.query(Assets).filter(Assets.id == todo_model.assetId).first()
         if asset_model is None:
             raise HTTPException(status_code=404, detail='Asset not found.')
 
@@ -412,12 +443,43 @@ async def render_edit_todo_page(request: Request, todo_id: int, db: db_dependenc
            return redirect_to_login()
 
         # get the current todo details
-        todo_model = db.query(Todos).filter(Todos.id == todo_id).first()
+        query = db.query(
+            Todos.id,
+            Todos.todoStatus,
+            Todos.priority,
+            Todos.task,
+            Todos.note,
+            Todos.assignedTo,
+            Todos.assetId,
+            func.strftime('%m/%d/%Y', Todos.createdDate).label('createdDate'),
+            Todos.createdBy,
+            func.strftime('%m/%d/%Y', Todos.updatedDate).label('updatedDate'),
+            Todos.updatedBy
+        )
+        todo_model = query.filter(Todos.id == todo_id).first()
+        #todo_model = db.query(Todos).filter(Todos.id == todo_id).first()
         if todo_model is None:
             raise HTTPException(status_code=404, detail='Todo not found.')
 
         # get the current asset details to show on the form in ready-only
-        asset_model = db.query(Assets).filter(Assets.id == todo_model.assetId).first()
+        query = db.query(
+            Assets.id,
+            Assets.majorArea,
+            Assets.minorArea,
+            Assets.description,
+            Assets.assetType,
+            Assets.model,
+            Assets.assetState,
+            Assets.satellite,
+            Assets.station,
+            Assets.distance,
+            func.strftime('%m/%d/%Y', Assets.createdDate).label('createdDate'),
+            Assets.createdBy,
+            func.strftime('%m/%d/%Y', Assets.updatedDate).label('updatedDate'),
+            Assets.updatedBy
+        )
+        asset_model = query.filter(Assets.id == todo_model.assetId).first()
+        #asset_model = db.query(Assets).filter(Assets.id == todo_model.assetId).first()
         if asset_model is None:
             raise HTTPException(status_code=404, detail='Asset not found.')
 
@@ -436,21 +498,53 @@ async def render_view_asset_page(request: Request, todo_id: int, db: db_dependen
         if user is None:
             return redirect_to_login()
 
-        todo_model = db.query(Todos).filter(Todos.id == todo_id).first()
+        query = db.query(
+            Todos.id,
+            Todos.todoStatus,
+            Todos.priority,
+            Todos.task,
+            Todos.note,
+            Todos.assignedTo,
+            Todos.assetId,
+            func.strftime('%m/%d/%Y', Todos.createdDate).label('createdDate'),
+            Todos.createdBy,
+            func.strftime('%m/%d/%Y', Todos.updatedDate).label('updatedDate'),
+            Todos.updatedBy
+        )
+        todo_model = query.filter(Todos.id == todo_id).first()
+        #todo_model = db.query(Todos).filter(Todos.id == todo_id).first()
         if todo_model is None:
             raise HTTPException(status_code=404, detail='Todo not found.')
 
         # get the current asset details to show on the form in ready-only
-        asset_model = db.query(Assets).filter(Assets.id == todo_model.assetId).first()
+        query = db.query(
+            Assets.id,
+            Assets.majorArea,
+            Assets.minorArea,
+            Assets.description,
+            Assets.assetType,
+            Assets.model,
+            Assets.assetState,
+            Assets.satellite,
+            Assets.station,
+            Assets.distance,
+            func.strftime('%m/%d/%Y', Assets.createdDate).label('createdDate'),
+            Assets.createdBy,
+            func.strftime('%m/%d/%Y', Assets.updatedDate).label('updatedDate'),
+            Assets.updatedBy
+        )
+        asset_model = query.filter(Assets.id == todo_model.assetId).first()
+        #asset_model = db.query(Assets).filter(Assets.id == todo_model.assetId).first()
         if asset_model is None:
             raise HTTPException(status_code=404, detail='Asset not found.')
 
-        return templates.TemplateResponse("add-edit-view-todo.html", {"request": request, "todo": todo_model,
+        return templates.TemplateResponse("view-todo.html", {"request": request, "todo": todo_model,
                                      "asset": asset_model, "todo_id": todo_id,
                                      "currentUser": user, "redirect": "T", "mode": "VIEW"})
 
     except:
         return redirect_to_login()
+
 
 @router.get("/view-todo-asset-page/{todo_id}")
 async def render_view_asset_page(request: Request, todo_id: int, db: db_dependency):
@@ -460,16 +554,47 @@ async def render_view_asset_page(request: Request, todo_id: int, db: db_dependen
         if user is None:
             return redirect_to_login()
 
-        todo_model = db.query(Todos).filter(Todos.id == todo_id).first()
+        query = db.query(
+            Todos.id,
+            Todos.todoStatus,
+            Todos.priority,
+            Todos.task,
+            Todos.note,
+            Todos.assignedTo,
+            Todos.assetId,
+            func.strftime('%m/%d/%Y', Todos.createdDate).label('createdDate'),
+            Todos.createdBy,
+            func.strftime('%m/%d/%Y', Todos.updatedDate).label('updatedDate'),
+            Todos.updatedBy
+        )
+        todo_model = query.filter(Todos.id == todo_id).first()
+        #todo_model = db.query(Todos).filter(Todos.id == todo_id).first()
         if todo_model is None:
             raise HTTPException(status_code=404, detail='Todo not found.')
 
         # get the current asset details to show on the form in ready-only
-        asset_model = db.query(Assets).filter(Assets.id == todo_model.assetId).first()
+        query = db.query(
+            Assets.id,
+            Assets.majorArea,
+            Assets.minorArea,
+            Assets.description,
+            Assets.assetType,
+            Assets.model,
+            Assets.assetState,
+            Assets.satellite,
+            Assets.station,
+            Assets.distance,
+            func.strftime('%m/%d/%Y', Assets.createdDate).label('createdDate'),
+            Assets.createdBy,
+            func.strftime('%m/%d/%Y', Assets.updatedDate).label('updatedDate'),
+            Assets.updatedBy
+        )
+        asset_model = query.filter(Assets.id == todo_model.assetId).first()
+        #asset_model = db.query(Assets).filter(Assets.id == todo_model.assetId).first()
         if asset_model is None:
             raise HTTPException(status_code=404, detail='Asset not found.')
 
-        return templates.TemplateResponse("add-edit-view-todo.html", {"request": request, "todo": todo_model,
+        return templates.TemplateResponse("view-todo.html", {"request": request, "todo": todo_model,
                                     "asset": asset_model, "todo_id": todo_id,
                                     "currentUser": user, "redirect": "A", "mode": "VIEW"})
 
@@ -516,6 +641,7 @@ async def create_todo(user: user_dependency, db: db_dependency,
        assignedTo =todo_request.assignedTo,
        assetId = asset_id,
        createdBy = login_user_model.initials,
+       updatedBy=login_user_model.initials,
     )
 
 #    todo_model = Todos(**todo_request.model_dump())

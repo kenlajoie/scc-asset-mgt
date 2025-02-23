@@ -146,7 +146,27 @@ async def render_edit_asset_page(request: Request, asset_id: int, db: db_depende
         if dropdownList is None:
            return redirect_to_login()
 
-        asset_model = db.query(Assets).filter(Assets.id == asset_id).first()
+        query = db.query(
+            Assets.id,
+            Assets.majorArea,
+            Assets.minorArea,
+            Assets.description,
+            Assets.assetType,
+            Assets.model,
+            Assets.assetState,
+            Assets.satellite,
+            Assets.station,
+            Assets.gpsLat,
+            Assets.gpsLng,
+            Assets.distance,
+            func.strftime('%m/%d/%Y', Assets.createdDate).label('createdDate'),
+            Assets.createdBy,
+            func.strftime('%m/%d/%Y', Assets.updatedDate).label('updatedDate'),
+            Assets.updatedBy
+        )
+        asset_model = query.filter(Assets.id == asset_id).first()
+
+        #asset_model = db.query(Assets).filter(Assets.id == asset_id).first()
         if asset_model is None:
             raise HTTPException(status_code=404, detail='Asset not found.')
 
@@ -176,7 +196,25 @@ async def render_view_asset_page(request: Request, asset_id: int, db: db_depende
         if user is None:
             return redirect_to_login()
 
-        asset_model = db.query(Assets).filter(Assets.id == asset_id).first()
+        query = db.query(
+            Assets.id,
+            Assets.majorArea,
+            Assets.minorArea,
+            Assets.description,
+            Assets.assetType,
+            Assets.model,
+            Assets.assetState,
+            Assets.satellite,
+            Assets.station,
+            Assets.gpsLat,
+            Assets.gpsLng,
+            Assets.distance,
+            func.strftime('%m/%d/%Y', Assets.createdDate).label('createdDate'),
+            Assets.createdBy,
+            func.strftime('%m/%d/%Y', Assets.updatedDate).label('updatedDate'),
+            Assets.updatedBy
+        )
+        asset_model = query.filter(Assets.id == asset_id).first()
         if asset_model is None:
             raise HTTPException(status_code=404, detail='Asset not found.')
 

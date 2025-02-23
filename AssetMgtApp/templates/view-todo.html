@@ -1,5 +1,4 @@
 {% include 'layout.html' %}
-
 <style>
  .container {
     text-align: left;
@@ -21,13 +20,6 @@
     text-align: center;
     padding-top: 8px;
     padding-bottom: 3px;
-  }
-
-  .list-content {
-    background-color: #d9dee0;
-    width: 100%;
-    padding-top: 3px;
-    padding-left: 3px;
   }
 
   .view-content {
@@ -100,7 +92,7 @@
   }
 </style>
 
-<form id="viewAssetForm">
+<form id="viewTodoForm">
    <div class="form-group">
       <input type="text" class="form-control" name="redirect" value="{{redirect}}" hidden>
       <input type="text" class="form-control" name="mode" value="{{mode}}" hidden>
@@ -111,12 +103,44 @@
 
   <div class="view-header">
    <div class="row mx-0 pb-1 gx-0">
-      <div class="col pagetitle d-flex justify-content-start">Asset</div>
+      <div class="col pagetitle d-flex justify-content-start">Todo</div>
    </div> <!--row-->
   </div> <!-- view-header -->
 
-<div id=assetTicket class="container">
+<div id=todoTicket class="container">
   <div class="view-content">
+       <div class="row">
+          <div class="col dataheader-left">AssignedTo</div>
+          <div class="col dataheader-left">Priority</div>
+          <div class="col dataheader-left">Status</div>
+        </div>
+        <div class="row">
+          <div class="col datafield">{{todo.assignedTo}}</div>
+          <div class="col datafield">{{todo.priority}}</div>
+          <div class="col datafield">{{todo.todoStatus}}</div>
+        </div>
+
+        <div class="row">
+          <div class="col col-2 text-end dataheader-right">Task:</div>
+          <div class="col datafield">{{todo.task}}</div>
+        </div>
+
+        <div class="row">
+          <div class="col col-2 text-end dataheader-right">Note:</div>
+          <div class="col datafield">{{todo.note}}</div>
+        </div>
+
+        <div class="row pt-1">
+             <div class="col addupdatedate-left">
+               <b>Created: </b>{{todo.createdDate}}<b> By: </b>{{todo.createdBy}}
+            </div>
+             <div class="col addupdatedate-right">
+               <b>Updated: </b>{{todo.updatedDate}}<b> By: </b>{{todo.updatedBy}}
+            </div>
+         </div>
+
+        <div style="border-top: 4px solid black; width: 98%; margin-top: 7px;"></div>
+
         <div class="row pt-2">
           <div class="col dataheader-left">Major</div>
           <div class="col dataheader-left">Minor</div>
@@ -148,67 +172,47 @@
           <div class="col datafield">{{asset.station}}</div>
         </div>
 
-        <div class="row">
-          <div class="col dataheader-right">Lat:</div>
-          <div class="col datafield">{{asset.gpsLat}}</div>
-          <div class="col dataheader-right">Lng:</div>
-          <div class="col datafield">{{asset.gpsLng}}</div>
-          {% if asset.gpsLat and asset.gpsLng %}
-              <div class="col">
-                  <button class="databutton" id="locate" type="button"
-                     onclick="window.location.href='/assets/locate-asset-page/{{asset.id}}'">Locate</button>
-              </div>
-          {% endif %}
-        </div>
-
-        <div class="row">
-          <div class="col dataheader-right">Distance to Major</div>
-          <div class="col datafield">{{asset.distance}}</div>
-        </div>
-
-        <div class="row">
-          <div class="col dataheader-left"><p id="location"></p></div>
-        </div>
-
         <div class="row pt-1">
              <div class="col addupdatedate-left">
-               <b>Created: </b>{{asset.createdDate}}<b> By: </b>{{asset.createdBy}}
+               <b>Created: </b>{{
+
+                 asset.createdDate}}<b> By: </b>{{asset.createdBy}}
             </div>
              <div class="col addupdatedate-right">
                <b>Updated: </b>{{asset.updatedDate}}<b> By: </b>{{asset.updatedBy}}
             </div>
          </div>
-  </div> <!-- view-content -->
 
-  <!-- asset navigation buttons -->
+
+  </div> <!-- view-content -->
+</div> <!-- todoTicket -->
+
+  <!-- navigation buttons -->
   <div class="view-footer">
    <div class="row mx-0 pb-1 gx-0">
       <div class="col d-flex justify-content-end">
         {% if currentUser.userRole == 'ADMIN' %}
           <button class="databutton" id="delete" type="submit">Delete</button>
         {% endif %}
-           <button class="databutton" type="button"
-                onclick="window.location.href='/assets/edit-asset-page/{{asset.id}}'">Edit</button>
+        {% if redirect == "T"%}
           <button class="databutton" id="back" type="button"
-                onclick="window.location.href='/assets/asset-page'">Back</button>
-          <button class="databutton" id="print" type="button"
-                onclick="printAsset()">Print</button>
+                onclick=window.location.href='/todos/todo-list/{{todo_id}}'>Back</button>
+        {% else %}  <!- assume A  -->
+          <button class="databutton" id="back" type="button"
+                 onclick=window.location.href='/assets/view-asset-page/{{asset.id}}'>Back</button>
+          {% endif %}
+        <button class="databutton" id="print" type="button"
+             onclick="printTodo()">Print</button>
       </div>
    </div> <!--row-->
   </div> <!-- view-footer -->
 
-  <!-- Scrollable todo content goes here -->
-  <div class="view-content">
-      <div id="container-list" class="container-list"></div>
-  </div> <!--filter-content-->
-</div> <!-- assetTicket -->
-
 </form>
 
 <script>
-function printAsset() {
+function printTodo() {
 
-      var printContent = document.getElementById('assetTicket').innerHTML;
+      var printContent = document.getElementById('todoTicket').innerHTML;
       var originalContent = document.body.innerHTML;
       document.body.innerHTML = printContent;  // Replace the content with the print section
 
@@ -217,67 +221,5 @@ function printAsset() {
       document.body.innerHTML = originalContent;  // Restore the original content
  }
 
-//----------------------------------------------------------------------------
-// create the todo list
-const containerList = document.getElementById("container-list");
-const addContainerButton = document.getElementById("add-container");
-// Array to store the dynamic containers' data
-let containersData = [];
-
-{% for todo in todo_list %}
-    newContainer = {
-     id: {{todo.id}}
-   };
-
-   containersData.push(newContainer); // Add new container to the data array
-
-  // Create a new container element and append it directly
-  newContainerElement = document.createElement("div");
-  newContainerElement.classList.add("container-item");
-
-  newContainerElement.innerHTML = `
-    <div class="row">
-      <div class="col dataheader">AssignedTo</div>
-      <div class="col dataheader">Priority</div>
-      <div class="col dataheader">Status</div>
-    </div>
-    <div class="row">
-      <div class="col datafield">{{todo.assignedTo}}</div>
-      <div class="col datafield">{{todo.priority}}</div>
-      <div class="col datafield">{{todo.todoStatus}}</div>
-    </div>
-
-    <div class="row">
-      <div class="col col-2 text-end dataheader-right">Task:</div>
-      <div class="col datafield">{{todo.task}}</div>
-    </div>
-
-    <div class="row">
-      <div class="col col-2 text-end dataheader-right">Note:</div>
-      <div class="col datafield">{{todo.note}}</div>
-    </div>
-
-    <div class="row">
-      <div class="col-12 d-flex justify-content-end">
-        <button class="databutton"
-                onclick="window.location.href='/todos/view-todo-asset-page/{{todo.id}}'"
-                type="button">View</button>
-        <button class="databutton"
-                onclick="window.location.href='/todos/edit-todo-asset-page/{{todo.id}}'"
-                type="button">Edit</button>
-        <button class="databutton"
-                onclick="window.location.href='/todos/add-todo-asset-page/{{asset.id}}'"
-                type="button" >Add</button>
-    </div> <!--row--->
-
-    <div style="border-top: 4px solid black; width: 98%; margin-top: 7px;"></div>
-
-  `;
-
-   // Append the new container element to the container list
-   containerList.appendChild(newContainerElement);
-
-{% endfor %}
 
 </script>
-

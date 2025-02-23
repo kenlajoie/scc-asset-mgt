@@ -89,6 +89,7 @@ table tr.bottom-border th {
 
 .card-body {
    padding: 1px 5px; /* Adjust the values to reduce or customize padding */
+   font-size: small;
 }
 
 .container { /* override and default container padding */
