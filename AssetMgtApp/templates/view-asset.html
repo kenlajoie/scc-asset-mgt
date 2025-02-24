@@ -10,8 +10,8 @@
     background-color:  rgb(255, 99, 71); /* Tomato color */
     color: black;
     text-align: center;
-    padding-top: 8px;
-    padding-bottom: 3px;
+    padding-top: 4px;
+    padding-bottom: 2px;
   }
 
   .view-footer {
@@ -19,8 +19,8 @@
     background-color:  rgb(255, 99, 71); /* Tomato color */
     color: black;
     text-align: center;
-    padding-top: 8px;
-    padding-bottom: 3px;
+    padding-top: 4px;
+    padding-bottom: 2px;
   }
 
   .list-content {
@@ -54,13 +54,13 @@
   .dataheader-right {
     font-size: small;
     text-align: right;
-    padding-right: 1px;
+    padding-right: 3px;
   }
 
   .dataheader-left {
     font-size: small;
     text-align: left;
-    padding-right: 1px;
+    padding-right: 3px;
   }
 
   .addupdatedate-left {
@@ -91,13 +91,34 @@
     font-size: small
   }
 
-  .databutton {
+  .xdatabutton {
     padding: 0px 3px; /* Custom padding for thinner appearance */
     margin: 0px 10px; /* space around the buttom */
     font-size: x-small;
     background-color: #007bff;
     color: white;
   }
+
+ .databutton {
+    padding: 0px 3px; /* Custom padding for thinner appearance */
+    margin: 0px 10px; /* space around the button */
+    font-size: x-small;
+    background-color: #007bff;
+    color: white;
+    border: none; /* Removing default border for a cleaner look */
+    border-radius: 3px; /* Optional: Rounded corners for a modern feel */
+    cursor: pointer; /* Adds pointer on hover */
+    transition: background-color 0.3s ease; /* Smooth background transition */
+ }
+
+ .databutton:hover {
+    background-color: #0056b3; /* Darker blue on hover for feedback */
+ }
+
+ .databutton:focus {
+    outline: none; /* Optional: removes focus outline for cleaner look */
+    box-shadow: 0 0 3px 2px rgba(0, 123, 255, 0.5); /* Optional: subtle focus effect */
+ }
 </style>
 
 <form id="viewAssetForm">
@@ -135,42 +156,45 @@
         </div>
 
         <div class="row">
-          <div class="col dataheader-right">Model:</div>
-          <div class="col datafield">{{asset.model}}</div>
-          <div class="col dataheader-right">State:</div>
-          <div class="col datafield">{{asset.assetState}}</div>
+          <div class="col-2 dataheader-right">Model:</div>
+          <div class="col-3 datafield">{{asset.model}}</div>
+          <div class="col-2 dataheader-right">State:</div>
+          <div class="col-3 datafield">{{asset.assetState}}</div>
         </div>
 
         <div class="row">
-          <div class="col dataheader-right">Satillite:</div>
-          <div class="col datafield">{{asset.satellite}}</div>
-          <div class="col dataheader-right">Station:</div>
-          <div class="col datafield">{{asset.station}}</div>
+          <div class="col-2 dataheader-right">Satillite:</div>
+          <div class="col-3 datafield">{{asset.satellite}}</div>
+          <div class="col-2 dataheader-right">Station:</div>
+          <div class="col-3 datafield">{{asset.station}}</div>
         </div>
 
         <div class="row">
-          <div class="col dataheader-right">Lat:</div>
-          <div class="col datafield">{{asset.gpsLat}}</div>
-          <div class="col dataheader-right">Lng:</div>
-          <div class="col datafield">{{asset.gpsLng}}</div>
+          <div class="col-2 dataheader-right">Lat:</div>
+          <div class="col-3 datafield">{{asset.gpsLat}}</div>
           {% if asset.gpsLat and asset.gpsLng %}
-              <div class="col">
-                  <button class="databutton" id="locate" type="button"
-                     onclick="window.location.href='/assets/locate-asset-page/{{asset.id}}'">Locate</button>
-              </div>
+          <div>
+              <button class="databutton" type="button"
+                 onclick="window.location.href='/assets/locate-asset-page/{{asset.id}}'">Locate</button>
+          </div>
           {% endif %}
         </div>
 
         <div class="row">
-          <div class="col dataheader-right">Distance to Major</div>
-          <div class="col datafield">{{asset.distance}}</div>
+          <div class="col-2 dataheader-right">Lng:</div>
+          <div class="col-3 datafield">{{asset.gpsLng}}</div>
+        </div>
+
+        <div class="row">
+          <div class="col-2 dataheader-right">Distance:</div>
+          <div class="col-3 datafield">{{asset.distance}}</div>
         </div>
 
         <div class="row">
           <div class="col dataheader-left"><p id="location"></p></div>
         </div>
 
-        <div class="row pt-1">
+        <div class="row pb-2">
              <div class="col addupdatedate-left">
                <b>Created: </b>{{asset.createdDate}}<b> By: </b>{{asset.createdBy}}
             </div>
@@ -178,30 +202,56 @@
                <b>Updated: </b>{{asset.updatedDate}}<b> By: </b>{{asset.updatedBy}}
             </div>
          </div>
+
+      <!-- asset navigation buttons -->
+       <div class="row mx-0 pb-1 gx-0">
+          <div class="col d-flex justify-content-end">
+            {% if currentUser.userRole == 'ADMIN' %}
+              <button class="databutton" id="delete" type="submit">Delete</button>
+            {% endif %}
+               <button class="databutton" type="button"
+                    onclick="window.location.href='/assets/edit-asset-page/{{asset.id}}'">Edit</button>
+              <button class="databutton" id="back" type="button"
+                    onclick="window.location.href='/assets/asset-page'">Back</button>
+              <button class="databutton" id="print" type="button"
+                    onclick="printAsset()">Print</button>
+          </div>
+       </div> <!--row-->
   </div> <!-- view-content -->
 
-  <!-- asset navigation buttons -->
+
   <div class="view-footer">
    <div class="row mx-0 pb-1 gx-0">
-      <div class="col d-flex justify-content-end">
-        {% if currentUser.userRole == 'ADMIN' %}
-          <button class="databutton" id="delete" type="submit">Delete</button>
-        {% endif %}
-           <button class="databutton" type="button"
-                onclick="window.location.href='/assets/edit-asset-page/{{asset.id}}'">Edit</button>
-          <button class="databutton" id="back" type="button"
-                onclick="window.location.href='/assets/asset-page'">Back</button>
-          <button class="databutton" id="print" type="button"
-                onclick="printAsset()">Print</button>
+      <div class="col d-flex justify-content-start">
+          Asset Todos
       </div>
    </div> <!--row-->
   </div> <!-- view-footer -->
 
   <!-- Scrollable todo content goes here -->
   <div class="view-content">
+    {% if todo_list|length == 0 %}
+       <div class="row mx-0 pb-1 gx-0">
+         <div class="col d-flex justify-content-center">
+             Asset has no Todos
+         </div>
+       </div> <!--row-->
+   {% endif %}
+  </div>
+
+  <div class="view-content">
       <div id="container-list" class="container-list"></div>
   </div> <!--filter-content-->
 </div> <!-- assetTicket -->
+
+<div class="view-footer">
+   <div class="row mx-0 pb-1 gx-0">
+      <div class="col d-flex justify-content-end">
+          <button class="databutton" id="addTodo" type="button"
+             onclick="window.location.href='/todos/add-todo-asset-page/{{asset.id}}'">Add Asset Todo</button>
+      </div>
+   </div> <!--row-->
+  </div> <!--filter-footer-->
 
 </form>
 

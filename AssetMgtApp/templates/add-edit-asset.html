@@ -1,5 +1,46 @@
 {% include 'layout.html' %}
+<style>
+  .addupdatedate-left {
+    font-size: x-small;
+    text-align: left;
+    padding-top: 1px;
+  }
 
+  .addupdatedate-right {
+    font-size: x-small;
+    text-align: left;
+    padding-top: 1px;
+  }
+
+  .dataheader-right {
+    font-size: small;
+    text-align: right;
+    padding-right: 1px;
+  }
+
+  .datafield {
+    margin: 3px;              /* Margin outside the border */
+    padding-left: 2px;
+    font-size: small
+  }
+
+  .datatextarea {
+    border: 2px solid black; /* Border color and thickness */
+    border-radius: 1px;
+    margin: 3px;              /* Margin outside the border */
+    padding-left: 2px;
+    font-size: small
+  }
+
+  .databutton {
+    padding: 0px 3px; /* Custom padding for thinner appearance */
+    margin: 0px 10px; /* space around the buttom */
+    font-size: x-small;
+    background-color: #007bff;
+    color: white;
+  }
+
+</style>
 <div class="container">
   <div class="card mt-2">
      <div class="card-header p-1">
@@ -17,182 +58,203 @@
               <input type="text" class="form-control" name="mode" value="{{mode}}" hidden>
             </div>
 
-            <div class="row g-5 pt-0">
-                <div class="col-sm-3">
-                    <label for="majorArea" class="form-label-sm">Major Area</label>
-                    <select id="majorArea" name="majorArea"
-                        style="min-width: 125px; max-width: 125px;" class="form-control-sm mb-1">
-                        {% for ddv in dropdown %}
-                          {% if ddv.column == "MAJORAREA" %}
-                              {% if ddv.value == asset.majorArea %}
-                                 <option value="{{ddv.value}}" selected>{{ddv.value}}</option>
-                              {% else %}
-                                 <option value="{{ddv.value}}">{{ddv.value}}</option>
-                              {% endif %}
-                          {% endif %}
-                        {% endfor %}
-                   </select>
-                </div>  <!-- col -->
+       <div class="row">
+          <div class="col-2 dataheader-right">Major:</div>
+          <div class="col-3 datafield">
+             <select id="majorArea" name="majorArea"
+                style="min-width: 125px; max-width: 125px;" class="form-control-sm mb-1">
+                {% for ddv in dropdown %}
+                  {% if ddv.column == "MAJORAREA" %}
+                      {% if ddv.value == asset.majorArea %}
+                         <option value="{{ddv.value}}" selected>{{ddv.value}}</option>
+                      {% else %}
+                         <option value="{{ddv.value}}">{{ddv.value}}</option>
+                      {% endif %}
+                  {% endif %}
+                {% endfor %}
+            </select>
+         </div>  <!-- col -->
+       </div> <!--row-->
 
-                <div class="col-sm-3">
-                    <label for="minorArea" class="form-label-sm">Minor Area</label>
-                    <select id="minorArea" name="minorArea"
-                        style="min-width: 125px; max-width: 125px;" class="form-control-sm">
-                        {% for ddv in dropdown %}
-                          {% if ddv.column == "MINORAREA" %}
-                              {% if ddv.value == asset.minorArea %}
-                                 <option value="{{ddv.value}}" selected>{{ddv.value}}</option>
-                              {% else %}
-                                 <option value="{{ddv.value}}">{{ddv.value}}</option>
-                              {% endif %}
-                          {% endif %}
-                        {% endfor %}
-                    </select>
-                </div>  <!-- col -->
+       <div class="row">
+         <div class="col-2 dataheader-right">Minor:</div>
+         <div class="col-3 datafield">
+            <select id="minorArea" name="minorArea"
+                style="min-width: 125px; max-width: 125px;" class="form-control-sm">
+                {% for ddv in dropdown %}
+                  {% if ddv.column == "MINORAREA" %}
+                      {% if ddv.value == asset.minorArea %}
+                         <option value="{{ddv.value}}" selected>{{ddv.value}}</option>
+                      {% else %}
+                         <option value="{{ddv.value}}">{{ddv.value}}</option>
+                      {% endif %}
+                  {% endif %}
+                {% endfor %}
+            </select>
+         </div>  <!-- col -->
+       </div> <!--row-->
 
-                <div class="col-sm-3">
-                    <label for="assetType" class="form-label-sm">Type</label>
-                    <select id="assetType" name="assetType"
-                        style="min-width: 125px; max-width: 125px;" class="form-control-sm">
-                        {% for ddv in dropdown %}
-                          {% if ddv.column == "ASSETTYPE" %}
-                              {% if ddv.value == asset.assetType %}
-                                 <option value="{{ddv.value}}" selected>{{ddv.value}}</option>
-                              {% else %}
-                                 <option value="{{ddv.value}}">{{ddv.value}}</option>
-                              {% endif %}
-                          {% endif %}
-                        {% endfor %}
-                    </select>
-                </div>  <!-- col -->
-            </div> <!--row-->
+       <div class="row">
+         <div class="col-2 dataheader-right">Type:</div>
+         <div class="col-3 datafield">
+            <select id="assetType" name="assetType"
+                style="min-width: 125px; max-width: 125px;" class="form-control-sm">
+                {% for ddv in dropdown %}
+                  {% if ddv.column == "ASSETTYPE" %}
+                      {% if ddv.value == asset.assetType %}
+                         <option value="{{ddv.value}}" selected>{{ddv.value}}</option>
+                      {% else %}
+                         <option value="{{ddv.value}}">{{ddv.value}}</option>
+                      {% endif %}
+                  {% endif %}
+                {% endfor %}
+            </select>
+         </div>  <!-- col -->
+       </div> <!--row-->
 
-            <div class="row g-3 pt-0">
-                <div class="col-sm-10">
-                    <label for="description" class="form-label-sm">Asset</label>
-                    <input id=description name="description" type="text"
-                            style="min-width: 350px; max-width: 350px;" class="form-control-sm"
-                            placeholder="Asset Description" value="{{asset.description}}" required>
-                    <div><span id="error-description" class="error"></span></div>
+       <div class="row">
+         <div class="col-2 dataheader-right">Asset:</div>
+         <div class="col-3 datafield">
+            <input id=description name="description" type="text"
+                    style="min-width: 300px; max-width: 300px;" class="form-control-sm"
+                    placeholder="Asset Description" value="{{asset.description}}" required>
+            <div><span id="error-description" class="error"></span></div>
+         </div>  <!-- col -->
+       </div> <!--row-->
 
-                </div>  <!-- col -->
-            </div> <!--row-->
+       <div class="row">
+         <div class="col-2 dataheader-right">Model:</div>
+         <div class="col-3 datafield">
+            <select id="model" name="model"
+                style="min-width: 125px; max-width: 125px;" class="form-control-sm">
+                <option value="">Choose...</option>
+                {% for ddv in dropdown %}
+                  {% if ddv.column == "MODEL" %}
+                      {% if ddv.value == asset.model %}
+                         <option value="{{ddv.value}}" selected>{{ddv.value}}</option>
+                      {% else %}
+                         <option value="{{ddv.value}}">{{ddv.value}}</option>
+                      {% endif %}
+                  {% endif %}
+                {% endfor %}
+            </select>
+         </div>  <!-- col -->
+       </div> <!--row-->
 
-             <div class="row g-3 pt-1">
-                <div class="col-sm-10">
-                    <label for="model" class="form-label-sm">Model</label>
-                    <select id="model" name="model"
-                        style="min-width: 125px; max-width: 125px;" class="form-control-sm">
-                        <option value="">Choose...</option>
-                        {% for ddv in dropdown %}
-                          {% if ddv.column == "MODEL" %}
-                              {% if ddv.value == asset.model %}
-                                 <option value="{{ddv.value}}" selected>{{ddv.value}}</option>
-                              {% else %}
-                                 <option value="{{ddv.value}}">{{ddv.value}}</option>
-                              {% endif %}
-                          {% endif %}
-                        {% endfor %}
-                    </select>
+       <div class="row">
+         <div class="col-2 dataheader-right">State:</div>
+         <div class="col-3 datafield">
+            <select id="assetState" name="assetState"
+                style="min-width: 125px; max-width: 125px;" class="form-control-sm">
+                {% for ddv in dropdown %}
+                  {% if ddv.column == "ASSETSTATE" %}
+                      {% if ddv.value == asset.assetState %}
+                         <option value="{{ddv.value}}" selected>{{ddv.value}}</option>
+                      {% else %}
+                         <option value="{{ddv.value}}">{{ddv.value}}</option>
+                      {% endif %}
+                  {% endif %}
+                {% endfor %}
+            </select>
+         </div>  <!-- col -->
+       </div> <!--row-->
 
-                    <label for="assetState" class="form-label-sm">State</label>
-                    <select id="assetState" name="assetState"
-                        style="min-width: 125px; max-width: 125px;" class="form-control-sm">
-                        {% for ddv in dropdown %}
-                          {% if ddv.column == "ASSETSTATE" %}
-                              {% if ddv.value == asset.assetState %}
-                                 <option value="{{ddv.value}}" selected>{{ddv.value}}</option>
-                              {% else %}
-                                 <option value="{{ddv.value}}">{{ddv.value}}</option>
-                              {% endif %}
-                          {% endif %}
-                        {% endfor %}
-                    </select>
-                </div>  <!-- col -->
-            </div> <!--row-->
+       <div class="row">
+         <div class="col-2 dataheader-right">Satellite:</div>
+         <div class="col-3 datafield">
+            <select id="satellite" name="satellite"
+                style="min-width: 125px; max-width: 125px;" class="form-control-sm">
+                <option value="">Choose...</option>
+                {% for ddv in dropdown %}
+                  {% if ddv.column == "SATELLITE" %}
+                      {% if ddv.value == asset.satellite %}
+                         <option value="{{ddv.value}}" selected>{{ddv.value}}</option>
+                      {% else %}
+                         <option value="{{ddv.value}}">{{ddv.value}}</option>
+                      {% endif %}
+                  {% endif %}
+                {% endfor %}
+            </select>
+         </div>  <!-- col -->
+       </div> <!--row-->
 
-            <div class="row g-3 pt-1">
-                <div class="col-sm-10">
-                    <label for="satellite" class="form-label-sm">Satellite</label>
-                    <select id="satellite" name="satellite"
-                        style="min-width: 125px; max-width: 125px;" class="form-control-sm">
-                        <option value="">Choose...</option>
-                        {% for ddv in dropdown %}
-                          {% if ddv.column == "SATELLITE" %}
-                              {% if ddv.value == asset.satellite %}
-                                 <option value="{{ddv.value}}" selected>{{ddv.value}}</option>
-                              {% else %}
-                                 <option value="{{ddv.value}}">{{ddv.value}}</option>
-                              {% endif %}
-                          {% endif %}
-                        {% endfor %}
-                    </select>
+       <div class="row">
+         <div class="col-2 dataheader-right">Station:</div>
+         <div class="col-3 datafield">
+            <select id="station" name="station"
+                style="min-width: 125px; max-width: 125px;" class="form-control-sm">
+                <option value="">Choose...</option>
+                {% for ddv in dropdown %}
+                  {% if ddv.column == "STATION" %}
+                      {% if ddv.value == asset.station %}
+                         <option value="{{ddv.value}}" selected>{{ddv.value}}</option>
+                      {% else %}
+                         <option value="{{ddv.value}}">{{ddv.value}}</option>
+                      {% endif %}
+                  {% endif %}
+                {% endfor %}
+            </select>
+         </div>  <!-- col -->
+       </div> <!--row-->
 
-                    <label for="station" class="form-label-sm">Station</label>
-                    <input id=station name="station" type="text"
-                        style="min-width: 100px; max-width: 100px;" class="form-control-sm"
-                        placeholder="Station" value="{{asset.station}}">
-                </div>  <!-- col -->
-            </div> <!--row-->
+       <div class="row">
+         <div class="col-2 dataheader-right">Lat::</div>
+         <div class="col-3 datafield">
+            <input name=gpsLat id=gpsLat type="text"
+                style="min-width: 125px; max-width: 125px;" class="form-control-sm"
+                placeholder="Latitude" value="{{asset.gpsLat}}" readonly>
+            <span id="error-gpsLat" class="error"></span>
+         </div>  <!-- col -->
+         <div class="col">
+              <button class="databutton ml-4" type="button"
+                onclick="captureLocation()">Capture</button>
+              <button class="databutton" type="button"
+                onclick="clearLocation()">Clear</button>
+          </div>
+       </div> <!--row-->
 
-            <div class="row g-3 pt-1">
-                <div class="col-sm-10">
-                    <label for="gpsLat" class="form-label-sm">Lat:</label>
-                    <input name=gpsLat id=gpsLat type="number" step="0.0000001"
-                        style="min-width: 105px; max-width: 105px;" class="form-control-sm"
-                        placeholder="Latitude" value="{{asset.gpsLat}}" readonly>
-                    <span id="error-gpsLat" class="error"></span>
+       <div class="row">
+         <div class="col-2 dataheader-right">Lng:</div>
+         <div class="col-3 datafield">
+            <input name=gpsLng id=gpsLng type="text"
+                style="min-width: 125px; max-width: 125px;" class="form-control-sm"
+                placeholder="longitude" value="{{asset.gpsLng}}" readonly>
+            <span id="error-gpsLng" class="error"></span>
+         </div>  <!-- col -->
+       </div> <!--row-->
 
-                    <label for="gpsLng" class="form-label-sm">Lng:</label>
-                    <input name=gpsLng id=gpsLng type="number" step="0.0000001"
-                        style="min-width: 105px; max-width: 105px;" class="form-control-sm"
-                        placeholder="longitude" value="{{asset.gpsLng}}" readonly>
-                    <span id="error-gpsLng" class="error"></span>
+       <div class="row">
+         <div class="col-2 dataheader-right">Distance:</div>
+         <div class="col-3 datafield">
+            <input name=distance id=distance type="text"
+                style="min-width: 125px; max-width: 125px;" class="form-control-sm"
+                placeholder="Distance" value="{{asset.distance}}" readonly>
+            <span id="error-distance" class="error"></span>
+         </div>  <!-- col -->
+         <div class="col">
+              <button class="databutton ml-4" type="button"
+                onclick="computeDistance(true)">Compute</button>
+          </div>
+       </div> <!--row-->
 
-                        <button name=capture id=capture class="btn-sm btn-primary btn-thin-sm"
-                            onclick="captureLocation()" type="button">Capture</button>
+       <div class="row g-3 pt-1">
+          <div class="col-sm-8">
+              <div>
+                  <p id="location"></p>
+              </div>
+          </div> <!-- col -->
+       </div> <!--row-->
 
-                        <button name=locate id=locate class="btn-sm btn-primary btn-thin-sm"
-                            onclick="clearLocation()" type="button">Clear</button>
-                </div> <!-- col -->
-            </div> <!--row-->
-
-            <div class="row g-3 pt-1">
-                <div class="col-sm-10">
-                    <label for="distance" class="form-label-sm">Distance to Major Area</label>
-                    <input name=distance id=distance type="number"
-                        style="min-width: 100px; max-width: 100px;" class="form-control-sm"
-                        placeholder="Distance" value="{{asset.distance}}">
-                    <span id="error-distance" class="error"></span>
-
-                    <button name=compute id=compute class="btn-sm btn-primary btn-thin-sm"
-                        onclick="computeDistance(true)" type="button">Compute</button>
-
-                </div>  <!-- col -->
-            </div> <!--row-->
-
-            <div class="row g-3 pt-1">
-                <div class="col-sm-8">
-                    <div>
-                        <p id="location"></p>
-                    </div>
-                </div> <!-- col -->
-            </div> <!--row-->
-
-            <hr style="border: 1px solid #333; margin: 19px 0px 5px 0px;">
-
-            {% if mode != "ADD"%}
-            <div class="row g-3 pt-1">
-                <div class="col-sm-8">
-                    <b>&nbsp;Created On:</b> {{asset.createdDate}}   <b>By: </b>{{asset.createdBy}}
-                </div> <!-- col -->
-            </div> <!--row-->
-            <div class="row g-3 pt-1">
-                <div class="col-sm-8">
-                    <b>Updated On:</b> {{asset.updatedDate}}   <b>By: </b>{{asset.updatedBy}}
-                </div> <!-- col -->
-            </div> <!--row-->
-            {% endif %}
+       {% if mode != "ADD"%}
+       <div class="row">
+           <div class="col addupdatedate-left">
+             <b>Created: </b>{{asset.createdDate}}<b> By: </b>{{asset.createdBy}}
+           </div>
+           <div class="col addupdatedate-right">
+              <b>Updated: </b>{{asset.updatedDate}}<b> By: </b>{{asset.updatedBy}}
+           </div>
+        </div>
+        {% endif %}
 
             <div class="row g-3 pt-1">
                 <div class="col-sm-3">

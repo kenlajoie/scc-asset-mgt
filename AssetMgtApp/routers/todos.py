@@ -3,6 +3,7 @@ from typing import Annotated
 from click import confirm
 from pydantic import BaseModel, Field
 from sqlalchemy import func
+from sqlalchemy.exc import SQLAlchemyError, IntegrityError, OperationalError
 from sqlalchemy.cyextension.processors import to_str
 from sqlalchemy.orm import Session
 from fastapi import APIRouter, Depends, HTTPException, Path, Request, status
@@ -152,8 +153,9 @@ async def render_todo_report_page(request: Request, db: db_dependency):
             Assets.model,
             Assets.assetState,
             Assets.satellite,
-            Assets.station,
-            Assets.distance
+            func.ifnull(func.round(Assets.gpsLat,8),"").label('gpsLat'),
+            func.ifnull(func.round(Assets.gpsLng,8),"").label('gpsLng'),
+            func.ifnull(func.round(Assets.distance,1),"").label('distance')
         ).join(Assets, Todos.assetId == Assets.id)
 
 #       todoList = query.all()
@@ -404,7 +406,9 @@ async def render_edit_todo_page(request: Request, todo_id: int, db: db_dependenc
             Assets.assetState,
             Assets.satellite,
             Assets.station,
-            Assets.distance,
+            func.ifnull(func.round(Assets.gpsLat,8),"").label('gpsLat'),
+            func.ifnull(func.round(Assets.gpsLng,8),"").label('gpsLng'),
+            func.ifnull(func.round(Assets.distance,1),"").label('distance'),
             func.strftime('%m/%d/%Y', Assets.createdDate).label('createdDate'),
             Assets.createdBy,
             func.strftime('%m/%d/%Y', Assets.updatedDate).label('updatedDate'),
@@ -472,7 +476,9 @@ async def render_edit_todo_page(request: Request, todo_id: int, db: db_dependenc
             Assets.assetState,
             Assets.satellite,
             Assets.station,
-            Assets.distance,
+            func.ifnull(func.round(Assets.gpsLat,8),"").label('gpsLat'),
+            func.ifnull(func.round(Assets.gpsLng,8),"").label('gpsLng'),
+            func.ifnull(func.round(Assets.distance,1),"").label('distance'),
             func.strftime('%m/%d/%Y', Assets.createdDate).label('createdDate'),
             Assets.createdBy,
             func.strftime('%m/%d/%Y', Assets.updatedDate).label('updatedDate'),
@@ -494,7 +500,6 @@ async def render_edit_todo_page(request: Request, todo_id: int, db: db_dependenc
 async def render_view_asset_page(request: Request, todo_id: int, db: db_dependency):
     try:
         user = await get_current_user(request.cookies.get('access_token'))
-
         if user is None:
             return redirect_to_login()
 
@@ -527,21 +532,23 @@ async def render_view_asset_page(request: Request, todo_id: int, db: db_dependen
             Assets.assetState,
             Assets.satellite,
             Assets.station,
-            Assets.distance,
+            func.ifnull(func.round(Assets.gpsLat,8),"").label('gpsLat'),
+            func.ifnull(func.round(Assets.gpsLng,8),"").label('gpsLng'),
+            func.ifnull(func.round(Assets.distance,1),"").label('distance'),
             func.strftime('%m/%d/%Y', Assets.createdDate).label('createdDate'),
             Assets.createdBy,
             func.strftime('%m/%d/%Y', Assets.updatedDate).label('updatedDate'),
             Assets.updatedBy
         )
+
         asset_model = query.filter(Assets.id == todo_model.assetId).first()
         #asset_model = db.query(Assets).filter(Assets.id == todo_model.assetId).first()
         if asset_model is None:
-            raise HTTPException(status_code=404, detail='Asset not found.')
+             raise HTTPException(status_code=404, detail='Asset not found.')
 
         return templates.TemplateResponse("view-todo.html", {"request": request, "todo": todo_model,
                                      "asset": asset_model, "todo_id": todo_id,
                                      "currentUser": user, "redirect": "T", "mode": "VIEW"})
-
     except:
         return redirect_to_login()
 
@@ -550,7 +557,6 @@ async def render_view_asset_page(request: Request, todo_id: int, db: db_dependen
 async def render_view_asset_page(request: Request, todo_id: int, db: db_dependency):
     try:
         user = await get_current_user(request.cookies.get('access_token'))
-
         if user is None:
             return redirect_to_login()
 
@@ -583,7 +589,9 @@ async def render_view_asset_page(request: Request, todo_id: int, db: db_dependen
             Assets.assetState,
             Assets.satellite,
             Assets.station,
-            Assets.distance,
+            func.ifnull(func.round(Assets.gpsLat,8),"").label('gpsLat'),
+            func.ifnull(func.round(Assets.gpsLng,8),"").label('gpsLng'),
+            func.ifnull(func.round(Assets.distance,1),"").label('distance'),
             func.strftime('%m/%d/%Y', Assets.createdDate).label('createdDate'),
             Assets.createdBy,
             func.strftime('%m/%d/%Y', Assets.updatedDate).label('updatedDate'),
@@ -593,6 +601,7 @@ async def render_view_asset_page(request: Request, todo_id: int, db: db_dependen
         #asset_model = db.query(Assets).filter(Assets.id == todo_model.assetId).first()
         if asset_model is None:
             raise HTTPException(status_code=404, detail='Asset not found.')
+
 
         return templates.TemplateResponse("view-todo.html", {"request": request, "todo": todo_model,
                                     "asset": asset_model, "todo_id": todo_id,

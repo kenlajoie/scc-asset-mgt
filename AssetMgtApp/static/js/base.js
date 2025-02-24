@@ -11,13 +11,17 @@
 
             data.column = data.column.toUpperCase();
 
-            data.gpsLat = document.getElementById('gpsLat').value;
-            if (!data.gpsLat.trim())
-                data.gpsLat = null;
+            if (document.getElementById('gpsLat')) {
+                data.gpsLat = document.getElementById('gpsLat').value;
+                if (!data.gpsLat.trim())
+                    data.gpsLat = null;
+            }
 
-            data.gpsLng = document.getElementById('gpsLng').value;
-            if (!data.gpsLng.trim())
-                data.gpsLng = null;
+            if (document.getElementById('gpsLng')) {
+                data.gpsLng = document.getElementById('gpsLng').value;
+                if (!data.gpsLng.trim())
+                    data.gpsLng = null;
+            }
 
             const payload = {
                 column: data.column,
@@ -81,13 +85,17 @@
             var url = window.location.pathname;
             const dropdownId = url.substring(url.lastIndexOf('/') + 1);
 
-            data.gpsLat = document.getElementById('gpsLat').value;
-            if (!data.gpsLat.trim())
-                data.gpsLat = null;
+            if (document.getElementById('gpsLat')) {
+                data.gpsLat = document.getElementById('gpsLat').value;
+                if (!data.gpsLat.trim())
+                    data.gpsLat = null;
+            }
 
-            data.gpsLng = document.getElementById('gpsLng').value;
-            if (!data.gpsLng.trim())
-                data.gpsLng = null;
+            if (document.getElementById('gpsLng')) {
+                data.gpsLng = document.getElementById('gpsLng').value;
+                if (!data.gpsLng.trim())
+                    data.gpsLng = null;
+            }
 
             const payload = {
                 column: data.column,
@@ -149,11 +157,25 @@
             var url = window.location.pathname;
             const dropdownId = url.substring(url.lastIndexOf('/') + 1);
 
+            if (document.getElementById('gpsLat')) {
+                data.gpsLat = document.getElementById('gpsLat').value;
+                if (!data.gpsLat.trim())
+                    data.gpsLat = null;
+            }
+
+            if (document.getElementById('gpsLng')) {
+                data.gpsLng = document.getElementById('gpsLng').value;
+                if (!data.gpsLng.trim())
+                    data.gpsLng = null;
+            }
+
             const payload = {
                 column: data.column,
                 value: data.value,
                 description: data.description,
                 order: data.order,
+                gpsLat: data.gpsLat,
+                gpsLng: data.gpsLng
             };
 
             //alert(JSON.stringify(payload));
@@ -643,10 +665,12 @@
 
                 if (!confirm("Delete Asset! This will delete all todo for the Asset too!  Are you sure?")) {
                     window.location.href = '/assets/asset-page'; // Redirect to the asset page
+                    return;
                 }
 
                 if (!confirm("Delete Asset! Really Sure?")) {
                     window.location.href = '/assets/asset-page'; // Redirect to the asset page
+                    return;
                 }
 
                 const response = await fetch(`/assets/asset/${assetId}`, {

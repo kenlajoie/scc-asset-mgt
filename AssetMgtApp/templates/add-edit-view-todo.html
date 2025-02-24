@@ -1,6 +1,19 @@
 
 {% include 'layout.html' %}
+<style>
+  .addupdatedate-left {
+    font-size: x-small;
+    text-align: left;
+    padding-top: 1px;
+  }
 
+  .addupdatedate-right {
+    font-size: x-small;
+    text-align: left;
+    padding-top: 1px;
+  }
+
+</style>
 <div class="container">
   <div class="card mt-2">
     <div class="card-header p-1">
@@ -26,25 +39,25 @@
 
            <div class="row g-5 pt-1">
 
-                <div class="col-sm-3">
+                <div class="col-2">
                     <label for="majorArea"
-                        class="form-label-sm">Major Area</label>
+                        class="form-label-sm">Major:</label>
                     <input id=majorArea name="majorArea" type="text"
                             style="min-width: 90px; max-width: 150px;" class="form-control-sm"
                             placeholder="Major Area" value="{{asset.majorArea}}" readonly>
                 </div>
 
-                <div class="col-sm-3">
+                <div class="col-2">
                     <label for="minorArea"
-                        class="form-label-sm">Minor Area</label>
+                        class="form-label-sm">Minor:</label>
                     <input id=minorArea name="MinorArea" type="text"
                             style="min-width: 90px; max-width: 150px;" class="form-control-sm"
                             placeholder="Minor Area" value="{{asset.minorArea}}" readonly>
                 </div>
 
-                <div class="col-sm-3">
+                <div class="col-2">
                     <label for="assetType"
-                        class="form-label-sm">Asset Type</label>
+                        class="form-label-sm">Type:</label>
                     <input id=assetType name="assetType" type="text"
                             style="min-width: 90px; max-width: 150px;" class="form-control-sm"
                             placeholder="Asset Type" value="{{asset.assetType}}" readonly>
@@ -177,18 +190,16 @@
                 </div>
             </div> <!--row-->
 
-            {% if mode != "ADD"%}
-            <div class="row g-3 pt-1">
-                <div class="col-sm-8">
-                    <b>&nbsp;Created On:</b> {{todo.createdDate}}   <b>By: </b>{{todo.createdBy}}
-                </div>
-            </div> <!--row-->
-            <div class="row g-3 pt-1">
-                <div class="col-sm-8">
-                    <b>Updated On:</b> {{todo.updatedDate}}   <b>By: </b>{{todo.updatedBy}}
-                </div>
-            </div> <!--row-->
-            {% endif %}
+        {% if mode != "ADD"%}
+            <div class="row pt-1">
+               <div class="col addupdatedate-left">
+                 <b>Created: </b>{{asset.createdDate}}<b> By: </b>{{asset.createdBy}}
+               </div>
+               <div class="col addupdatedate-right">
+                  <b>Updated: </b>{{asset.updatedDate}}<b> By: </b>{{asset.updatedBy}}
+               </div>
+            </div>
+        {% endif %}
 
             <div class="row g-3 pt-3 pb-3">
                 <div class="col-sm-3">

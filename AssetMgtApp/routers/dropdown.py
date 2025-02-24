@@ -166,7 +166,21 @@ async def render_dropdown_edit_page(request: Request, dropdown_id: int, db: db_d
         if loginUser is None:
             return redirect_to_login()
 
-        dropdown_model = db.query(Dropdown).filter(Dropdown.id == dropdown_id).first()
+        query = db.query(
+            Dropdown.id,
+            Dropdown.column,
+            Dropdown.value,
+            Dropdown.description,
+            Dropdown.order,
+            func.ifnull(func.round(Dropdown.gpsLat,8),"").label('gpsLat'),
+            func.ifnull(func.round(Dropdown.gpsLng,8),"").label('gpsLng'),
+            func.strftime('%m/%d/%Y', Dropdown.createdDate).label('createdDate'),
+            Dropdown.createdBy,
+            func.strftime('%m/%d/%Y', Dropdown.updatedDate).label('updatedDate'),
+            Dropdown.updatedBy
+        )
+        dropdown_model = query.filter(Dropdown.id == dropdown_id).first()
+        #ropdown_model = db.query(Dropdown).filter(Dropdown.id == dropdown_id).first()
         if dropdown_model is None:
             raise HTTPException(status_code=404, detail='dropdown not found.')
 
@@ -179,7 +193,6 @@ async def render_dropdown_edit_page(request: Request, dropdown_id: int, db: db_d
 
         if dropdown_model.order is None:
             dropdown_model.order = ""
-
 
         return templates.TemplateResponse("add-edit-view-dropdown.html",
                         {"request": request, "dropdown": dropdown_model, "currentUser": loginUser, "mode": "EDIT"})
@@ -195,7 +208,21 @@ async def render_dropdown_view_page(request: Request, dropdown_id: int, db: db_d
             return redirect_to_login()
 
 
-        dropdown_model = db.query(Dropdown).filter(Dropdown.id == dropdown_id).first()
+        query = db.query(
+            Dropdown.id,
+            Dropdown.column,
+            Dropdown.value,
+            Dropdown.description,
+            Dropdown.order,
+            func.ifnull(func.round(Dropdown.gpsLat,8),"").label('gpsLat'),
+            func.ifnull(func.round(Dropdown.gpsLng,8),"").label('gpsLng'),
+            func.strftime('%m/%d/%Y', Dropdown.createdDate).label('createdDate'),
+            Dropdown.createdBy,
+            func.strftime('%m/%d/%Y', Dropdown.updatedDate).label('updatedDate'),
+            Dropdown.updatedBy
+        )
+        dropdown_model = query.filter(Dropdown.id == dropdown_id).first()
+        #ropdown_model = db.query(Dropdown).filter(Dropdown.id == dropdown_id).first()
         if dropdown_model is None:
             raise HTTPException(status_code=404, detail='Dropdown not found.')
 

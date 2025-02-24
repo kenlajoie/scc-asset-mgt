@@ -1,5 +1,37 @@
 {% include 'layout.html' %}
+<style>
+  .addupdatedate-left {
+    font-size: x-small;
+    text-align: left;
+    padding-top: 1px;
+  }
 
+  .addupdatedate-right {
+    font-size: x-small;
+    text-align: left;
+    padding-top: 1px;
+  }
+  .databutton {
+    padding: 0px 3px; /* Custom padding for thinner appearance */
+    margin: 0px 10px; /* space around the buttom */
+    font-size: x-small;
+    background-color: #007bff;
+    color: white;
+  }
+
+  .dataheader-right {
+    font-size: small;
+    text-align: right;
+    padding-right: 1px;
+  }
+
+  .datafield {
+    margin: 3px;              /* Margin outside the border */
+    padding-left: 2px;
+    font-size: small
+  }
+
+</style>
 
 <div class="container">
   <div class="card mt-2">
@@ -20,124 +52,101 @@
             <div class="form-group">
               <input type="text" class="form-control" name="mode" value="{{mode}}" hidden>
 
-            <div class="row g-3 pt-2">
-                <div class="col-sm-2">
-                    <label for="column" class="form-label-sm">Column</label>
-               </div>
-               <div class="col-sm-10">
-                    {% if mode in ["ADD","EDIT", "VIEW"] %}  <!--column is ready only -->
-                        <input id="column" name="column" type="text"
-                                style="min-width: 150px; max-width: 200px; text-transform: uppercase;" class="form-control-sm"
-                                placeholder="Column" value="{{dropdown.column}}" readonly>
-                    {% else %}  <!- ADDX is for adding a new column from the botton ADD button --!>
-                        <input id="column" name="column" type="text" autocomplete="off"
-                                style="min-width: 150px; max-width: 200px; text-transform: uppercase;" class="form-control-sm"
-                                placeholder="column" value="{{dropdown.column}}" required>
-                        <div><span id="error-column" class="error"></span></div>
-                    {% endif %}
-                </div>
-            </div> <!--row-->
+       <div class="row">
+         <div class="col-2 dataheader-right">Column:</div>
+         <div class="col-3 datafield">
+           {% if mode in ["ADD","EDIT", "VIEW"] %}  <!--column is ready only -->
+                <input id="column" name="column" type="text"
+                        style="min-width: 150px; max-width: 150px; text-transform: uppercase;" class="form-control-sm"
+                        placeholder="Column" value="{{dropdown.column}}" readonly>
+           {% else %}  <!- ADDX is for adding a new column from the botton ADD button --!>
+                <input id=column name="column" type="text" autocomplete="off"
+                        style="min-width: 150px; max-width: 150px;text-transform: uppercase;" class="form-control-sm"
+                        placeholder="value" value="{{dropdown.column}}" required
+                        oninput="this.value = this.value.replace(/\s/g, '');"
+                        onkeydown="if (event.key === ' ') event.preventDefault();" />
+                <div><span id="error-column" class="error"></span></div>
+             {% endif %}
+         </div>  <!-- col -->
+       </div> <!--row-->
 
-            <div class="row g-3 pt-2">
-                <div class="col-sm-2">
-                    <label for="value" class="form-label-sm">Value</label>
-               </div>
-                <div class="col-sm-10">
-                    {% if mode in ["VIEW", "EDIT"] %} <!--column is ready only once added -->
-                        <input id=value" name=value type="text"
-                                style="min-width: 100px; max-width: 100px;" class="form-control-sm"
-                                placeholder="value" value="{{dropdown.value}}" readonly>
-                    {% else %} <!- assume ADD or ADDX--!>
-                        <input id=value name="value" type="text" autocomplete="off"
-                                style="min-width: 100px; max-width: 100px;text-transform: uppercase;" class="form-control-sm"
-                                placeholder="value" value="{{dropdown.value}}" required
-                                oninput="this.value = this.value.replace(/\s/g, '');"
-                                onkeydown="if (event.key === ' ') event.preventDefault();" />
-                        <div><span id="error-value" class="error"></span></div>
-                    {% endif %}
-                </div>
-            </div> <!--row-->
 
-            <div class="row g-3 pt-2">
-                <div class="col-sm-2">
-                    <label for="description" class="form-label-sm">Description</label>
-               </div>
-                <div class="col-sm-10">
-                    {% if mode == "VIEW"%}
-                        <input id="description" name="description" type="text"
-                                style="min-width: 150px; max-width: 200px;" class="form-control-sm"
-                                placeholder="Description" value="{{dropdown.description}}" readonly>
-                    {% else %}  <!- assume ADD. ADDX OR edit--!>
-                        <input id="description" name="description" type="text" autocomplete="off"
-                                style="min-width: 150px; max-width: 200px;" class="form-control-sm"
-                                placeholder="Description" value="{{dropdown.description}}" required>
-                        <div><span id="error-description" class="error"></span></div>
-                    {% endif %}
-                </div>
-            </div> <!--row-->
 
-            <div class="row g-3 pt-2">
-                <div class="col-sm-2">
-                    <label for="order" class="form-label-sm">Order</label>
-               </div>
-                <div class="col-sm-10">
-                    {% if mode == "VIEW"%}
-                        <input id="order" name="order" type="text"
-                                style="min-width: 150px; max-width: 200px;" class="form-control-sm"
-                                placeholder="Order" value="{{dropdown.order}}" type="number" readonly>
-                    {% else %}  <!- assume ADD, ADDX OR edit--!>
-                        <input id="order" name="order" type="text" autocomplete="off"
-                                style="min-width: 150px; max-width: 200px;" class="form-control-sm"
-                                placeholder="Order" value="{{dropdown.order}}" type="number" required>
-                        <div><span id="error-order" class="error"></span></div>
-                    {% endif %}
-                </div> <!-- col -->
-            </div> <!--row-->
+       <div class="row">
+         <div class="col-2 dataheader-right">Value:</div>
+         <div class="col-3 datafield">
+            {% if mode in ["VIEW", "EDIT"] %} <!--column is ready only once added -->
+                <input id=value" name=value type="text"
+                        style="min-width: 150px; max-width: 150px;" class="form-control-sm"
+                        placeholder="value" value="{{dropdown.value}}" readonly>
+            {% else %} <!- assume ADD or ADDX--!>
+                <input id=value name="value" type="text" autocomplete="off"
+                        style="min-width: 150px; max-width: 150px;text-transform: uppercase;" class="form-control-sm"
+                        placeholder="value" value="{{dropdown.value}}" required
+                        oninput="this.value = this.value.replace(/\s/g, '');"
+                        onkeydown="if (event.key === ' ') event.preventDefault();" />
+                <div><span id="error-value" class="error"></span></div>
+             {% endif %}
+         </div>  <!-- col -->
+       </div> <!--row-->
+
+       <div class="row">
+         <div class="col-2 dataheader-right">Descrip:</div>
+         <div class="col-3 datafield">
+            {% if mode == "VIEW"%}
+                <input id=description name="description" type="text"
+                    style="min-width: 300px; max-width: 300px;" class="form-control-sm"
+                    placeholder="Dropdown Description" value="{{dropdown.description}}" readonly>
+             {% else %}  <!- assume ADD. ADDX OR edit--!>
+                <input id=description name="description" type="text"
+                    style="min-width: 200px; max-width: 200px;" class="form-control-sm"
+                    placeholder="Dropdown Description" value="{{dropdown.description}}" required>
+                <div><span id="error-description" class="error"></span></div>
+             {% endif %}
+         </div>  <!-- col -->
+       </div> <!--row-->
+
+       <div class="row">
+         <div class="col-2 dataheader-right">Order:</div>
+         <div class="col-3 datafield">
+            {% if mode == "VIEW"%}
+                <input id="order" name="order" type="text"
+                        style="min-width: 150px; max-width: 150px;" class="form-control-sm"
+                        placeholder="Order" value="{{dropdown.order}}" type="number" readonly>
+             {% else %}  <!- assume ADD. ADDX OR edit--!>
+                <input id="order" name="order" type="text" autocomplete="off"
+                        style="min-width: 150px; max-width: 150px;" class="form-control-sm"
+                        placeholder="Order" value="{{dropdown.order}}" type="number" required>
+                <div><span id="error-order" class="error"></span></div>
+             {% endif %}
+         </div>  <!-- col -->
+       </div> <!--row-->
 
             {% if dropdown.column == "MAJORAREA"%}
-            <div class="row g-3 pt-2">
-                <div class="col-sm-2">
-                    <label for="gpsLat" class="form-label-sm">Latitude:</label>
-                </div> <!-- col -->
-                <div class="col-sm-4">
-                    {% if mode == "VIEW"%}
-                       <input name=gpsLat id=gpsLat type="text"
-                            style="min-width: 120px; max-width: 120px;" class="form-control-sm"
-                            placeholder="Latitude" value="{{dropdown.gpsLat}}" readonly>
-                    {% else %}  <!- assume ADD OR edit--!>
-                            <input name=gpsLat id=gpsLat type="text"
-                                style="min-width: 120px; max-width: 120px;" class="form-control-sm"
-                                placeholder="Latitude" value="{{dropdown.gpsLat}}">
-                            <span id="error-gpsLat" class="error"></span>
-                    {% endif %}
-                </div> <!-- col -->
+            <div class="row">
+               <div class="col-2 dataheader-right">Lat::</div>
+               <div class="col-3 datafield">
+                  <input name=gpsLat id=gpsLat type="text"
+                     style="min-width: 125px; max-width: 125px;" class="form-control-sm"
+                     placeholder="Latitude" value="{{dropdown.gpsLat}}" readonly>
+                  <span id="error-gpsLat" class="error"></span>
+               </div>  <!-- col -->
+               <div class="col">
+                   <button class="databutton ml-4" type="button"
+                     onclick="captureLocation()">Capture</button>
+                   <button class="databutton" type="button"
+                     onclick="clearLocation()">Clear</button>
+                </div>
             </div> <!--row-->
 
-            <div class="row g-3 pt-2">
-                <div class="col-sm-2">
-                    <label for="gpsLng" class="form-label-sm">Longitude:</label>
-                </div> <!-- col -->
-                <div class="col-sm-4">
-                    {% if mode == "VIEW"%}
-                        <input name=gpsLng id=gpsLng type="text"
-                            style="min-width: 120px; max-width: 120px;" class="form-control-sm"
-                            placeholder="longitude" value="{{dropdown.gpsLng}}" readonly>
-                    {% else %} <!-- assume  ["ADD","EDIT" ] -->
-                        <input name=gpsLng id=gpsLng type="texts"
-                            style="min-width: 120px; max-width: 120px;" class="form-control-sm"
-                            placeholder="Latitude" value="{{dropdown.gpsLng}}">
-                         <span id="error-gpsLng" class="error"></span>
-                    {% endif %}
-
-                    {% if mode in ["ADD","EDIT"] %}
-                         <button name=capture id=capture class="btn-sm btn-primary btn-thin-sm"
-                                 onclick="captureLocation()" type="button">Capture</button>
-
-                         <button name=locate id=locate class="btn-sm btn-primary btn-thin-sm"
-                            onclick="clearLocation()" type="button">Clear</button>
-                    {% endif %}
-
-                </div> <!-- col -->
+            <div class="row">
+               <div class="col-2 dataheader-right">Lng:</div>
+               <div class="col-3 datafield">
+                  <input name=gpsLng id=gpsLng type="text"
+                      style="min-width: 125px; max-width: 125px;" class="form-control-sm"
+                      placeholder="longitude" value="{{dropdown.gpsLng}}" readonly>
+                  <span id="error-gpsLng" class="error"></span>
+               </div>  <!-- col -->
             </div> <!--row-->
 
             <div class="row g-3 pt-1">
@@ -149,34 +158,33 @@
             </div> <!--row-->
             {% endif %}
 
-            {% if mode in ["VIEW", "EDIT"] %}
-            <div class="row g-3 pt-1">
-                <div class="col-sm-8">
-                    <b>&nbsp;Created On:</b> {{dropdown.createdDate}}   <b>By: </b>{{dropdown.createdBy}}
-                </div>
-            </div> <!--row-->
-            <div class="row g-3 pt-1">
-                <div class="col-sm-8">
-                    <b>Updated On:</b> {{dropdown.updatedDate}}   <b>By: </b>{{dropdown.updatedBy}}
-                </div>
-            </div> <!--row-->
+            {% if mode != "ADD"%}
+            <div class="row mt-2">
+               <div class="col addupdatedate-left">
+                 <b>Created: </b>{{dropdown.createdDate}}<b> By: </b>{{dropdown.createdBy}}
+               </div>
+               <div class="col addupdatedate-right">
+                  <b>Updated: </b>{{dropdown.updatedDate}}<b> By: </b>{{dropdown.updatedBy}}
+               </div>
+             </div>
+             {% endif %}
+
+      <!-- dropdown  navigation buttons -->
+       <div class="row mt-2 pb-1 gx-0">
+          <div class="col d-flex justify-content-end">
+            {% if mode == "VIEW" %}
+               {% if currentUser.userRole == 'ADMIN' %}
+                  <button class="databutton" id="delete" type="submit">Delete</button>
+                {% endif %}
+            {% else %}  <!- assume ADDX, ADD OR EDIT--!>
+               <button class="databutton" id="save" type="submit">Save</button>
             {% endif %}
+               <button class="databutton" id="back" type="button"
+                    onclick="window.location.href='/dropdown/dropdown-page'">Back</button>
+          </div>
+       </div> <!--row-->
 
-            <div class="row g-3 pt-3 pb-3">
-                <div class="col-sm-3">
-                   {% if mode == "VIEW" %}
-                        <button type="submit"
-                             class="btn-sm btn-primary btn-thin-sm">Delete</button>
-                   {% else %}  <!- assume ADDX, ADD OR EDIT--!>
-                        <button type="submit"
-                            class="btn-sm btn-primary btn-thin-sm">Save</button>
-                    {% endif %}
 
-                        <button
-                            class="btn-sm btn-primary btn-thin-sm"
-                            onclick=window.location.href='/dropdown/dropdown-page' type="button">Back</button>
-                </div>
-            </div> <!--row-->
       </form>
     </div> <!-- card body -->
   </div> <!-- card -->
