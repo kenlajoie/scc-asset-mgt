@@ -1,7 +1,37 @@
 
 {% include 'layout.html' %}
+
 <style>
-  .addupdatedate-left {
+ .view-header {
+    width: 100%;
+    background-color:  rgb(255, 99, 71); /* Tomato color */
+    color: black;
+    text-align: center;
+    padding-top: 4px;
+    padding-bottom: 2px;
+  }
+
+  .view-footer {
+    width: 100%;
+    background-color:  rgb(255, 99, 71); /* Tomato color */
+    color: black;
+    text-align: center;
+    padding-top: 4px;
+    padding-bottom: 2px;
+  }
+
+  .view-content {
+    min-width: 375px; /* Minimum width */
+    mac-width: 100%;  /* Width will scale to 100% of the parent element */
+    background-color: #d9dee0;  /* light gray */
+    padding: 2px 14px 2px;  /* top, left/right, bottom */
+    display: flex;
+    flex-direction: column;
+    margin-top: 2px;
+  }
+
+
+ .addupdatedate-left {
     font-size: x-small;
     text-align: left;
     padding-top: 1px;
@@ -13,12 +43,70 @@
     padding-top: 1px;
   }
 
+  .dataheader-right {
+    font-size: small;
+    text-align: right;
+    padding-right: 3px;
+  }
+
+  .dataheader-left {
+    font-size: small;
+    text-align: left;
+    padding-right: 3px;
+  }
+
+  .inputfield {
+    margin: 3px;              /* Margin outside the border */
+    padding-left: 2px;
+    font-size: small
+  }
+
+  .form-control-sm { /* for all the input fields */
+     font-size: 12px;  /* Change font size to small */
+  }
+
+  .datafield {
+    border: 2px solid black; /* Border color and thickness */
+    border-radius: 1px;
+    margin: 3px;              /* Margin outside the border */
+    padding-left: 2px;
+    font-size: small
+  }
+
+  .datatextarea {
+    border: 2px solid black; /* Border color and thickness */
+    border-radius: 1px;
+    margin: 3px;              /* Margin outside the border */
+    padding-left: 2px;
+    font-size: small
+  }
+
+  .databutton {
+    padding: 0px 3px; /* Custom padding for thinner appearance */
+    margin: 0px 10px; /* space around the button */
+    font-size: x-small;
+    background-color: #007bff;
+    color: white;
+    border: none; /* Removing default border for a cleaner look */
+    border-radius: 3px; /* Optional: Rounded corners for a modern feel */
+    cursor: pointer; /* Adds pointer on hover */
+    transition: background-color 0.3s ease; /* Smooth background transition */
+  }
+
+  .databutton:hover {
+    background-color: #0056b3; /* Darker blue on hover for feedback */
+  }
+
+  .databutton:focus {
+    outline: none; /* Optional: removes focus outline for cleaner look */
+    box-shadow: 0 0 3px 2px rgba(0, 123, 255, 0.5); /* Optional: subtle focus effect */
+  }
+
 </style>
+
 <div class="container">
   <div class="card mt-2">
-    <div class="card-header p-1">
-        <h5 class="card-title card-title-left">Todo</h5>
-    </div>
+
     <div class="card-body">
         {% if mode == "ADD"%}
         <form id="addTodoForm">
@@ -26,203 +114,155 @@
         {% if mode == "EDIT"%}
         <form id="editTodoForm">
         {% endif %}
-        {% if mode == "VIEW"%}
-        <form id="viewTodoForm">
-        {% endif %}
 
-           <div class="form-group">
+          <div class="form-group">
               <input type="text" class="form-control" name="redirect" value="{{redirect}}" hidden>
               <input type="text" class="form-control" name="mode" value="{{mode}}" hidden>
               <input type="text" class="form-control" name="todo_id" value="{{todo_id}}" hidden>
               <input type="text" class="form-control" name="assetId" value="{{asset.id}}" hidden>
-           </div>
+          </div>
 
-           <div class="row g-5 pt-1">
+          <div class="view-header">
+           <div class="row mx-0 pb-1 gx-0">
+              <div class="col pagetitle d-flex justify-content-start">Asset</div>
+           </div> <!--row-->
+          </div> <!-- view-header -->
 
-                <div class="col-2">
-                    <label for="majorArea"
-                        class="form-label-sm">Major:</label>
-                    <input id=majorArea name="majorArea" type="text"
-                            style="min-width: 90px; max-width: 150px;" class="form-control-sm"
-                            placeholder="Major Area" value="{{asset.majorArea}}" readonly>
-                </div>
+          <div class="view-content">
+            <div class="row pt-2">
+              <div class="col dataheader-left">Major</div>
+              <div class="col dataheader-left">Minor</div>
+              <div class="col dataheader-left">Type</div>
+            </div>
 
-                <div class="col-2">
-                    <label for="minorArea"
-                        class="form-label-sm">Minor:</label>
-                    <input id=minorArea name="MinorArea" type="text"
-                            style="min-width: 90px; max-width: 150px;" class="form-control-sm"
-                            placeholder="Minor Area" value="{{asset.minorArea}}" readonly>
-                </div>
+            <div class="row">
+              <div class="col datafield">{{asset.majorArea}}</div>
+              <div class="col datafield">{{asset.minorArea}}</div>
+              <div class="col datafield">{{asset.assetType}}</div>
+            </div>
 
-                <div class="col-2">
-                    <label for="assetType"
-                        class="form-label-sm">Type:</label>
-                    <input id=assetType name="assetType" type="text"
-                            style="min-width: 90px; max-width: 150px;" class="form-control-sm"
-                            placeholder="Asset Type" value="{{asset.assetType}}" readonly>
-                </div>
+            <div class="row">
+              <div class="col col-2 text-end dataheader-right">Asset:</div>
+              <div class="col datafield">{{asset.description}}</div>
+            </div>
 
-            </div> <!--row-->
+            <div class="row">
+              <div class="col-2 dataheader-right">Model:</div>
+              <div class="col-3 datafield">{{asset.model}}</div>
+              <div class="col-2 dataheader-right">State:</div>
+              <div class="col-3 datafield">{{asset.assetState}}</div>
+            </div>
 
-            <div class="row g-3 pt-2">
-                <div class="col-sm-8">
-                    <label for="description" class="form-label-sm">Description</label>
-                    <input id=description name="description" type="text"
-                            style="min-width: 300px; max-width: 400px;" class="form-control-sm"
-                            placeholder="Asset Description" value="{{asset.description}}" readonly>
-                </div>
-            </div> <!--row-->
+            <div class="row">
+              <div class="col-2 dataheader-right">Satillite:</div>
+              <div class="col-3 datafield">{{asset.satellite}}</div>
+              <div class="col-2 dataheader-right">Station:</div>
+              <div class="col-3 datafield">{{asset.station}}</div>
+            </div>
 
-            <div class="row g-3 pt-2">
-                <div class="col-sm-10">
-                    <label for="model" class="form-label-sm">Model</label>
-                    <input id="model" name="model" type="text"
-                            style="min-width: 100px; max-width: 150px;" class="form-control-sm"
-                            placeholder="Model" value="{{asset.model}}" readonly>
-                </div> <!--col-->
-            </div> <!--row-->
-            <div class="row g-3 pb-2">
-                <div class="col-sm-10">
-                    <label for="assetState" class="form-label-sm">State</label>
-                    <input id="assetState" name="assetState" type="text"
-                            style="min-width: 100px; max-width: 150px;" class="form-control-sm"
-                            placeholder="Asset State" value="{{asset.assetState}}" readonly>
-                </div> <!--col-->
-            </div> <!--row-->
+          </div> <!--view-content-->
 
-<!------------todo stuff---------------->
-            <hr style="border: 3px solid #333;  margin: 5px 0;">
+          <div class="view-header">
+           <div class="row mx-0 pb-1 gx-0">
+              <div class="col pagetitle d-flex justify-content-start">Todo</div>
+           </div> <!--row-->
+          </div> <!-- view-header -->
 
-            <div class="row g-3 pt-2">
-                <div class="col-sm-8">
-                    <label for="task" class="form-label-sm">Todo Task</label>
-                    {% if mode == "VIEW"%}
-                        <input id=task name="task" type="text"
-                                style="min-width: 300px; max-width: 400px;" class="form-control-sm"
-                                placeholder="Todo Task" value="{{todo.task}}" readonly>
-                    {% else %}  <!- assume ADD OR edit--!>
-                        <input id=task name="task" type="text"
-                                style="min-width: 300px; max-width: 400px;" class="form-control-sm"
-                                placeholder="Todo Task" value="{{todo.task}}" required>
-                        <div><span id="error-task" class="error"></span></div>
+           <div class="row">
+              <div class="col-2 dataheader-right">Who:</div>
+              <div class="col-3 inputfield">
+                    <select id="assignedTo" name="assignedTo"
+                        style="min-width: 125px; max-width: 125px;" class="form-control-sm mb=1">
+                        {% for user in users %}
+                          {% if todo.assignedTo == user.initials %}
+                             <option value="{{user.initials}}" selected>{{user.initials}}</option>
+                          {% else %}
+                             <option value="{{user.initials}}">{{user.initials}}</option>
+                          {% endif %}
+                        {% endfor %}
+                    </select>
+             </div>  <!-- col -->
+           </div> <!--row-->
 
-                    {% endif %}
-                </div>
-            </div> <!--row-->
-             <div class="row g-3 pt-1">
-                <div class="col-sm-3">
-                    <label for="assignedTo"
-                        class="form-label-sm">AssignedTo</label>
-                    {% if mode == "VIEW"%}
-                        <input id=assignedTo name="assignedTo" type="text"
-                                style="min-width: 125px; max-width: 125px;" class="form-control-sm"
-                                placeholder="Assigned To" value="{{todo.assignedTo}}" readonly>
-                    {% else %}  <!- assume ADD OR edit--!>
-                        <select id="assignedTo" name="assignedTo"
-                            style="min-width: 100px; max-width: 100px;" class="form-control-sm">
-                            {% for user in users %}
-                              {% if todo.assignedTo == user.initials %}
-                                 <option value="{{user.initials}}" selected>{{user.initials}}</option>
-                              {% else %}
-                                 <option value="{{user.initials}}">{{user.initials}}</option>
+           <div class="row">
+              <div class="col-2 dataheader-right">Priority:</div>
+              <div class="col-3 inputfield">
+                    <select id="priority" name="priority"
+                        style="min-width: 125px; max-width: 125px;" class="form-control-sm">
+                            {% for ddv in dropdown %}
+                              {% if ddv.column == "TODOPRIORITY" %}
+                                  {% if ddv.value == todo.priority %}
+                                     <option value="{{ddv.value}}" selected>{{ddv.value}}</option>
+                                  {% else %}
+                                     <option value="{{ddv.value}}">{{ddv.value}}</option>
+                                  {% endif %}
                               {% endif %}
                             {% endfor %}
-                        </select>
-                    {% endif %}
-                </div>
+                    </select>
+             </div>  <!-- col -->
+           </div> <!--row-->
 
-                <div class="col-sm-3">
-                    <label for="priority"
-                        class="form-label-sm">Priority</label>
-                    {% if mode == "VIEW"%}
-                        <input id=priority name="priority" type="text"
-                                style="min-width: 125px; max-width: 125px;" class="form-control-sm"
-                                placeholder="Priority" value="{{todo.priority}}" readonly>
-                    {% else %}  <!- assume ADD OR edit--!>
-                        <select id="priority" name="priority"
-                            style="min-width: 125px; max-width: 125px;" class="form-control-sm">
-                                {% for ddv in dropdown %}
-                                  {% if ddv.column == "TODOPRIORITY" %}
-                                      {% if ddv.value == todo.priority %}
-                                         <option value="{{ddv.value}}" selected>{{ddv.value}}</option>
-                                      {% else %}
-                                         <option value="{{ddv.value}}">{{ddv.value}}</option>
-                                      {% endif %}
+           <div class="row">
+              <div class="col-2 dataheader-right">Status:</div>
+              <div class="col-3 inputfield">
+                    <select id="todoStatus" name="todoStatus"
+                        style="min-width: 125px; max-width: 125px;" class="form-control-sm">
+                            {% for ddv in dropdown %}
+                              {% if ddv.column == "TODOSTATUS" %}
+                                  {% if ddv.value == todo.status %}
+                                     <option value="{{ddv.value}}" selected>{{ddv.value}}</option>
+                                  {% else %}
+                                     <option value="{{ddv.value}}">{{ddv.value}}</option>
                                   {% endif %}
-                                {% endfor %}
-                        </select>
-                    {% endif %}
-                </div>
+                              {% endif %}
+                            {% endfor %}
+                    </select>
+             </div>  <!-- col -->
+           </div> <!--row-->
 
-                <div class="col-sm-3">
-                    <label for="todoStatus"
-                        class="form-label-sm">Status</label>
-                    {% if mode == "VIEW"%}
-                        <input id=todoStatus name="todoStatus" type="text"
-                                style="min-width: 125px; max-width: 125px;" class="form-control-sm"
-                                placeholder="Todo Status" value="{{todo.todoStatus}}" readonly>
-                    {% else %}  <!- assume ADD OR edit--!>
-                        <select id="todoStatus" name="todoStatus"
-                            style="min-width: 125px; max-width: 125px;" class="form-control-sm">
-                                {% for ddv in dropdown %}
-                                  {% if ddv.column == "TODOSTATUS" %}
-                                      {% if ddv.value == todo.status %}
-                                         <option value="{{ddv.value}}" selected>{{ddv.value}}</option>
-                                      {% else %}
-                                         <option value="{{ddv.value}}">{{ddv.value}}</option>
-                                      {% endif %}
-                                  {% endif %}
-                                {% endfor %}
-                        </select>
-                    {% endif %}
-                </div>
-            </div> <!--row-->
+           <div class="row">
+              <div class="col-2 dataheader-right">Task:</div>
+              <div class="col-3 inputfield pb-2">
+                    <input id=task name="task" type="text"
+                            style="min-width: 300px; max-width: 400px;" class="form-control-sm"
+                            placeholder="Todo Task" value="{{todo.task}}" required>
+                    <div><span id="error-task" class="error"></span></div>
+             </div>  <!-- col -->
+           </div> <!--row-->
 
-            <div class="row g-3 pt-2">
-                <div class="col-sm-8">
-                    <label for="note" class="form-label-sm">Notes</label>
-                    {% if mode == "VIEW"%}
-                        <textarea name="note" class="form-control" rows="3" readonly>{{todo.note}}</textarea>
-                    {% else %}  <!- assume ADD OR edit--!>
-                        <textarea name="note" class="form-control" rows="3">{{todo.note}}</textarea>
-                    {% endif %}
-                </div>
-            </div> <!--row-->
+           <div class="row">
+              <div class="col-2 dataheader-right">Notes:</div>
+              <div class="col-3 inputfield">
+                    <textarea style="width: 300px;" name="note" class="form-control-sm" rows="3">{{todo.note}}</textarea>
+             </div>  <!-- col -->
+           </div> <!--row-->
 
-        {% if mode != "ADD"%}
-            <div class="row pt-1">
+           {% if mode != "ADD"%}
+           <div class="row pt-1">
                <div class="col addupdatedate-left">
-                 <b>Created: </b>{{asset.createdDate}}<b> By: </b>{{asset.createdBy}}
+                 <b>Created: </b>{{todo.createdDate}}<b> By: </b>{{todo.createdBy}}
                </div>
                <div class="col addupdatedate-right">
-                  <b>Updated: </b>{{asset.updatedDate}}<b> By: </b>{{asset.updatedBy}}
+                  <b>Updated: </b>{{todo.updatedDate}}<b> By: </b>{{todo.updatedBy}}
                </div>
-            </div>
-        {% endif %}
+           </div>
+           {% endif %}
 
-            <div class="row g-3 pt-3 pb-3">
-                <div class="col-sm-3">
-                    {% if mode == "VIEW"%}
-                        {% if currentUser.userRole == 'ADMIN' %}
-                            <button type="submit"
-                                class="btn-sm btn-primary btn-thin-sm">Delete</button>
-                        {% endif %}
-                   {% else %}  <!- assume ADD OR EDIT--!>
-                        <button type="submit"
-                            class="btn-sm btn-primary btn-thin-sm">Save</button>
-                    {% endif %}
+          <!-- todo  navigation buttons -->
+          <div class="row mt-2 pb-1 gx-0">
+             <div class="col d-flex justify-content-end">
+                <button class="databutton" id="save" type="submit">Save</button>
 
-                    {% if redirect == "T"%}
-                        <button class="btn-sm btn-primary btn-thin-sm"
-                            onclick=window.location.href='/todos/todo-list/{{todo_id}}' type="button">Back</button>
-                    {% else %}  <!- assume A  -->
-                            <button class="btn-sm btn-primary btn-thin-sm"
-                                onclick=window.location.href='/assets/view-asset-page/{{asset.id}}' type="button">Back</button>
-                    {% endif %}
-                </div>
-            </div> <!--row-->
-      </form>
+                {% if redirect == "T"%}
+                   <button class="databutton" id="todoback" type="button"
+                      onclick=window.location.href='/todos/todo-list/{{todo_id}}'>Back</button>
+                {% else %}  <!- assume A  -->
+                   <button class="databutton" id="assetback" type="button"
+                      onclick=window.location.href='/assets/view-asset-page/{{asset.id}}'>Back</button>
+                {% endif %}
+             </div>
+          </div> <!--row-->
+    </form>
     </div> <!-- card body -->
   </div> <!-- card -->
 </div> <!-- container -->

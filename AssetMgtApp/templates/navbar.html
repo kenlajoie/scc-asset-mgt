@@ -1,7 +1,6 @@
-
 <div>
   <nav class="navbar navbar-expand-sm navbar-dark main-color fixed-top p-0">
-    <a class="navbar-brand" href="#">Asset Mgt</a>
+    <a class="navbar-brand" href="#">Asset Management (V.09)</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
             aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -10,22 +9,22 @@
       <ul class="navbar-nav">
    {% if currentUser %}
         <li class="nav-item active">
-          <a class="nav-link" href="/assets/asset-page">Assets</a>
+          <a class="nav-link p-1" href="/assets/asset-page">Assets</a>
         </li>
         <li class="nav-item active">
           <!-- pass 0 to clear the active row -->
-          <a class="nav-link" href="/todos/todo-list/0">Todos</a>
+          <a class="nav-link p-1" href="/todos/todo-list/0">Todos</a>
         </li>
      {% if currentUser.userRole == 'ADMIN' %}
         <li class="nav-item active">
-          <a class="nav-link" href="/users/user-page">Users</a>
+          <a class="nav-link p-1" href="/users/user-page">Users</a>
         </li>
         <li class="nav-item active">
-          <a class="nav-link" href="/dropdown/dropdown-page">Dropdown</a>
+          <a class="nav-link p-1" href="/dropdown/dropdown-page">Dropdown</a>
         </li>
      {% endif %} <!-- is ADMIN -->
         <li class="nav-item active">
-          <a class="nav-link" onclick="logout()">Logout</a>
+          <a class="nav-link p-1" onclick="logout()">Logout</a>
         </li>
    {% endif %} <!--currentUser -->
       </ul>

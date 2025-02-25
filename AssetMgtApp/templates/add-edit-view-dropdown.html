@@ -11,14 +11,6 @@
     text-align: left;
     padding-top: 1px;
   }
-  .databutton {
-    padding: 0px 3px; /* Custom padding for thinner appearance */
-    margin: 0px 10px; /* space around the buttom */
-    font-size: x-small;
-    background-color: #007bff;
-    color: white;
-  }
-
   .dataheader-right {
     font-size: small;
     text-align: right;
@@ -30,6 +22,33 @@
     padding-left: 2px;
     font-size: small
   }
+
+  .databutton {
+    padding: 0px 3px; /* Custom padding for thinner appearance */
+    margin: 0px 10px; /* space around the button */
+    font-size: x-small;
+    background-color: #007bff;
+    color: white;
+    border: none; /* Removing default border for a cleaner look */
+    border-radius: 3px; /* Optional: Rounded corners for a modern feel */
+    cursor: pointer; /* Adds pointer on hover */
+    transition: background-color 0.3s ease; /* Smooth background transition */
+  }
+
+  .databutton:hover {
+    background-color: #0056b3; /* Darker blue on hover for feedback */
+  }
+
+  .databutton:focus {
+    outline: none; /* Optional: removes focus outline for cleaner look */
+    box-shadow: 0 0 3px 2px rgba(0, 123, 255, 0.5); /* Optional: subtle focus effect */
+  }
+
+ .form-control-sm { /* for all the input fields */
+    font-size: 12px;  /* Change font size to small */
+  }
+
+
 
 </style>
 
