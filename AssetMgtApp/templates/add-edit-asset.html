@@ -46,20 +46,20 @@
      <div class="card-header p-1">
          <h5 class="card-title card-title-left">Asset</h5>
      </div>
-     <div class="card-body">
-        {% if mode == "ADD"%}
-        <form id="addAssetForm">
-        {% endif %}
-        {% if mode == "EDIT"%}
-        <form id="editAssetForm">
-        {% endif %}
+    <div class="card-body">
+      {% if mode == "ADD"%}
+      <form id="addAssetForm">
+      {% endif %}
+      {% if mode == "EDIT"%}
+      <form id="editAssetForm">
+      {% endif %}
 
             <div class="form-group">
               <input type="text" class="form-control" name="mode" value="{{mode}}" hidden>
             </div>
 
        <div class="row">
-          <div class="col-2 dataheader-right">Major:</div>
+          <div class="col-3 dataheader-right">Major:</div>
           <div class="col-3 datafield">
              <select id="majorArea" name="majorArea"
                 style="min-width: 125px; max-width: 125px;" class="form-control-sm mb-1">
@@ -77,7 +77,7 @@
        </div> <!--row-->
 
        <div class="row">
-         <div class="col-2 dataheader-right">Minor:</div>
+         <div class="col-3 dataheader-right">Minor:</div>
          <div class="col-3 datafield">
             <select id="minorArea" name="minorArea"
                 style="min-width: 125px; max-width: 125px;" class="form-control-sm">
@@ -95,7 +95,7 @@
        </div> <!--row-->
 
        <div class="row">
-         <div class="col-2 dataheader-right">Type:</div>
+         <div class="col-3 dataheader-right">Type:</div>
          <div class="col-3 datafield">
             <select id="assetType" name="assetType"
                 style="min-width: 125px; max-width: 125px;" class="form-control-sm">
@@ -113,17 +113,17 @@
        </div> <!--row-->
 
        <div class="row">
-         <div class="col-2 dataheader-right">Asset:</div>
+         <div class="col-3 dataheader-right">Asset:</div>
          <div class="col-3 datafield">
             <input id=description name="description" type="text"
-                    style="min-width: 300px; max-width: 300px;" class="form-control-sm"
+                    style="min-width: 250px; max-width: 300px;" class="form-control-sm"
                     placeholder="Asset Description" value="{{asset.description}}" required>
             <div><span id="error-description" class="error"></span></div>
          </div>  <!-- col -->
        </div> <!--row-->
 
        <div class="row">
-         <div class="col-2 dataheader-right">Model:</div>
+         <div class="col-3 dataheader-right">Model:</div>
          <div class="col-3 datafield">
             <select id="model" name="model"
                 style="min-width: 125px; max-width: 125px;" class="form-control-sm">
@@ -142,7 +142,7 @@
        </div> <!--row-->
 
        <div class="row">
-         <div class="col-2 dataheader-right">State:</div>
+         <div class="col-3 dataheader-right">State:</div>
          <div class="col-3 datafield">
             <select id="assetState" name="assetState"
                 style="min-width: 125px; max-width: 125px;" class="form-control-sm">
@@ -160,7 +160,7 @@
        </div> <!--row-->
 
        <div class="row">
-         <div class="col-2 dataheader-right">Satellite:</div>
+         <div class="col-3 dataheader-right">Satellite:</div>
          <div class="col-3 datafield">
             <select id="satellite" name="satellite"
                 style="min-width: 125px; max-width: 125px;" class="form-control-sm">
@@ -179,7 +179,7 @@
        </div> <!--row-->
 
        <div class="row">
-         <div class="col-2 dataheader-right">Station:</div>
+         <div class="col-3 dataheader-right">Station:</div>
          <div class="col-3 datafield">
             <select id="station" name="station"
                 style="min-width: 125px; max-width: 125px;" class="form-control-sm">
@@ -198,7 +198,7 @@
        </div> <!--row-->
 
        <div class="row">
-         <div class="col-2 dataheader-right">Lat::</div>
+         <div class="col-3 dataheader-right">Lat::</div>
          <div class="col-3 datafield">
             <input name=gpsLat id=gpsLat type="text"
                 style="min-width: 125px; max-width: 125px;" class="form-control-sm"
@@ -214,7 +214,7 @@
        </div> <!--row-->
 
        <div class="row">
-         <div class="col-2 dataheader-right">Lng:</div>
+         <div class="col-3 dataheader-right">Lng:</div>
          <div class="col-3 datafield">
             <input name=gpsLng id=gpsLng type="text"
                 style="min-width: 125px; max-width: 125px;" class="form-control-sm"
@@ -224,7 +224,7 @@
        </div> <!--row-->
 
        <div class="row">
-         <div class="col-2 dataheader-right">Distance:</div>
+         <div class="col-3 dataheader-right">Distance:</div>
          <div class="col-3 datafield">
             <input name=distance id=distance type="text"
                 style="min-width: 125px; max-width: 125px;" class="form-control-sm"
@@ -256,21 +256,25 @@
         </div>
         {% endif %}
 
-            <div class="row g-3 pt-1">
-                <div class="col-sm-3">
-                    <button type="submit" class="btn-sm btn-primary btn-thin-sm">Save</button>
-                    {% if mode == "ADD"%}
-                        <button class="btn-sm btn-primary btn-thin-sm" type="button"
-                            onclick=window.location.href='/assets/asset-page'>Back</button>
-                    {% endif %}
-                    {% if mode == "EDIT"%}
-                        <button class="btn-sm btn-primary btn-thin-sm" type="button"
-                           onclick=window.location.href='/assets/view-asset-page/{{asset.id}}'>Back</button>
-                    {% endif %}
-                </div> <!-- col -->
-            </div> <!--row-->
-        </form>
-     </div> <!-- card body -->
+      <!-- asset  navigation buttons -->
+      <div class="row mt-2 pb-1 gx-0">
+         <div class="col d-flex justify-content-end">
+            <button class="databutton" id="save" type="submit">Save</button>
+            {% if mode == "ADD"%}
+               <button class="databutton" id="back" type="button"
+                  onclick="window.location.href='/assets/asset-page'">Back</button>
+            {% endif %}
+
+           {% if mode == "EDIT"%}
+               <button class="databutton" id="back" type="button"
+                  onclick=window.location.href='/assets/view-asset-page/{{asset.id}}'>Back</button>
+           {% endif %}
+         </div>
+      </div> <!--row-->
+
+
+      </form>
+    </div> <!-- card body -->
   </div> <!-- card -->
 </div>  <!-- container -->
 

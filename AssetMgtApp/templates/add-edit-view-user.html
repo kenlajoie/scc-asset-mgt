@@ -1,4 +1,39 @@
 {% include 'layout.html' %}
+<style>
+  .addupdatedate-left {
+    font-size: x-small;
+    text-align: left;
+    padding-top: 1px;
+  }
+
+  .addupdatedate-right {
+    font-size: x-small;
+    text-align: left;
+    padding-top: 1px;
+  }
+
+  .databutton {
+    padding: 0px 3px; /* Custom padding for thinner appearance */
+    margin: 0px 10px; /* space around the buttom */
+    font-size: x-small;
+    background-color: #007bff;
+    color: white;
+  }
+
+  .dataheader-right {
+    font-size: small;
+    text-align: right;
+    padding-right: 1px;
+  }
+
+  .datafield {
+    margin: 3px;              /* Margin outside the border */
+    padding-left: 2px;
+    font-size: small
+  }
+
+</style>
+
 <div class="container">
   <div class="card mt-2">
      <div class="card-header p-1">
@@ -11,167 +46,155 @@
       {% if mode == "EDIT"%}
       <form id="editUserForm">
       {% endif %}
-      {% if mode == "VIEW"%}
-      <form id="viewUserForm">
+      {% if mode == "PASS"%}
+      <form id="passwordUserForm">
       {% endif %}
 
             <div class="form-group">
               <input type="text" class="form-control" name="mode" value="{{mode}}" hidden>
             </div>
 
-            <div class="row g-3 pt-2">
-                <div class="col-sm-2">
-                    <label for="username" class="form-label-sm">Username</label>
-               </div>
-                <div class="col-sm-10">
-                    {% if mode == 'VIEW' %}
-                        <input id=username" name=username type="text"
-                                style="min-width: 100px; max-width: 100px;" class="form-control-sm"
-                                placeholder="username" value="{{user.username}}" readonly>
-                    {% else %} <!- assume ADD OR edit--!>
-                        <input id=username name="username" type="text" autocomplete="off"
-                                style="min-width: 100px; max-width: 100px;" class="form-control-sm"
-                                placeholder="username" value="{{user.username}}" required
-                                oninput="this.value = this.value.replace(/\s/g, '');"
-                                onkeydown="if (event.key === ' ') event.preventDefault();" />
-                        <div><span id="error-username" class="error"></span></div>
-                    {% endif %}
-                </div>
-            </div> <!--row-->
+      <div class="row">
+         <div class="col-3 dataheader-right">Username:</div>
+         <div class="col-3 datafield">
+          {% if mode != 'ADD' %} <!- assume EDIT or VIEW  or PASS --!>
+                <input id=username" name=username type="text"
+                        style="min-width: 100px; max-width: 100px;" class="form-control-sm"
+                        placeholder="username" value="{{user.username}}" readonly>
+           {% else %} <!- assume ADD --!>
+                <input id=username name="username" type="text" autocomplete="off"
+                        style="min-width: 100px; max-width: 100px;" class="form-control-sm"
+                        placeholder="username" value="{{user.username}}" required
+                        oninput="this.value = this.value.replace(/\s/g, '');"
+                        onkeydown="if (event.key === ' ') event.preventDefault();" />
+                <div><span id="error-username" class="error"></span></div>
+             {% endif %}
+         </div>  <!-- col -->
+      </div> <!--row-->
 
-            <div class="row g-3 pt-2">
-                <div class="col-sm-2">
-                    <label for="initials" class="form-label-sm">Initials</label>
-               </div>
-                <div class="col-sm-10">
-                    {% if mode != 'ADD' %} <!- assume EDIT or VIEW --!>
-                        <input id="initials" name=initials type="text"
-                                style="min-width: 100px; max-width: 100px;" class="form-control-sm"
-                                placeholder="initials" value="{{user.initials}}" readonly>
-                    {% else %}  <!- assume ADD --!>
-                        <input id="initials" name="initials" type="text" autocomplete="off"
-                                style="min-width: 100px; max-width: 100px; text-transform: uppercase;" class="form-control-sm"
-                                placeholder="Initials" value="{{user.initials}}" required
-                                oninput="this.value = this.value.replace(/\s/g, '');"
-                                onkeydown="if (event.key === ' ') event.preventDefault();" />
-                        <div><span id="error-initials" class="error"></span></div>
-                    {% endif %}
-                </div>
-            </div> <!--row-->
+      <div class="row">
+         <div class="col-3 dataheader-right">Initials:</div>
+         <div class="col-3 datafield">
+          {% if mode != 'ADD' %} <!- assume EDIT or VIEW  or PASS--!>
+                <input id="initials" name=initials type="text"
+                        style="min-width: 100px; max-width: 100px;" class="form-control-sm"
+                        placeholder="initials" value="{{user.initials}}" readonly>
+           {% else %} <!- assume ADD --!>
+                <input id="initials" name="initials" type="text" autocomplete="off"
+                        style="min-width: 100px; max-width: 100px; text-transform: uppercase;" class="form-control-sm"
+                        placeholder="Initials" value="{{user.initials}}" required
+                        oninput="this.value = this.value.replace(/\s/g, '');"
+                        onkeydown="if (event.key === ' ') event.preventDefault();" />
+                <div><span id="error-initials" class="error"></span></div>
+           {% endif %}
+         </div>  <!-- col -->
+      </div> <!--row-->
 
-
-            <div class="row g-3 pt-2">
-                <div class="col-sm-2">
-                    <label for="name" class="form-label-sm">Name</label>
-               </div>
-                <div class="col-sm-10">
-                    {% if mode == "VIEW"%}
-                        <input id="name" name="name" type="text"
-                                style="min-width: 1500px; max-width: 200px;" class="form-control-sm"
-                                placeholder="Name" value="{{user.name}}" readonly>
-                    {% else %}  <!- assume ADD OR edit--!>
+      <div class="row">
+         <div class="col-3 dataheader-right">Name:</div>
+         <div class="col-4 datafield">
+            {% if mode in ["VIEW","PASS"] %}
+                <input id="name" name="name" type="text"
+                        style="min-width: 250px; max-width: 250px;" class="form-control-sm"
+                        placeholder="Name" value="{{user.name}}" readonly>
+            {% else %}  <!- assume ADD OR edit--!>
                         <input id="name" name="name" type="text" autocomplete="off"
-                                style="min-width: 300px; max-width: 300px;" class="form-control-sm"
+                                style="min-width: 250px; max-width: 250px;" class="form-control-sm"
                                 placeholder="Name" value="{{user.name}}" required>
                         <div><span id="error-name" class="error"></span></div>
-                    {% endif %}
-                </div>
-            </div> <!--row-->
+           {% endif %}
+         </div>  <!-- col -->
+      </div> <!--row-->
 
-             <div class="row g-3 pt-2">
-                <div class="col-sm-2">
-                    <label for="userRole" class="form-label-sm">Role</label>
-               </div>
-                <div class="col-sm-3">
-                    {% if mode == "VIEW"%}
-                        <input id="userRole" name="userRole" type="text"
-                                style="min-width: 125px; max-width: 125px;" class="form-control-sm"
-                                placeholder="Role" value="{{user.userRole}}" readonly>
-                    {% else %}  <!- assume ADD OR EDIT--!>
-                        <select id="userRole" name="userRole"
-                            style="min-width: 125px; max-width: 125px;" class="form-control-sm">
-                            {% for ddv in dropdown %}
-                              {% if ddv.column == "USERROLE" %}
-                                  {% if ddv.value == user.userRole %}
-                                     <option value="{{ddv.value}}" selected>{{ddv.value}}</option>
-                                  {% else %}
-                                     <option value="{{ddv.value}}">{{ddv.value}}</option>
-                                  {% endif %}
-                              {% endif %}
-                            {% endfor %}
-                        </select>
-                    {% endif %}
-                </div> <!--col -->
-            </div> <!--row-->
-
-             <div class="row g-3 pt-2">
-                <div class="col-sm-2">
-                    <label for="userStatus" class="form-label-sm">Status</label>
-               </div>
-                <div class="col-sm-3">
-                    {% if mode == "VIEW"%}
-                        <input id="userStatus" name="userStatus" type="text"
-                                style="min-width: 125px; max-width: 125px;" class="form-control-sm"
-                                placeholder="Status" value="{{user.userStatus}}" readonly>
-                    {% else %}  <!- assume ADD OR EDIT--!>
-                        <select id="userStatus" name="userStatus"
-                            style="min-width: 125px; max-width: 125px;" class="form-control-sm">
-                            {% for ddv in dropdown %}
-                              {% if ddv.column == "USERSTATUS" %}
-                                  {% if ddv.value == user.userStatus %}
-                                     <option value="{{ddv.value}}" selected>{{ddv.value}}</option>
-                                  {% else %}
-                                     <option value="{{ddv.value}}">{{ddv.value}}</option>
-                                  {% endif %}
-                              {% endif %}
-                            {% endfor %}
-                        </select>
-                    {% endif %}
-                </div> <!--col -->
-            </div> <!--row-->
-
-            {% if mode == "ADD"%}
-             <div class="row g-3 pt-2">
-                <div class="col-sm-2">
-                    <label for="password" class="form-label-sm">Password</label>
-               </div>
-                <div class="col-sm-10">
-                    <input id="password" name="password" type="text" autocomplete="off"
-                        style="min-width: 150px; max-width: 100px;" class="form-control-sm"
-                        placeholder="Password" value="" required>
-                    <div><span id="error-password" class="error"></span></div>
-                </div> <!--col -->
-            </div> <!--row-->
+       <div class="row">
+         <div class="col-3 dataheader-right">Role:</div>
+         <div class="col-3 datafield">
+            {% if mode in ["VIEW","PASS"] %}
+                <input id="userRole" name="userRole" type="text"
+                        style="min-width: 125px; max-width: 125px;" class="form-control-sm"
+                        placeholder="Role" value="{{user.userRole}}" readonly>
+            {% else %}  <!- assume ADD OR EDIT--!>
+                <select id="userRole" name="userRole"
+                    style="min-width: 125px; max-width: 125px;" class="form-control-sm">
+                    {% for ddv in dropdown %}
+                      {% if ddv.column == "USERROLE" %}
+                          {% if ddv.value == user.userRole %}
+                             <option value="{{ddv.value}}" selected>{{ddv.value}}</option>
+                          {% else %}
+                             <option value="{{ddv.value}}">{{ddv.value}}</option>
+                          {% endif %}
+                      {% endif %}
+                    {% endfor %}
+                </select>
             {% endif %}
+         </div>  <!-- col -->
+       </div> <!--row-->
 
-            {% if mode != "ADD"%}
-            <div class="row g-3 pt-1">
-                <div class="col-sm-8">
-                    <b>&nbsp;Created On:</b> {{user.createdDate}}   <b>By: </b>{{user.createdBy}}
-                </div>
-            </div> <!--row-->
-            <div class="row g-3 pt-1">
-                <div class="col-sm-8">
-                    <b>Updated On:</b> {{user.updatedDate}}   <b>By: </b>{{user.updatedBy}}
-                </div>
-            </div> <!--row-->
+       <div class="row">
+         <div class="col-3 dataheader-right">User Status:</div>
+         <div class="col-3 datafield">
+            {% if mode in ["VIEW","PASS"] %}
+                <input id="userStatus" name="userStatus" type="text"
+                        style="min-width: 125px; max-width: 125px;" class="form-control-sm"
+                        placeholder="Status" value="{{user.userStatus}}" readonly>
+            {% else %}  <!- assume ADD OR EDIT--!>
+                <select id="userStatus" name="userStatus"
+                    style="min-width: 125px; max-width: 125px;" class="form-control-sm">
+                    {% for ddv in dropdown %}
+                      {% if ddv.column == "USERSTATUS" %}
+                          {% if ddv.value == user.userStatus %}
+                             <option value="{{ddv.value}}" selected>{{ddv.value}}</option>
+                          {% else %}
+                             <option value="{{ddv.value}}">{{ddv.value}}</option>
+                          {% endif %}
+                      {% endif %}
+                    {% endfor %}
+                </select>
             {% endif %}
+         </div>  <!-- col -->
+       </div> <!--row-->
 
-            <div class="row g-3 pt-3 pb-3">
-                <div class="col-sm-3">
-                   {% if mode == "VIEW"%}
-                        <button type="submit"
-                             class="btn-sm btn-primary btn-thin-sm">Delete</button>
-                   {% else %}  <!- assume ADD OR edit--!>
-                        <button type="submit"
-                            class="btn-sm btn-primary btn-thin-sm">Save</button>
-                    {% endif %}
+      {% if mode in ["ADD","PASS"] %}  <!-- password only available during ADD or PASS -->
+      <div class="row">
+         <div class="col-3 dataheader-right">Password:</div>
+         <div class="col-4 datafield">
+                <input id="password" name="password" type="text" autocomplete="off"
+                        style="min-width: 150px; max-width: 150px;" class="form-control-sm"
+                        placeholder="Password" value="{{user.password}}" required
+                        oninput="this.value = this.value.replace(/\s/g, '');"
+                        onkeydown="if (event.key === ' ') event.preventDefault();" />
+                <div><span id="error-password" class="error"></span></div>
+         </div>  <!-- col -->
+      </div> <!--row-->
+      {% endif %}
 
-                        <button
-                            class="btn-sm btn-primary btn-thin-sm"
-                            onclick=window.location.href='/users/user-page' type="button">Back</button>
-                </div>
-            </div> <!--row-->
+
+      {% if mode != "ADD"%}
+      <div class="row mt-2">
+         <div class="col addupdatedate-left">
+             <b>Created: </b>{{user.createdDate}}<b> By: </b>{{user.createdBy}}
+         </div>
+         <div class="col addupdatedate-right">
+            <b>Updated: </b>{{user.updatedDate}}<b> By: </b>{{user.updatedBy}}
+         </div>
+      </div>
+      {% endif %}
+
+      <!-- user  navigation buttons -->
+      <div class="row mt-2 pb-1 gx-0">
+         <div class="col d-flex justify-content-end">
+            {% if mode == "VIEW" %}
+               {% if currentUser.userRole == 'ADMIN' %}
+                  <button class="databutton" id="delete" type="submit">Delete</button>
+                {% endif %}
+            {% else %}  <!- assume ADD OR EDIT or PASS--!>
+               <button class="databutton" id="save" type="submit">Save</button>
+            {% endif %}
+               <button class="databutton" id="back" type="button"
+                    onclick="window.location.href='/users/user-page'">Back</button>
+         </div>
+      </div> <!--row-->
+
       </form>
     </div> <!-- card body -->
   </div> <!-- card -->

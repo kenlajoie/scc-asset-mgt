@@ -152,7 +152,20 @@ async def render_user_edit_page(request: Request, user_id: int, db: db_dependenc
         if dropdownList is None:
            return redirect_to_login()
 
-        user_model = db.query(Users).filter(Users.id == user_id).first()
+        query = db.query(
+            Users.id,
+            Users.username,
+            Users.initials,
+            Users.name,
+            Users.userRole,
+            Users.userStatus,
+            func.strftime('%m/%d/%Y', Users.createdDate).label('createdDate'),
+            Users.createdBy,
+            func.strftime('%m/%d/%Y', Users.updatedDate).label('updatedDate'),
+            Users.updatedBy
+        )
+        user_model = query.filter(Users.id == user_id).first()
+        #user_model = db.query(Users).filter(Users.id == user_id).first()
         if user_model is None:
             raise HTTPException(status_code=404, detail='User not found.')
 
@@ -172,7 +185,20 @@ async def render_user_view_page(request: Request, user_id: int, db: db_dependenc
             return redirect_to_login()
 
 
-        user_model = db.query(Users).filter(Users.id == user_id).first()
+        query = db.query(
+            Users.id,
+            Users.username,
+            Users.initials,
+            Users.name,
+            Users.userRole,
+            Users.userStatus,
+            func.strftime('%m/%d/%Y', Users.createdDate).label('createdDate'),
+            Users.createdBy,
+            func.strftime('%m/%d/%Y', Users.updatedDate).label('updatedDate'),
+            Users.updatedBy
+        )
+        user_model = query.filter(Users.id == user_id).first()
+        #user_model = db.query(Users).filter(Users.id == user_id).first()
         if user_model is None:
             raise HTTPException(status_code=404, detail='User not found.')
 
@@ -191,12 +217,25 @@ async def render_user_password_page(request: Request, user_id: int, db: db_depen
         if loginUser is None:
             return redirect_to_login()
 
-        user_model = db.query(Users).filter(Users.id == user_id).first()
+        query = db.query(
+            Users.id,
+            Users.username,
+            Users.initials,
+            Users.name,
+            Users.userRole,
+            Users.userStatus,
+            func.strftime('%m/%d/%Y', Users.createdDate).label('createdDate'),
+            Users.createdBy,
+            func.strftime('%m/%d/%Y', Users.updatedDate).label('updatedDate'),
+            Users.updatedBy
+        )
+        user_model = query.filter(Users.id == user_id).first()
+        #user_model = db.query(Users).filter(Users.id == user_id).first()
         if user_model is None:
             raise HTTPException(status_code=404, detail='User not found.')
 
-        return templates.TemplateResponse("password-user.html",
-                                    {"request": request, "user": user_model, "currentUser": loginUser})
+        return templates.TemplateResponse("add-edit-view-user.html",
+                                {"request": request, "user": user_model, "currentUser": loginUser, "mode": "PASS"})
 
     except:
         return redirect_to_login()
