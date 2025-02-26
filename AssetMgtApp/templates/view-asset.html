@@ -130,6 +130,9 @@
         width: 100%;      /* Width will scale to 100% of the parent element */
         border: 4px solid black; /*Border color and thickness */
     }
+    .container=item {  /* never tested */
+        page-break-inside: avoid;  /* Avoid breaking inside the card */
+    }
 }
 
 </style>
@@ -141,8 +144,6 @@
       <input type="text" class="form-control" name="todo_id" value="{{todo_id}}" hidden>
       <input type="text" class="form-control" name="assetId" value="{{asset.id}}" hidden>
    </div>
-
- <div id="assetTicket">
 
   <div class="view-header">
    <div class="row mx-0 pb-1 gx-0">
@@ -256,8 +257,6 @@
       <div id="container-list" class="container-list"></div>
   </div> <!--filter-content-->
 
-</div> <!-- assetTicket -->
-
 <div class="view-footer">
    <div class="row mx-0 pb-1 gx-0">
       <div class="col d-flex justify-content-end">
@@ -273,15 +272,10 @@
 
 function printAsset() {
 
-      var printContent = document.getElementById('assetTicket').innerHTML;
-      var originalContent = document.body.innerHTML;
-      document.body.innerHTML = printContent;  // Replace the content with the print section
-
       setTimeout(function() {
            window.print();
       }, 100);  //setTimeout() to Ensure Print Styles Are Applied
 
-      document.body.innerHTML = originalContent;  // Restore the original content
  }
 
 //----------------------------------------------------------------------------

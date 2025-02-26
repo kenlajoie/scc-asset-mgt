@@ -44,25 +44,28 @@
     .noprint {
         display: none;
     }
+
+    .card {  /* Assuming your card has a class of .card */
+        page-break-inside: avoid;  /* Avoid breaking inside the card */
+        border: 1px solid black;  /* Ensure border is visible */
+    }
  }
 </style>
 
  {% include 'layout.html' %}
 
-<div class="card mt-2">
-     <div class="card-header p-1">
-        <h5 class="card-title card-title-left pagetitle">Todo Report</h5>
-        <div class="col d-flex justify-content-start">
-            <button id=printButton class="dataButton"
+ <div class="card noprint mt-2">
+     <div class="card-header noprint p-1">
+        <h5 class="card-title card-title-left pagetitle noprint">Todo Report</h5>
+        <div class="col d-flex justify-content-start" noprint>
+            <button id=printButton class="dataButton noprint"
                onclick="printReport()" type="button">Print</button>
              &nbsp;&nbsp;
-            <button class="dataButton"
+            <button class="dataButton noprint"
                 onclick=window.location.href='/todos/todo-page' type="button">Back</button>
         </div> <!--justify-->
-    </div> <!--card-header -->
-</div> <!--card-->
-
-<div id="todoReport">
+     </div> <!--card-header -->
+ </div> <!--card-->
 
    <div class="card border-dark border-3 pt-1 text-center">
         <h5 class="card-title d-flex justify-content-between mt-1 mb-0"><p id="reportFor"></p><p id="todaysDate"></p></h5>
@@ -167,7 +170,6 @@
         </div> <!-- card -->
       </div> <!-- "thiscard" -->
     {% endfor %}
-</div> <!-- todoReport -->
 
 <script>
   function getCookie(cname) {
@@ -197,33 +199,18 @@
   else document.getElementById("reportFor").textContent = `Todo Report`;
 
   function removeCard(button) {
+
     // Remove the card by accessing its parent node (the card's thiscard div)
     const card = button.closest('.thiscard');
     card.remove();
   }
 
-  function printReport() {
-
-      // save the value of message
-      let message = document.getElementById('message');
-      const value = message.value;
-
-      var printContent = document.getElementById('todoReport').innerHTML;
-      var originalContent = document.body.innerHTML;
-      document.body.innerHTML = printContent;  // Replace the content with the print section
-
-      //push the save value of message to new instance of page
-      message = document.getElementById('message');
-      message.value = value;
+function printReport() {
 
       setTimeout(function() {
            window.print();
       }, 100);  //setTimeout() to Ensure Print Styles Are Applied
 
-      document.body.innerHTML = originalContent;  // Restore the original content
-      //push the save value of message to refreshed instance of page
-      message = document.getElementById('message');
-      message.value = value;
  }
 
 const message = document.getElementById('message');
