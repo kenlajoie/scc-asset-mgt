@@ -1,7 +1,11 @@
  <style>
+
+     body {
+        min-width: 600px;  /* Adjust the value as needed */
+     }
+
     /* Optional: Style your section */
     #todoReport {
-      background-color: #f9f9f9;
       padding: 20spx;
       border: 1px solid #ccc;
     }
@@ -9,23 +13,46 @@
       font-size: medium;
       font-weight: bold;
     }
-   .databutton {
-     padding: 0px 3px; /* Custom padding for thinner appearance */
-     margin: 0px 3px;
-     font-size: x-small;
-     background-color: #007bff;
-     color: white;
+
+  .databutton {
+    padding: 0px 3px; /* Custom padding for thinner appearance */
+    margin: 0px 10px; /* space around the button */
+    font-size: x-small;
+    background-color: #007bff;
+    color: white;
+    border: none; /* Removing default border for a cleaner look */
+    border-radius: 3px; /* Optional: Rounded corners for a modern feel */
+    cursor: pointer; /* Adds pointer on hover */
+    transition: background-color 0.3s ease; /* Smooth background transition */
   }
 
-  </style>
+  .databutton:hover {
+    background-color: #0056b3; /* Darker blue on hover for feedback */
+  }
+
+  .databutton:focus {
+    outline: none; /* Optional: removes focus outline for cleaner look */
+    box-shadow: 0 0 3px 2px rgba(0, 123, 255, 0.5); /* Optional: subtle focus effect */
+  }
+
+@media print {
+    * {
+        background: none !important;
+        color: black;
+    }
+
+    .noprint {
+        display: none;
+    }
+ }
+</style>
 
  {% include 'layout.html' %}
 
-<div class="container">
-  <div class="card mt-2">
+<div class="card mt-2">
      <div class="card-header p-1">
         <h5 class="card-title card-title-left pagetitle">Todo Report</h5>
-        <div class="col d-flex justify-content-end">
+        <div class="col d-flex justify-content-start">
             <button id=printButton class="dataButton"
                onclick="printReport()" type="button">Print</button>
              &nbsp;&nbsp;
@@ -35,103 +62,102 @@
     </div> <!--card-header -->
 </div> <!--card-->
 
-<div id=todoReport class="container">
-  <div class="card border-dark border-3 pt-1 text-center">
-        <h5 class="card-title d-flex justify-content-between mt-1 mb-0"><p id="reportFor"></p><div></div><p id="todaysDate"></p></h5></div?>
-  </div>
-  <div class="row g-1 pb-2 pt-1">
-      <div class="col-sm-12">
+<div id="todoReport">
+
+   <div class="card border-dark border-3 pt-1 text-center">
+        <h5 class="card-title d-flex justify-content-between mt-1 mb-0"><p id="reportFor"></p><p id="todaysDate"></p></h5>
+   </div> <!--- card -->
+   <div class="card border-dark border-3 pb-2">
+      <div class="col-12">
         <textarea id=message  placeholder="Message" class="auto-grow form-control"></textarea>
       </div> <!--col-->
-</div> <!--row-->
+   </div> <!--- card -->
 
-  <div class="row" id="card-list">
-    {% for todo in todos %}
-      <div class="col-md-12">
-        <div class="card border-dark border-3 pb-2">
+  {% for todo in todos %}
+      <div class="thiscard">
+        <div class="card border-dark border-3 pb-2 ">
          <div class="card-body">
           <div class="row g-1 pt-1">
-              <div class="col-sm-4">
+              <div class="col-4">
                 Major: {{todo.majorArea}}
               </div> <!--col-->
-              <div class="col-sm-4">
+              <div class="col-4">
                 Minor {{todo.minorArea}}
               </div> <!--col-->
-              <div class="col-sm-4">
+              <div class="col-4">
                 Type: {{todo.assetType}}
               </div> <!--col-->
            </div> <!--row-->
            <div class="row g-1 pt-1">
-              <div class="col-sm-10">
+              <div class="col-10">
                 Description: {{todo.description}}
               </div> <!--col-->
            </div> <!--row-->
            <div class="row g-1 pt-1">
-              <div class="col-sm-4">
+              <div class="col-4">
                 Model: {{todo.model}}
               </div> <!--col-->
-              <div class="col-sm-4">
+              <div class="col-4">
                 State: {{todo.assetState}}
               </div> <!--col-->
            </div> <!--row-->
            <div class="row g-1 pt-1">
-              <div class="col-sm-4">
+              <div class="col-4">
                 Satellite: {{todo.satellite}}
               </div> <!--col-->
-              <div class="col-sm-4">
+              <div class="col-4">
                 Station: {{todo.station}}
               </div> <!--col-->
-              <div class="col-sm-4">
+              <div class="col-4">
                 Distance: {{todo.distance}}
               </div> <!--col-->
            </div> <!--row-->
            <div class="row g-1 pt-1">
-              <div class="col-sm-12">
+              <div class="col-12">
                 <hr style="border: 1px solid #333;  margin: 5px 0;">
               </div> <!--col-->
            </div> <!--row-->
           <div class="row g-1 pt-1">
-              <div class="col-sm-8">
+              <div class="col-8">
                 <b>Task: {{ todo.task }}</b>
               </div> <!--col-->
-              <div class="col-sm-3">
+              <div class="col-3">
                 <b>Status: {{ todo.todoStatus }}</b>
               </div> <!--col-->
            </div> <!--row-->
            <div class="row g-1 pt-1">
-              <div class="col-sm-12">
+              <div class="col-12">
                 <hr style="border: 1px solid #333;  margin: 5px 0;">
               </div> <!--col-->
            </div> <!--row-->
 
            <div class="row g-1 pt-1">
-              <div class="col-sm-4">
+              <div class="col-4">
                 Assigned To: {{todo.assignedTo}}
               </div> <!--col-->
-              <div class="col-sm-4">
+              <div class="col-4">
                 Priority: {{todo.priority}}
               </div> <!--col-->
            </div> <!--row-->
 
            <div class="row g-1 pt-1">
-              <div class="col-sm-2">
+              <div class="col-2">
                 Note:
               </div> <!--col-->
-              <div class="col-sm-8">
+              <div class="col-8">
                 <textarea name="note" class="auto-grow form-control" readonly>{{todo.note}}</textarea>
               </div> <!--col-->
             </div> <!--row-->
             <div class="row g-1 pt-1">
-                <div class="col-sm-5">
+                <div class="col-5">
                     Created: {{todo.createdDate}} By: {{todo.createdBy}}
                 </div>
-                <div class="col-sm-3">
+                <div class="col-3">
                     Updated: {{todo.updatedDate}} By: {{todo.updatedBy}}
-                </div>
                </div> <!--col-->
             </div> <!--row-->
             <div class="row g-1 pt-1">
-                <div class="col-sm-5">
+                <div class="col-5">
                     <a onclick="removeCard(this)" class="icon-link">
                         <img src="/static/img/remove_icon.png" alt="Remove">
                     </a>
@@ -139,10 +165,9 @@
             </div> <!--row-->
          </div> <!-- card-body -->
         </div> <!-- card -->
-      </div> <!-- "col-md-12" -->
+      </div> <!-- "thiscard" -->
     {% endfor %}
-  </div> <!-- card-list -->
-</div> <!-- container -->
+</div> <!-- todoReport -->
 
 <script>
   function getCookie(cname) {
@@ -172,8 +197,8 @@
   else document.getElementById("reportFor").textContent = `Todo Report`;
 
   function removeCard(button) {
-    // Remove the card by accessing its parent node (the card's col-sm-10 div)
-    const card = button.closest('.col-md-12');
+    // Remove the card by accessing its parent node (the card's thiscard div)
+    const card = button.closest('.thiscard');
     card.remove();
   }
 
@@ -191,7 +216,9 @@
       message = document.getElementById('message');
       message.value = value;
 
-      window.print();  // Trigger the print dialog
+      setTimeout(function() {
+           window.print();
+      }, 100);  //setTimeout() to Ensure Print Styles Are Applied
 
       document.body.innerHTML = originalContent;  // Restore the original content
       //push the save value of message to refreshed instance of page

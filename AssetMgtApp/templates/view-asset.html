@@ -112,6 +112,26 @@
     outline: none; /* Optional: removes focus outline for cleaner look */
     box-shadow: 0 0 3px 2px rgba(0, 123, 255, 0.5); /* Optional: subtle focus effect */
  }
+
+@media print {
+    * {
+        background: none !important;
+        color: black;
+    }
+
+    .noprint {
+        display: none !important;
+    }
+    button {
+        display: none !important;
+    }
+
+    .printbox {
+        width: 100%;      /* Width will scale to 100% of the parent element */
+        border: 4px solid black; /*Border color and thickness */
+    }
+}
+
 </style>
 
 <form id="viewAssetForm">
@@ -122,10 +142,11 @@
       <input type="text" class="form-control" name="assetId" value="{{asset.id}}" hidden>
    </div>
 
+ <div id="assetTicket">
 
   <div class="view-header">
    <div class="row mx-0 pb-1 gx-0">
-      <div class="col pagetitle d-flex justify-content-start">Asset</div>
+      <div class="col pagetitle d-flex justify-content-start printbox">Asset</div>
    </div> <!--row-->
   </div> <!-- view-header -->
 
@@ -214,7 +235,7 @@
 
   <div class="view-footer">
    <div class="row mx-0 pb-1 gx-0">
-      <div class="col d-flex justify-content-start">
+      <div class="col d-flex justify-content-start printbox">
           Asset Todos
       </div>
    </div> <!--row-->
@@ -234,6 +255,7 @@
   <div class="view-content">
       <div id="container-list" class="container-list"></div>
   </div> <!--filter-content-->
+
 </div> <!-- assetTicket -->
 
 <div class="view-footer">
@@ -248,13 +270,16 @@
 </form>
 
 <script>
+
 function printAsset() {
 
       var printContent = document.getElementById('assetTicket').innerHTML;
       var originalContent = document.body.innerHTML;
       document.body.innerHTML = printContent;  // Replace the content with the print section
 
-      window.print();  // Trigger the print dialog
+      setTimeout(function() {
+           window.print();
+      }, 100);  //setTimeout() to Ensure Print Styles Are Applied
 
       document.body.innerHTML = originalContent;  // Restore the original content
  }
