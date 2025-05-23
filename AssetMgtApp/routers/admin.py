@@ -1,10 +1,10 @@
 from typing import Annotated
-from pydantic import BaseModel, Field
 from sqlalchemy.orm import Session
+from sqlalchemy import and_
 from fastapi import APIRouter, Depends, HTTPException, Path
 from starlette import status
 from ..database import SessionLocal  #was ..
-from ..models import Assets            #was ..
+from ..models import Assets
 from .auth import get_current_user
 
 router = APIRouter(
@@ -32,11 +32,11 @@ async def read_all(user: user_dependency, db: db_dependency):
 
 
 @router.delete("/asset/{asset_id}", status_code=status.HTTP_204_NO_CONTENT)
-async def delete_asset(user: user_dependency, db: db_dependency, Assets_id: int = Path(gt=0)):
+async def delete_asset(user: user_dependency, db: db_dependency, asset_id: int = Path(gt=0)):
     if user is None or user.get('user_role') != 'admin':
         raise HTTPException(status_code=401, detail='Authentication Failed')
-    asset_model = db.query(Assets).filter(Asset.id == asset_id).first()
+    asset_model = db.query(Assets).filter(and_(Assets.id == asset_id)).first()
     if asset_model is None:
         raise HTTPException(status_code=404, detail='Asset not found.')
-    db.query(Assets).filter(Asset.id == asset_id).delete()
+    db.query(Assets).filter(and_(Assets.id == asset_id)).delete()
     db.commit()

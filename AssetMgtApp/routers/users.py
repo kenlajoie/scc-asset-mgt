@@ -3,13 +3,13 @@ from typing import Annotated
 
 from click import confirm
 from pydantic import BaseModel, Field
-from sqlalchemy import func
-from sqlalchemy.exc import SQLAlchemyError, IntegrityError, OperationalError
+from sqlalchemy import func, and_
+from sqlalchemy.exc import SQLAlchemyError, IntegrityError
 from sqlalchemy.orm import Session
-from fastapi import APIRouter, Depends, HTTPException, Path, Request, status
+from fastapi import APIRouter, Depends, HTTPException, Path, Request
 
 from starlette import status
-from ..models import Users, Dropdown
+from ..models import Users
 from ..database import SessionLocal
 from .auth import get_current_user
 from passlib.context import CryptContext
@@ -95,10 +95,10 @@ async def render_user_page(request: Request, db: db_dependency):
         query = db.query(Users)
 
         if userRoleFilter is not None and userRoleFilter != "ALL":
-            query = query.filter(Users.userRole == userRoleFilter)
+            query = query.filter(and_(Users.userRole == userRoleFilter))
 
         if userStatusFilter is not None and userStatusFilter != "ALL":
-            query = query.filter(Users.userStatus == userStatusFilter)
+            query = query.filter(and_(Users.userStatus == userStatusFilter))
 
         userList = query.all()
 
@@ -164,7 +164,7 @@ async def render_user_edit_page(request: Request, user_id: int, db: db_dependenc
             func.strftime('%m/%d/%Y', Users.updatedDate).label('updatedDate'),
             Users.updatedBy
         )
-        user_model = query.filter(Users.id == user_id).first()
+        user_model = query.filter(and_(Users.id == user_id)).first()
         #user_model = db.query(Users).filter(Users.id == user_id).first()
         if user_model is None:
             raise HTTPException(status_code=404, detail='User not found.')
@@ -197,7 +197,7 @@ async def render_user_view_page(request: Request, user_id: int, db: db_dependenc
             func.strftime('%m/%d/%Y', Users.updatedDate).label('updatedDate'),
             Users.updatedBy
         )
-        user_model = query.filter(Users.id == user_id).first()
+        user_model = query.filter(and_(Users.id == user_id)).first()
         #user_model = db.query(Users).filter(Users.id == user_id).first()
         if user_model is None:
             raise HTTPException(status_code=404, detail='User not found.')
@@ -229,7 +229,7 @@ async def render_user_password_page(request: Request, user_id: int, db: db_depen
             func.strftime('%m/%d/%Y', Users.updatedDate).label('updatedDate'),
             Users.updatedBy
         )
-        user_model = query.filter(Users.id == user_id).first()
+        user_model = query.filter(and_(Users.id == user_id)).first()
         #user_model = db.query(Users).filter(Users.id == user_id).first()
         if user_model is None:
             raise HTTPException(status_code=404, detail='User not found.')
@@ -248,7 +248,7 @@ async def create_user(user: user_dependency, db: db_dependency,
     if user is None:
         raise HTTPException(status_code=401, detail='Authentication Failed')
 
-    login_user_model = db.query(Users).filter(Users.id == user.get('id')).first()
+    login_user_model = db.query(Users).filter(and_(Users.id == user.get('id'))).first()
     if login_user_model is None:
         raise HTTPException(status_code=404, detail='login user Not found.')
 
@@ -297,18 +297,16 @@ async def update_user(user: user_dependency, db: db_dependency,
     if user is None:
         raise HTTPException(status_code=401, detail='Authentication Failed')
 
-    login_user_model = db.query(Users).filter(Users.id == user.get('id')).first()
+    login_user_model = db.query(Users).filter(and_(Users.id == user.get('id'))).first()
     if login_user_model is None:
         raise HTTPException(status_code=404, detail='login user Not found.')
 
-    user_model = db.query(Users).filter(Users.id == user_id).first()
+    user_model = db.query(Users).filter(and_(Users.id == user_id)).first()
     if user_model is None:
         raise HTTPException(status_code=404, detail='User not found.')
 
     errors = {}
     try:
-        save = user_model.hashedPassword
-
         user_model.username = user_request.username
         user_model.initials = user_request.initials
         user_model.name = user_request.name
@@ -350,11 +348,11 @@ async def delete_user(user: user_dependency, db: db_dependency,
     if user is None or user.get('userRole') != 'ADMIN' :
         raise HTTPException(status_code=401, detail='Authentication Failed')
 
-    user_model = db.query(Users).filter(Users.id == user_id).first()
+    user_model = db.query(Users).filter(and_(Users.id == user_id)).first()
     if user_model is None:
         raise HTTPException(status_code=404, detail='User Not found.')
 
-    db.query(Users).filter(Users.id == user_id).delete()
+    db.query(Users).filter(and_(Users.id == user_id)).delete()
     db.commit()
 
 
@@ -365,11 +363,11 @@ async def update_user_password(user: user_dependency, db: db_dependency,
     if user is None:
         raise HTTPException(status_code=401, detail='Authentication Failed')
 
-    login_user_model = db.query(Users).filter(Users.id == user.get('id')).first()
+    login_user_model = db.query(Users).filter(and_(Users.id == user.get('id'))).first()
     if login_user_model is None:
         raise HTTPException(status_code=404, detail='login user Not found.')
 
-    user_model = db.query(Users).filter(Users.id == user_id).first()
+    user_model = db.query(Users).filter(and_(Users.id == user_id)).first()
     if user_model is None:
         raise HTTPException(status_code=404, detail='User not found.')
 
@@ -407,7 +405,7 @@ async def read_user(user: user_dependency, db: db_dependency, user_id: int = Pat
     if user is None:
         raise HTTPException(status_code=401, detail='Authentication Failed')
 
-    user_model = db.query(Users).filter(user.id == user_id).first()
+    user_model = db.query(Users).filter(and_(Users.id == user_id)).first()
 
     if user_model is not None:
         return user_model
@@ -420,7 +418,7 @@ async def change_password(user: user_dependency, db: db_dependency,
     if user is None:
         raise HTTPException(status_code=401, detail='Authentication Failed')
 
-    user_model = db.query(Users).filter(Users.id == user.get('id')).first()
+    user_model = db.query(Users).filter(and_(Users.id == user.get('id'))).first()
     if not bcrypt_context.verify(user_verification.password, user_model.hashedPassword):
        raise HTTPException(status_code=401, detail='Error on password change')
 
@@ -449,7 +447,7 @@ async def change_password(user: user_dependency, db: db_dependency,
 async def get_user(user: user_dependency, db: db_dependency):
     if user is None:
         raise HTTPException(status_code=401, detail='Authentication Failed')
-    return db.query(Users).filter(Users.id == user.get('id')).first()
+    return db.query(Users).filter(and_(Users.id == user.get('id'))).first()
 
 
 

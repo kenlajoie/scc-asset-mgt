@@ -1,7 +1,6 @@
 from datetime import timedelta, datetime, timezone
-from typing import Annotated
+from typing import Annotated, Optional
 
-from click import confirm
 from fastapi import APIRouter, Depends, HTTPException, Request
 from pydantic import BaseModel
 from sqlalchemy.exc import IntegrityError
@@ -60,21 +59,38 @@ def render_login_page(request: Request):
     return templates.TemplateResponse("login.html", {"request": request})
 
 ### Endpoints ###
-def authenticate_user(username: str, password: str, db):
-    user = db.query(Users).filter(Users.username == username).first()
-    if not user:
-        return False
-    if not bcrypt_context.verify(password, user.hashedPassword):
-        return False
 
+def authenticate_user(username: str, password: str, db) -> Optional[Users]:
+    user = db.query(Users).filter(Users.username == username).first()
+    if not user or not bcrypt_context.verify(password, user.hashedPassword):
+        return None
     return user
 
+#def oldauthenticate_user(username: str, password: str, db):
+#    user = db.query(Users).filter(Users.username == username).first()
+#    if not user:
+#        return False
+#    if not bcrypt_context.verify(password, user.hashedPassword):
+#        return False
+#
+#    return user
 
 def create_access_token(username: str, userId: int, userRole: str, expires_delta: timedelta):
-    encode = {'sub': username, 'id': userId, 'userRole': userRole}
-    expires = datetime.now(timezone.utc) + expires_delta
-    encode.update({'exp': expires})
+    encode = {
+        'sub': username,
+        'id': userId,
+        'userRole': userRole,
+        'exp': (datetime.now(timezone.utc) + expires_delta).timestamp()
+    }
     return jwt.encode(encode, SECRET_KEY, algorithm=ALGORITHM)
+
+
+
+#def oldcreate_access_token(username: str, userId: int, userRole: str, expires_delta: timedelta):
+#    encode = {'sub': username, 'id': userId, 'userRole': userRole}
+#    expires = datetime.now(timezone.utc) + expires_delta
+#    encode.update({'exp': expires})
+#    return jwt.encode(encode, SECRET_KEY, algorithm=ALGORITHM)
 
 
 async def get_current_user(token: Annotated[str, Depends(oauth2_bearer)]):

@@ -1,14 +1,13 @@
 from typing import Annotated
 
-from click import confirm
 from pydantic import BaseModel, Field
 from typing import Optional
-from sqlalchemy import func
+from sqlalchemy import func, and_
 from sqlalchemy.orm import Session
-from sqlalchemy.exc import SQLAlchemyError, IntegrityError, OperationalError
-from fastapi import APIRouter, Depends, HTTPException, Path, Request, status
+from sqlalchemy.exc import SQLAlchemyError, IntegrityError
+from fastapi import APIRouter, Depends, HTTPException, Path, Request
 from starlette import status
-from ..models import Assets, Todos, Users, Dropdown
+from ..models import Assets, Todos, Users
 from ..database import SessionLocal
 from .auth import get_current_user
 from starlette.responses import RedirectResponse
@@ -75,20 +74,21 @@ async def render_asset_page(request: Request, db: db_dependency):
         assetStateFilter =request.cookies.get('assetStateFilter')
 
 
+
         ##build dynamic query
         query = db.query(Assets)
 
         if majorAreaFilter is not None and majorAreaFilter != "ALL":
-            query = query.filter(Assets.majorArea == majorAreaFilter)
+            query = query.filter(and_(Assets.majorArea == majorAreaFilter))
 
         if minorAreaFilter is not None and minorAreaFilter != "ALL":
-            query = query.filter(Assets.minorArea == minorAreaFilter)
+            query = query.filter(and_(Assets.minorArea == minorAreaFilter))
 
         if assetTypeFilter is not None and assetTypeFilter != "ALL":
-            query = query.filter(Assets.assetType == assetTypeFilter)
+            query = query.filter(and_(Assets.assetType == assetTypeFilter))
 
         if assetStateFilter is not None and assetStateFilter != "ALL":
-            query = query.filter(Assets.assetState == assetStateFilter)
+            query = query.filter(and_(Assets.assetState == assetStateFilter))
 
         assetList = query.all()
 
@@ -164,7 +164,7 @@ async def render_edit_asset_page(request: Request, asset_id: int, db: db_depende
             func.strftime('%m/%d/%Y', Assets.updatedDate).label('updatedDate'),
             Assets.updatedBy
         )
-        asset_model = query.filter(Assets.id == asset_id).first()
+        asset_model = query.filter(and_(Assets.id == asset_id)).first()
 
         #asset_model = db.query(Assets).filter(Assets.id == asset_id).first()
         if asset_model is None:
@@ -214,11 +214,11 @@ async def render_view_asset_page(request: Request, asset_id: int, db: db_depende
             func.strftime('%m/%d/%Y', Assets.updatedDate).label('updatedDate'),
             Assets.updatedBy
         )
-        asset_model = query.filter(Assets.id == asset_id).first()
+        asset_model = query.filter(and_(Assets.id == asset_id)).first()
         if asset_model is None:
             raise HTTPException(status_code=404, detail='Asset not found.')
 
-        todo_list = db.query(Todos).filter(Todos.assetId == asset_id).all()
+        todo_list = db.query(Todos).filter(and_(Todos.assetId == asset_id)).all()
 
         return templates.TemplateResponse("view-asset.html", {"request": request, "asset": asset_model,
                                                               "todo_list": todo_list, "currentUser": user})
@@ -238,7 +238,7 @@ async def render_locate_asset_page(request: Request, asset_id: int, db: db_depen
         if dropdownList is None:
            return redirect_to_login()
 
-        asset_model = db.query(Assets).filter(Assets.id == asset_id).first()
+        asset_model = db.query(Assets).filter(and_(Assets.id == asset_id)).first()
         if asset_model is None:
             raise HTTPException(status_code=404, detail='Asset not found.')
 
@@ -261,7 +261,7 @@ async def read_asset(user: user_dependency, db: db_dependency, asset_id: int = P
     if user is None:
         raise HTTPException(status_code=401, detail='Authentication Failed')
 
-    asset_model = db.query(Assets).filter(Assets.id == asset_id).first()
+    asset_model = db.query(Assets).filter(and_(Assets.id == asset_id)).first()
 
     if asset_model is not None:
         return asset_model
@@ -274,7 +274,7 @@ async def create_asset(user: user_dependency, db: db_dependency,
     if user is None:
         raise HTTPException(status_code=401, detail='Authentication Failed')
 
-    login_user_model = db.query(Users).filter(Users.id == user.get('id')).first()
+    login_user_model = db.query(Users).filter(and_(Users.id == user.get('id'))).first()
     if login_user_model is None:
         raise HTTPException(status_code=404, detail='login user Not found.')
 
@@ -306,11 +306,11 @@ async def update_asset(user: user_dependency, db: db_dependency,
     if user is None:
         raise HTTPException(status_code=401, detail='Authentication Failed')
 
-    login_user_model = db.query(Users).filter(Users.id == user.get('id')).first()
+    login_user_model = db.query(Users).filter(and_(Users.id == user.get('id'))).first()
     if login_user_model is None:
         raise HTTPException(status_code=404, detail='login user Not found.')
 
-    asset_model = db.query(Assets).filter(Assets.id == asset_id).first()
+    asset_model = db.query(Assets).filter(and_(Assets.id == asset_id)).first()
     if asset_model is None:
         raise HTTPException(status_code=404, detail='Asset not found.')
 
@@ -351,15 +351,15 @@ async def delete_asset(user: user_dependency, db: db_dependency, asset_id: int =
         raise HTTPException(status_code=401, detail='Authentication Failed')
 
 
-    asset_model = db.query(Assets).filter(Assets.id == asset_id).first()
+    asset_model = db.query(Assets).filter(and_(Assets.id == asset_id)).first()
     if asset_model is None:
         raise HTTPException(status_code=404, detail='Asset not found.')
 
     #delete all todos for asset
-    db.query(Todos).filter(Todos.assetId == asset_id).delete()
+    db.query(Todos).filter(and_(Todos.assetId == asset_id)).delete()
 
     #delete asset
-    db.query(Assets).filter(Assets.id == asset_id).delete()
+    db.query(Assets).filter(and_(Assets.id == asset_id)).delete()
 
     db.commit()
 

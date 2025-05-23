@@ -1,5 +1,7 @@
+
 from .database import Base
-from sqlalchemy import Column, Integer, String, Boolean, ForeignKey, Double, Table, DateTime, func
+from sqlalchemy import Column, Integer, String, ForeignKey, Double, DateTime
+from sqlalchemy.sql import func
 
 
 class Users(Base):
@@ -13,10 +15,11 @@ class Users(Base):
     userStatus = Column(String)
     hashedPassword = Column(String)
     createdBy = Column(String, ForeignKey("users.initials"))
-    createdDate = Column(DateTime, server_default=func.now())
+    #createdDate = Column(DateTime, func.now())
+    createdDate = Column(DateTime, default=func.now())
     updatedBy = Column(String, ForeignKey("users.initials"))
-    updatedDate = Column(DateTime, server_default=func.now())
-
+    #updatedDate = Column(DateTime, func.now())
+    updatedDate = Column(DateTime, default=func.now(), onupdate=func.now())
 
 class Assets(Base):
     __tablename__ = 'assets'
@@ -34,9 +37,11 @@ class Assets(Base):
     gpsLng = Column(Double)
     distance = Column(Integer)
     createdBy = Column(String, ForeignKey("users.initials"))
-    createdDate = Column(DateTime, server_default=func.now())
+    #createdDate = Column(DateTime, func.now())
+    createdDate = Column(DateTime, default=func.now())
     updatedBy = Column(String, ForeignKey("users.initials"))
-    updatedDate = Column(DateTime, server_default=func.now())
+    #updatedDate = Column(DateTime, func.now())
+    updatedDate = Column(DateTime, default=func.now(), onupdate=func.now())
 
 
 class Todos(Base):
@@ -52,9 +57,11 @@ class Todos(Base):
     closedBy = Column(String, ForeignKey("users.initials"))
     closedDate = Column(DateTime)
     createdBy = Column(String, ForeignKey("users.initials"))
-    createdDate = Column(DateTime, server_default=func.now())
+    #createdDate = Column(DateTime, func.now())
+    createdDate = Column(DateTime, default=func.now())
     updatedBy = Column(String, ForeignKey("users.initials"))
-    updatedDate = Column(DateTime, server_default=func.now())
+    #updatedDate = Column(DateTime, func.now())
+    updatedDate = Column(DateTime, default=func.now(), onupdate=func.now())
 
 
 class Dropdown(Base):
@@ -68,6 +75,8 @@ class Dropdown(Base):
     gpsLat  = Column(Double)
     gpsLng = Column(Double)
     createdBy = Column(String, ForeignKey("users.initials"))
-    createdDate = Column(DateTime, server_default=func.now())
+    #createdDate = Column(DateTime, func.now())
+    createdDate = Column(DateTime, default=func.now())
     updatedBy = Column(String, ForeignKey("users.initials"))
-    updatedDate = Column(DateTime, server_default=func.now())
+    #updatedDate = Column(DateTime, func.now())
+    updatedDate = Column(DateTime, default=func.now(), onupdate=func.now())

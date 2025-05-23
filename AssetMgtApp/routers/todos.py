@@ -1,15 +1,19 @@
 from typing import Annotated
 
-from click import confirm
 from pydantic import BaseModel, Field
 from sqlalchemy import func
-from sqlalchemy.exc import SQLAlchemyError, IntegrityError, OperationalError
-from sqlalchemy.cyextension.processors import to_str
+#from sqlalchemy.exc import SQLAlchemyError, IntegrityError, OperationalError
+#from sqlalchemy.cyextension.processors import to_str
+
 from sqlalchemy.orm import Session
-from fastapi import APIRouter, Depends, HTTPException, Path, Request, status
-from sqlalchemy.testing.schema import mapped_column
+from sqlalchemy import and_
+
+#from fastapi import APIRouter, Depends, HTTPException, Path, Request, status
+from fastapi import APIRouter, Depends, HTTPException, Path, Request
+#from sqlalchemy.testing.schema import mapped_column
 from starlette import status
-from ..models import Todos, Assets, Users, Dropdown
+#from ..models import Todos, Assets, Users, Dropdown
+from ..models import Todos, Assets, Users
 from ..database import SessionLocal
 from .auth import get_current_user
 from starlette.responses import RedirectResponse
@@ -86,28 +90,38 @@ async def render_todo_page(request: Request, db: db_dependency):
             Assets.minorArea,
             Assets.description,
             Assets.assetType
-        ).join(Assets, Todos.assetId == Assets.id)
+#        ).join(Assets, Todos.assetId == Assets.id)
+        ).join(Assets, Todos)
 
 #       todoList = query.all()
 
 #       build dynamic query
+
+        query = query.filter(and_(Todos.assetId == Assets.id))
+
         if assignedToFilter is not None and assignedToFilter != "ALL":
-            query = query.filter(Todos.assignedTo == assignedToFilter)
+            #query = query.filter(Todos.assignedTo == assignedToFilter)
+            query = query.filter(and_(Todos.assignedTo == assignedToFilter))
 
         if todoStatusFilter is not None and todoStatusFilter != "ALL":
-            query = query.filter(Todos.todoStatus == todoStatusFilter)
+            #query = query.filter(Todos.todoStatus == todoStatusFilter)
+            query = query.filter(and_(Todos.todoStatus == todoStatusFilter))
 
         if priorityFilter is not None and priorityFilter != "ALL":
-            query = query.filter(Todos.priority == priorityFilter)
+            #query = query.filter(Todos.priority == priorityFilter)
+            query = query.filter(and_(Todos.priority == priorityFilter))
 
         if todoMajorAreaFilter is not None and todoMajorAreaFilter != "ALL":
-            query = query.filter(Assets.majorArea == todoMajorAreaFilter)
+            #query = query.filter(Assets.majorArea == todoMajorAreaFilter)
+            query = query.filter(and_(Assets.majorArea == todoMajorAreaFilter))
 
         if todoMinorAreaFilter is not None and todoMinorAreaFilter != "ALL":
-            query = query.filter(Assets.minorArea == todoMinorAreaFilter)
+            #query = query.filter(Assets.minorArea == todoMinorAreaFilter)
+            query = query.filter(and_(Assets.minorArea == todoMinorAreaFilter))
 
         if todoAssetTypeFilter is not None and todoAssetTypeFilter != "ALL":
-            query = query.filter(Assets.assetType == todoAssetTypeFilter)
+            #query = query.filter(Assets.assetType == todoAssetTypeFilter)
+            query = query.filter(and_(Assets.assetType == todoAssetTypeFilter))
 
         todoList = query.all()
 
@@ -156,28 +170,37 @@ async def render_todo_report_page(request: Request, db: db_dependency):
             func.ifnull(func.round(Assets.gpsLat,8),"").label('gpsLat'),
             func.ifnull(func.round(Assets.gpsLng,8),"").label('gpsLng'),
             func.ifnull(func.round(Assets.distance,1),"").label('distance')
-        ).join(Assets, Todos.assetId == Assets.id)
+#        ).join(Assets, Todos.assetId == Assets.id)
+        ).join(Assets, Todos)
 
 #       todoList = query.all()
 
 #       build dynamic query
+        query = query.filter(and_(Todos.assetId == Assets.id))
+
         if assignedToFilter is not None and assignedToFilter != "ALL":
-            query = query.filter(Todos.assignedTo == assignedToFilter)
+            #query = query.filter(Todos.assignedTo == assignedToFilter)
+            query = query.filter(and_(Todos.assignedTo == assignedToFilter))
 
         if todoStatusFilter is not None and todoStatusFilter != "ALL":
-            query = query.filter(Todos.todoStatus == todoStatusFilter)
+            #query = query.filter(Todos.todoStatus == todoStatusFilter)
+            query = query.filter(and_(Todos.todoStatus == todoStatusFilter))
 
         if priorityFilter is not None and priorityFilter != "ALL":
-            query = query.filter(Todos.priority == priorityFilter)
+            #query = query.filter(Todos.priority == priorityFilter)
+            query = query.filter(and_(Todos.priority == priorityFilter))
 
         if todoMajorAreaFilter is not None and todoMajorAreaFilter != "ALL":
-            query = query.filter(Assets.majorArea == todoMajorAreaFilter)
+            #query = query.filter(Assets.majorArea == todoMajorAreaFilter)
+            query = query.filter(and_(Assets.majorArea == todoMajorAreaFilter))
 
         if todoMinorAreaFilter is not None and todoMinorAreaFilter != "ALL":
-            query = query.filter(Assets.minorArea == todoMinorAreaFilter)
+            #query = query.filter(Assets.minorArea == todoMinorAreaFilter)
+            query = query.filter(and_(Assets.minorArea == todoMinorAreaFilter))
 
         if todoAssetTypeFilter is not None and todoAssetTypeFilter != "ALL":
-            query = query.filter(Assets.assetType == todoAssetTypeFilter)
+            #query = query.filter(Assets.assetType == todoAssetTypeFilter)
+            query = query.filter(and_(Assets.assetType == todoAssetTypeFilter))
 
         todoList = query.all()
 
@@ -226,28 +249,37 @@ async def render_todo_list(request: Request, todo_id: int, db: db_dependency):
             Assets.minorArea,
             Assets.description,
             Assets.assetType
-        ).join(Assets, Todos.assetId == Assets.id)
+#        ).join(Assets, Todos.assetId == Assets.id)
+        ).join(Assets, Todos)
 
 #       todoList = query.all()
 
 #       build dynamic query
+        query = query.filter(and_(Todos.assetId == Assets.id))
+
         if assignedToFilter is not None and assignedToFilter != "ALL":
-            query = query.filter(Todos.assignedTo == assignedToFilter)
+            #query = query.filter(Todos.assignedTo == assignedToFilter)
+            query = query.filter(and_(Todos.assignedTo == assignedToFilter))
 
         if todoStatusFilter is not None and todoStatusFilter != "ALL":
-            query = query.filter(Todos.todoStatus == todoStatusFilter)
+            #query = query.filter(Todos.todoStatus == todoStatusFilter)
+            query = query.filter(and_(Todos.todoStatus == todoStatusFilter))
 
         if priorityFilter is not None and priorityFilter != "ALL":
-            query = query.filter(Todos.priority == priorityFilter)
+            #query = query.filter(Todos.priority == priorityFilter)
+            query = query.filter(and_(Todos.priority == priorityFilter))
 
         if todoMajorAreaFilter is not None and todoMajorAreaFilter != "ALL":
-            query = query.filter(Assets.majorArea == todoMajorAreaFilter)
+            #query = query.filter(Assets.majorArea == todoMajorAreaFilter)
+            query = query.filter(and_(Assets.majorArea == todoMajorAreaFilter))
 
         if todoMinorAreaFilter is not None and todoMinorAreaFilter != "ALL":
-            query = query.filter(Assets.minorArea == todoMinorAreaFilter)
+            #query = query.filter(Assets.minorArea == todoMinorAreaFilter)
+            query = query.filter(and_(Assets.minorArea == todoMinorAreaFilter))
 
         if todoAssetTypeFilter is not None and todoAssetTypeFilter != "ALL":
-            query = query.filter(Assets.assetType == todoAssetTypeFilter)
+            #query = query.filter(Assets.assetType == todoAssetTypeFilter)
+            query = query.filter(and_(Assets.assetType == todoAssetTypeFilter))
 
         todoList = query.all()
 
@@ -279,12 +311,12 @@ async def render_todo_page(request: Request, asset_id: int,db: db_dependency):
         if dropdownList is None:
            return redirect_to_login()
 
-        login_user_model = db.query(Users).filter(Users.id == user.get('id')).first()
+        login_user_model = db.query(Users).filter(and_(Users.id == user.get('id'))).first()
         if login_user_model is None:
             raise HTTPException(status_code=404, detail='login user Not found.')
 
         # get the current asset details to show on the form in ready-only
-        asset_model = db.query(Assets).filter(Assets.id == asset_id).first()
+        asset_model = db.query(Assets).filter(and_(Assets.id == asset_id)).first()
         if asset_model is None:
             raise HTTPException(status_code=404, detail='Asset not found.')
 
@@ -324,7 +356,7 @@ async def render_todo_page(request: Request, asset_id: int,db: db_dependency):
         if dropdownList is None:
            return redirect_to_login()
 
-        login_user_model = db.query(Users).filter(Users.id == user.get('id')).first()
+        login_user_model = db.query(Users).filter(and_(Users.id == user.get('id'))).first()
         if login_user_model is None:
             raise HTTPException(status_code=404, detail='login user Not found.')
 
@@ -335,7 +367,7 @@ async def render_todo_page(request: Request, asset_id: int,db: db_dependency):
             raise HTTPException(status_code=404, detail='Dropdown User List not found.')
 
         # get the current asset details to show on the form in ready-only
-        asset_model = db.query(Assets).filter(Assets.id == asset_id).first()
+        asset_model = db.query(Assets).filter(and_(Assets.id == asset_id)).first()
         if asset_model is None:
             raise HTTPException(status_code=404, detail='Asset not found.')
 
@@ -390,7 +422,7 @@ async def render_edit_todo_page(request: Request, todo_id: int, db: db_dependenc
             func.strftime('%m/%d/%Y', Todos.updatedDate).label('updatedDate'),
             Todos.updatedBy
         )
-        todo_model = query.filter(Todos.id == todo_id).first()
+        todo_model = query.filter(and_(Todos.id == todo_id)).first()
         #todo_model = db.query(Todos).filter(Todos.id == todo_id).first()
         if todo_model is None:
             raise HTTPException(status_code=404, detail='Todo not found.')
@@ -414,7 +446,7 @@ async def render_edit_todo_page(request: Request, todo_id: int, db: db_dependenc
             func.strftime('%m/%d/%Y', Assets.updatedDate).label('updatedDate'),
             Assets.updatedBy
         )
-        asset_model = query.filter(Assets.id == todo_model.assetId).first()
+        asset_model = query.filter(and_(Assets.id == todo_model.assetId)).first()
         #asset_model = db.query(Assets).filter(Assets.id == todo_model.assetId).first()
         if asset_model is None:
             raise HTTPException(status_code=404, detail='Asset not found.')
@@ -460,7 +492,7 @@ async def render_edit_todo_page(request: Request, todo_id: int, db: db_dependenc
             func.strftime('%m/%d/%Y', Todos.updatedDate).label('updatedDate'),
             Todos.updatedBy
         )
-        todo_model = query.filter(Todos.id == todo_id).first()
+        todo_model = query.filter(and_(Todos.id == todo_id)).first()
         #todo_model = db.query(Todos).filter(Todos.id == todo_id).first()
         if todo_model is None:
             raise HTTPException(status_code=404, detail='Todo not found.')
@@ -484,7 +516,7 @@ async def render_edit_todo_page(request: Request, todo_id: int, db: db_dependenc
             func.strftime('%m/%d/%Y', Assets.updatedDate).label('updatedDate'),
             Assets.updatedBy
         )
-        asset_model = query.filter(Assets.id == todo_model.assetId).first()
+        asset_model = query.filter(and_(Assets.id == todo_model.assetId)).first()
         #asset_model = db.query(Assets).filter(Assets.id == todo_model.assetId).first()
         if asset_model is None:
             raise HTTPException(status_code=404, detail='Asset not found.')
@@ -516,7 +548,7 @@ async def render_view_asset_page(request: Request, todo_id: int, db: db_dependen
             func.strftime('%m/%d/%Y', Todos.updatedDate).label('updatedDate'),
             Todos.updatedBy
         )
-        todo_model = query.filter(Todos.id == todo_id).first()
+        todo_model = query.filter(and_(Todos.id == todo_id)).first()
         #todo_model = db.query(Todos).filter(Todos.id == todo_id).first()
         if todo_model is None:
             raise HTTPException(status_code=404, detail='Todo not found.')
@@ -541,7 +573,7 @@ async def render_view_asset_page(request: Request, todo_id: int, db: db_dependen
             Assets.updatedBy
         )
 
-        asset_model = query.filter(Assets.id == todo_model.assetId).first()
+        asset_model = query.filter(and_(Assets.id == todo_model.assetId)).first()
         #asset_model = db.query(Assets).filter(Assets.id == todo_model.assetId).first()
         if asset_model is None:
              raise HTTPException(status_code=404, detail='Asset not found.')
@@ -573,7 +605,7 @@ async def render_view_asset_page(request: Request, todo_id: int, db: db_dependen
             func.strftime('%m/%d/%Y', Todos.updatedDate).label('updatedDate'),
             Todos.updatedBy
         )
-        todo_model = query.filter(Todos.id == todo_id).first()
+        todo_model = query.filter(and_(Todos.id == todo_id)).first()
         #todo_model = db.query(Todos).filter(Todos.id == todo_id).first()
         if todo_model is None:
             raise HTTPException(status_code=404, detail='Todo not found.')
@@ -597,7 +629,7 @@ async def render_view_asset_page(request: Request, todo_id: int, db: db_dependen
             func.strftime('%m/%d/%Y', Assets.updatedDate).label('updatedDate'),
             Assets.updatedBy
         )
-        asset_model = query.filter(Assets.id == todo_model.assetId).first()
+        asset_model = query.filter(and_(Assets.id == todo_model.assetId)).first()
         #asset_model = db.query(Assets).filter(Assets.id == todo_model.assetId).first()
         if asset_model is None:
             raise HTTPException(status_code=404, detail='Asset not found.')
@@ -623,7 +655,7 @@ async def read_todo(user: user_dependency, db: db_dependency, todo_id: int = Pat
     if user is None:
         raise HTTPException(status_code=401, detail='Authentication Failed')
 
-    todo_model = db.query(Todos).filter(Todos.id == todo_id).first()
+    todo_model = db.query(Todos).filter(and_(Todos.id == todo_id)).first()
 
     if todo_model is not None:
         return todo_model
@@ -638,7 +670,7 @@ async def create_todo(user: user_dependency, db: db_dependency,
     if user is None:
         raise HTTPException(status_code=401, detail='Authentication Failed')
 
-    login_user_model = db.query(Users).filter(Users.id == user.get('id')).first()
+    login_user_model = db.query(Users).filter(and_(Users.id == user.get('id'))).first()
     if login_user_model is None:
         raise HTTPException(status_code=404, detail='login user Not found.')
 
@@ -665,13 +697,13 @@ async def update_todo(user: user_dependency, db: db_dependency,
     if user is None:
         raise HTTPException(status_code=401, detail='Authentication Failed')
 
-    login_user_model = db.query(Users).filter(Users.id == user.get('id')).first()
+    login_user_model = db.query(Users).filter(and_(Users.id == user.get('id'))).first()
     if login_user_model is None:
         raise HTTPException(status_code=404, detail='login user Not found.')
 
 
     # get the rows current values
-    todo_model = db.query(Todos).filter(Todos.id == todo_id).first()
+    todo_model = db.query(Todos).filter(and_(Todos.id == todo_id)).first()
     if todo_model is None:
         raise HTTPException(status_code=404, detail='Todo not found.')
 
@@ -681,7 +713,8 @@ async def update_todo(user: user_dependency, db: db_dependency,
     todo_model.priority = todo_request.priority
     todo_model.todoStatus = todo_request.todoStatus
     todo_model.assignedTo = todo_request.assignedTo
-    todo_model.updatedDate = server_default=func.now()
+#    todo_model.updatedDate = server_default=func.now()
+    todo_model.updatedDate = func.now()
     todo_model.updatedBy= login_user_model.initials
 
     db.add(todo_model)
@@ -693,11 +726,12 @@ async def delete_todo(user: user_dependency, db: db_dependency, todo_id: int = P
     if user is None:
         raise HTTPException(status_code=401, detail='Authentication Failed')
 
-    todo_model = db.query(Todos).filter(Todos.id == todo_id).first()
+    todo_model = db.query(Todos).filter(and_(Todos.id == todo_id)).first()
 
     if todo_model is None:
         raise HTTPException(status_code=404, detail='Todo not found.')
 
-    db.query(Todos).filter(Todos.id == todo_id).delete()
+    db.query(Todos).filter(and_(Todos.id == todo_id)).delete()
 
     db.commit()
+

@@ -1,9 +1,8 @@
 from functools import lru_cache
 from typing import Annotated, Optional
 
-from click import confirm
 from pydantic import BaseModel, Field
-from sqlalchemy import func
+from sqlalchemy import func, and_
 from sqlalchemy.exc import SQLAlchemyError, IntegrityError
 from sqlalchemy.orm import Session
 from fastapi import APIRouter, Depends, HTTPException, Path, Request
@@ -80,7 +79,7 @@ async def render_dropdown_page(request: Request, db: db_dependency):
         query = db.query(Dropdown)
 
         if dropdownColumnFilter is not None and dropdownColumnFilter != "ALL":
-            query = query.filter(Dropdown.column == dropdownColumnFilter)
+            query = query.filter(and_(Dropdown.column == dropdownColumnFilter))
 
         query = query.order_by(Dropdown.column,Dropdown.order)
 
@@ -119,7 +118,7 @@ async def render_dropdown_page(request: Request):
         return redirect_to_login()
 
 
-@router.get("/add-dropdown-page/{dropdown_id}")  #from and existing row button.. pass the column
+@router.get("/add-dropdown-page/{dropdown_id}")  #from and existing row button. pass the column
 async def render_dropdown_value_page(request: Request, dropdown_id: int, db: db_dependency):
 
     try:
@@ -128,7 +127,7 @@ async def render_dropdown_value_page(request: Request, dropdown_id: int, db: db_
             return redirect_to_login()
 
         #lookup the details of the current row to get the column
-        dropdown_model = db.query(Dropdown).filter(Dropdown.id == dropdown_id).first()
+        dropdown_model = db.query(and_(Dropdown).filter(Dropdown.id == dropdown_id)).first()
         if dropdown_model is None:
             raise HTTPException(status_code=404, detail='dropdown not found.')
 
@@ -179,7 +178,7 @@ async def render_dropdown_edit_page(request: Request, dropdown_id: int, db: db_d
             func.strftime('%m/%d/%Y', Dropdown.updatedDate).label('updatedDate'),
             Dropdown.updatedBy
         )
-        dropdown_model = query.filter(Dropdown.id == dropdown_id).first()
+        dropdown_model = query.filter(and_(Dropdown.id == dropdown_id)).first()
         #ropdown_model = db.query(Dropdown).filter(Dropdown.id == dropdown_id).first()
         if dropdown_model is None:
             raise HTTPException(status_code=404, detail='dropdown not found.')
@@ -221,7 +220,7 @@ async def render_dropdown_view_page(request: Request, dropdown_id: int, db: db_d
             func.strftime('%m/%d/%Y', Dropdown.updatedDate).label('updatedDate'),
             Dropdown.updatedBy
         )
-        dropdown_model = query.filter(Dropdown.id == dropdown_id).first()
+        dropdown_model = query.filter(and_(Dropdown.id == dropdown_id)).first()
         #ropdown_model = db.query(Dropdown).filter(Dropdown.id == dropdown_id).first()
         if dropdown_model is None:
             raise HTTPException(status_code=404, detail='Dropdown not found.')
@@ -240,7 +239,7 @@ async def create_dropdown(user: user_dependency, db: db_dependency,
     if user is None:
         raise HTTPException(status_code=401, detail='Authentication Failed')
 
-    login_user_model = db.query(Users).filter(Users.id == user.get('id')).first()
+    login_user_model = db.query(Users).filter(and_(Users.id == user.get('id'))).first()
     if login_user_model is None:
         raise HTTPException(status_code=404, detail='login user Not found.')
 
@@ -282,11 +281,11 @@ async def update_dropdown(user: user_dependency, db: db_dependency,
     if user is None:
         raise HTTPException(status_code=401, detail='Authentication Failed')
 
-    login_user_model = db.query(Users).filter(Users.id == user.get('id')).first()
+    login_user_model = db.query(Users).filter(and_(Users.id == user.get('id'))).first()
     if login_user_model is None:
         raise HTTPException(status_code=404, detail='login user Not found.')
 
-    dropdown_model = db.query(Dropdown).filter(Dropdown.id == dropdown_id).first()
+    dropdown_model = db.query(Dropdown).filter(and_(Dropdown.id == dropdown_id)).first()
     if dropdown_model is None:
         raise HTTPException(status_code=404, detail='Dropdown not found.')
 
@@ -325,11 +324,11 @@ async def delete_dropdown(user: user_dependency, db: db_dependency,
     if user is None or user.get('userRole') != 'ADMIN' :
         raise HTTPException(status_code=401, detail='Authentication Failed')
 
-    dropdown_model = db.query(Dropdown).filter(Dropdown.id == dropdown_id).first()
+    dropdown_model = db.query(Dropdown).filter(and_(Dropdown.id == dropdown_id)).first()
     if dropdown_model is None:
         raise HTTPException(status_code=404, detail='Dropdown Not found.')
 
-    db.query(Dropdown).filter(Dropdown.id == dropdown_id).delete()
+    db.query(Dropdown).filter(and_(Dropdown.id == dropdown_id)).delete()
     db.commit()
 
     # clear the dropdown_list cache
